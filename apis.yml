@@ -7,9 +7,9 @@ description: >-
 type: Index
 image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
 tags:
-  - Security
-  - Platform
   - API Testing
+  - Platform
+  - Security
 url: >-
   https://raw.githubusercontent.com/api-evangelist/pynt/refs/heads/main/apis.yml
 created: '2025-01-08'
@@ -18,8 +18,7 @@ specificationVersion: '0.19'
 apis:
   - aid: pynt:pynt
     name: Pynt
-    tags:
-      - API
+    tags: []
     humanURL: https://www.pynt.io/
     properties:
       - url: https://www.pynt.io/learning-hub/api-security-guide/api-security
