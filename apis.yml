@@ -15,6 +15,11 @@ url: >-
 created: '2025-01-08'
 modified: '2026-03-16'
 specificationVersion: '0.19'
+common:
+  - type: GitHubOrganization
+    url: https://github.com/pynt-io
+  - type: LinkedIn
+    url: https://www.linkedin.com/company/pynt
 apis:
   - aid: pynt:pynt
     name: Pynt
