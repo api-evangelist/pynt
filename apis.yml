@@ -20,6 +20,8 @@ common:
     url: https://github.com/pynt-io
   - type: LinkedIn
     url: https://www.linkedin.com/company/pynt
+  - type: LLMsTxt
+    url: https://www.pynt.io/llms.txt
 apis:
   - aid: pynt:pynt
     name: Pynt
