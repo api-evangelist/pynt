@@ -1,0 +1,21 @@
+{
+  "repo": "pynt",
+  "feeds": [
+    {
+      "source": "https://www.pynt.io/blog",
+      "feed_url": "https://www.pynt.io/blog",
+      "title": "",
+      "saved": 0,
+      "method": "none"
+    },
+    {
+      "source": "https://www.pynt.io/llms.txt",
+      "feed_url": "https://www.pynt.io/llms.txt",
+      "title": "",
+      "saved": 0,
+      "method": "none"
+    }
+  ],
+  "fetched": "2026-07-11T11:50:51Z",
+  "post_count": 2
+}
