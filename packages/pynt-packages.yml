@@ -1,0 +1,98 @@
+generated: '2026-08-27'
+method: searched
+source: >-
+  pypi.org/pypi/pyntcli/json (registry metadata), docs.pynt.io install guides,
+  github.com/pynt-io org listing
+provider: Pynt
+providerId: pynt
+description: >-
+  First-party client and runner distributions for Pynt. Pynt does not ship a
+  conventional REST SDK per language; the shipped client is the pyntcli
+  command-line utility that drives the security-scan workflow, plus a Linux
+  binary distributed from the Pynt CDN and integration adapters published on the
+  Pynt GitHub organization.
+packages:
+  - name: pyntcli
+    registry: pypi
+    url: https://pypi.org/project/pyntcli/
+    language: Python
+    official: true
+    version: 0.1.125
+    published: '2026-02-24'
+    requires: '>=3.9'
+    install: python3 -m pip install pyntcli
+    note: >-
+      Confirmed first-party: PyPI author "Pynt-io <support@pynt.io>", project
+      Homepage https://pynt.io. 109 releases published. This is the "Pynt CLI"
+      the documentation tells users to install; it manages the Pynt Docker image
+      itself.
+  - name: pynt (Linux binary)
+    registry: cdn
+    url: https://cdn.pynt.io/binary-release/install.sh
+    language: binary
+    official: true
+    version: null
+    published: null
+    install: wget https://cdn.pynt.io/binary-release/install.sh && chmod +x install.sh && ./install.sh
+    http_status: 200
+    note: >-
+      Unpinned CDN distribution — the install script URL carries no version and
+      floats to whatever the latest release is, so a consumer cannot tell which
+      build they are getting either. No registry metadata endpoint exists for
+      this artifact. Documented for Linux CI/CD environments where Docker is not
+      available; requires PYNT_ID as an environment variable.
+  - name: api-security-action
+    registry: github
+    url: https://github.com/pynt-io/api-security-action
+    language: Python
+    official: true
+    version: null
+    published: '2025-10-23'
+    note: >-
+      GitHub Action wrapper for Pynt scans. No tagged release found via the
+      GitHub releases API; `published` records the last push date instead.
+      version: null because the repository publishes no version tag.
+  - name: pynt-newman
+    registry: github
+    url: https://github.com/pynt-io/pynt-newman
+    language: JavaScript
+    official: true
+    version: null
+    published: '2023-01-18'
+    note: >-
+      Newman (Postman CLI) integration helper on the Pynt GitHub organization.
+      No registry release; last push 2023-01-18, which makes this the oldest
+      first-party distribution in the set.
+  - name: burp-extension
+    registry: github
+    url: https://github.com/pynt-io/burp-extension
+    official: true
+    version: null
+    published: '2024-07-25'
+    note: Burp Suite extension source. No tagged release.
+absent:
+  - registry: npm
+    checked:
+      - pynt
+      - pynt-mcp
+      - '@pynt/mcp'
+    result: 404
+    note: No first-party Pynt package published to npm as of this probe.
+  - registry: pypi
+    checked:
+      - pynt
+    result: 200
+    note: >-
+      NOT PYNT. pypi.org/project/pynt is "Lightweight Python Build Tool" by rags
+      (v0.8.2, last released 2018-06-24), an unrelated project that happens to
+      share the name. Do not credit it to this provider.
+  - registry: dockerhub
+    checked:
+      - pyntio/pynt
+    result: 404
+    note: >-
+      The Pynt container image is pulled and managed by pyntcli automatically;
+      no public Docker Hub repository resolved under this name.
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com

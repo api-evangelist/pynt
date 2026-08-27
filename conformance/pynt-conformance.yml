@@ -1,0 +1,140 @@
+generated: '2026-08-27'
+method: derived
+source: >-
+  derived from openapi/pynt-openapi.json and live probes; searched
+  www.pynt.io/trust-center and docs.pynt.io for compliance claims
+provider: Pynt
+providerId: pynt
+description: >-
+  Cross-cutting and domain standard conformance for Pynt, asserted from the
+  contract and from the provider's own published trust page. Absence of a
+  standard is recorded, never invented.
+standards:
+  - id: openapi
+    conforms: true
+    version: 3.1.0
+    evidence: >-
+      https://api.pynt.io/openapi.json returns a valid OpenAPI 3.1.0 document,
+      105 paths / 134 operations / 208 component schemas. HTTP 200,
+      application/json, 184,842 bytes, fetched 2026-08-27.
+  - id: json-schema
+    conforms: true
+    version: 2020-12
+    evidence: Implied by OpenAPI 3.1.0, which uses JSON Schema 2020-12 for its schema objects.
+  - id: oauth2
+    conforms: false
+    evidence: >-
+      No oauth2 securityScheme is declared. All five schemes are apiKey-in-header.
+      /.well-known/oauth-authorization-server returned 404 on every host.
+  - id: oidc
+    conforms: false
+    evidence: >-
+      /.well-known/openid-configuration returned 404 on www.pynt.io, api.pynt.io
+      and docs.pynt.io. Pynt DOES support customer-side SSO into its own portal
+      (Okta and Microsoft Entra ID, documented at
+      docs.pynt.io/documentation/account-management/single-sign-on-sso), but that
+      is inbound tenant SSO, not an OIDC provider surface on the API.
+  - id: rfc9457
+    conforms: false
+    evidence: >-
+      Errors are FastAPI's {"detail": ...} envelope on application/json, not
+      application/problem+json. See errors/pynt-problem-types.yml.
+  - id: rfc8594
+    conforms: false
+    evidence: >-
+      No Sunset or Deprecation response header is declared, though five
+      operations carry OpenAPI `deprecated: true`. See
+      lifecycle/pynt-lifecycle.yml.
+  - id: idempotency
+    conforms: false
+    evidence: No Idempotency-Key parameter on any of the 134 operations.
+  - id: pagination
+    conforms: false
+    evidence: >-
+      No limit/offset, page, or cursor parameter and no Link header. List
+      endpoints are shaped by an undocumented `filter` expression with separate
+      /count endpoints.
+  - id: scim
+    conforms: false
+    evidence: >-
+      No urn:ietf:params:scim:schemas:* URN and no /scim/v2 path in the
+      contract. User and invite provisioning is Pynt's own REST shape, so an
+      enterprise buying Pynt cannot provision users through a standard SCIM
+      connector.
+  - id: odata
+    conforms: false
+    evidence: No $metadata surface and no OData query options.
+  - id: fhir
+    conforms: false
+    evidence: Not a healthcare data API. Pynt markets a healthcare USE CASE
+      (www.pynt.io/use-cases/healthcare) but exchanges no clinical data.
+  - id: psd2
+    conforms: false
+    evidence: Not a financial data API.
+  - id: json:api
+    conforms: false
+    evidence: Response envelopes are bespoke; no application/vnd.api+json media type.
+domain_standards:
+  market: application security testing / API security (DAST, API discovery)
+  note: >-
+    REWARD-ONLY dimension. The relevant interchange standards for this market
+    are SARIF (static/dynamic analysis result interchange), CycloneDX/SPDX
+    (SBOM), OpenVEX, CVE/CWE identifier schemes, OWASP API Security Top 10, and
+    CVSS scoring. Each was checked against the contract; findings below.
+  candidates:
+    - id: sarif
+      conforms: false
+      evidence: >-
+        No SARIF media type, schema or export format in the contract. Export is
+        offered via POST /v1/endpoint-group/export with a `format` path
+        parameter on the download URL, but no format enumeration in the spec
+        names SARIF. A SARIF export would let Pynt findings land in GitHub code
+        scanning and every other AppSec aggregator with no bespoke connector.
+    - id: cvss
+      conforms: partial
+      evidence: >-
+        The contract exposes severity as a bespoke enum
+        (NotificationRuleCreate.severity_levels: ANY | CRITICAL | HIGH | MEDIUM)
+        and a Pynt-computed risk score, not a CVSS vector string. Pynt's docs
+        describe a likelihood-x-impact risk matrix
+        (docs.pynt.io/documentation/api-catalog/navigate-api-catalog/apis-at-risk)
+        rather than CVSS. Severity bands are CVSS-shaped; the machine-readable
+        vector is absent.
+    - id: cwe
+      conforms: unknown
+      evidence: >-
+        Pynt's published test coverage maps onto named weakness classes
+        (injection, SSRF, mass assignment, BOLA-style authorization bypass,
+        stack trace in response, GraphQL introspection, LLM prompt injection)
+        but no CWE identifier field was found in the Finding or FindingDetails
+        schemas. Not asserted either way without reading a live finding payload,
+        which is auth-gated.
+    - id: owasp-api-top-10
+      conforms: partial
+      evidence: >-
+        Pynt's documented test catalog
+        (docs.pynt.io/documentation/api-security-testing/pynt-security-tests-coverage)
+        maps closely onto the OWASP API Security Top 10 categories, but the
+        mapping is prose on the docs site, not a machine-readable field in the
+        contract.
+    - id: cyclonedx
+      conforms: false
+      evidence: No SBOM surface in the contract.
+compliance:
+  - name: SOC 2 Type II
+    published: true
+    source: https://www.pynt.io/trust-center
+    fetched: '2026-08-27'
+    note: >-
+      Named on Pynt's own trust center page as a standard Pynt adheres to. No
+      external trust portal (Vanta / Drata / SafeBase) and no downloadable
+      report link were found; the claim is a page assertion, not a machine-
+      verifiable attestation.
+  - name: GDPR / privacy program
+    published: true
+    source: https://www.pynt.io/privacy-policy
+    fetched: '2026-08-27'
+    http_status: 200
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com

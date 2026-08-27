@@ -1,0 +1,116 @@
+generated: '2026-08-27'
+method: searched
+source: >-
+  https://docs.pynt.io/documentation/api-security-testing/how-to-install-pynt-cli.md,
+  .../pynt-cli-modes.md, .../how-to-install-pynt-binary-linux-only.md,
+  .../pynt-on-ci-cd/how-to-get-pynt-id-for-ci-cd-authentication.md,
+  https://pypi.org/pypi/pyntcli/json
+provider: Pynt
+providerId: pynt
+name: Pynt CLI
+binary: pynt
+description: >-
+  The Pynt CLI is the primary way customers actually consume Pynt — more so than
+  the REST API. It wraps existing functional tests or proxies live traffic, then
+  runs Pynt's security scan against whatever API traffic it observes. It is a
+  Python package that manages a Docker container on the user's behalf.
+install:
+  - method: pip
+    command: python3 -m pip install pyntcli
+    package: pyntcli
+    version: 0.1.125
+    published: '2026-02-24'
+    requires: Python >= 3.9
+    primary: true
+  - method: linux binary
+    command: wget https://cdn.pynt.io/binary-release/install.sh && chmod +x install.sh && ./install.sh
+    url: https://cdn.pynt.io/binary-release/install.sh
+    http_status: 200
+    version: null
+    note: >-
+      For Linux CI/CD environments where Docker cannot be used. Syntax-compatible
+      with the Python CLI. Installs pynt, newman, mitmdump and custom_har.py into
+      ~/.pynt/bin and symlinks pynt into /usr/local/bin. Must be run as a
+      non-root user. Unpinned — the install script URL carries no version.
+  - method: docker
+    command: null
+    note: >-
+      No manual docker pull is required. The CLI pulls and runs the Pynt
+      container itself, including fetching the latest image.
+authentication:
+  interactive: >-
+    On first run the CLI prompts an interactive browser login; the session
+    persists until it expires. This uses the device-code flow in the REST
+    contract (PUT/GET /v1/auth/device-code/{device_code}).
+  ci:
+    variable: PYNT_ID
+    how_to_get:
+      - Pynt platform → Settings → General → Pynt ID
+      - pynt pynt-id
+    note: >-
+      The Linux binary requires PYNT_ID as an environment variable because, per
+      the docs, "Pynt authentication is not implemented yet" for that build.
+    source: https://docs.pynt.io/documentation/security-testing-integrations/pynt-on-ci-cd/how-to-get-pynt-id-for-ci-cd-authentication.md
+modes:
+  - name: command
+    invocation: pynt command
+    description: >-
+      Wraps an existing CLI-based functional test run with Pynt's security
+      testing. Pynt observes the traffic the wrapped command produces and
+      attacks the API surface it sees.
+    source: https://docs.pynt.io/documentation/api-security-testing/pynt-cli-modes/pynt-command-cli-mode.md
+  - name: listen
+    invocation: pynt listen
+    description: >-
+      Runs as an interactive proxy on a specified port, capturing network
+      traffic for security analysis. Intended for any tool that can be pointed
+      at a proxy — browsers, test suites, manual exploration.
+    source: https://docs.pynt.io/documentation/api-security-testing/pynt-cli-modes/pynt-listen-cli-mode.md
+  - name: newman
+    invocation: pynt newman
+    description: Scan a locally stored Postman collection through the Newman runner.
+    source: https://docs.pynt.io/documentation/security-testing-integrations/pynt-with-api-testing-clis/pynt-for-newman-postman-cli.md
+  - name: har
+    description: Scan from a prerecorded HAR file.
+    source: https://docs.pynt.io/documentation/security-testing-integrations/advanced-pynt-examples/pynt-with-prerecorded-har-files.md
+  - name: pynt-id
+    invocation: pynt pynt-id
+    description: Print the Pynt ID used for CI/CD authentication.
+known_commands:
+  - pynt command
+  - pynt listen
+  - pynt newman
+  - pynt pynt-id
+known_commands_note: >-
+  Only commands that appear verbatim in Pynt's published documentation are
+  listed. Pynt publishes no complete CLI reference page, so the full flag and
+  subcommand surface is not enumerated here rather than guessed.
+integrations_driven_by_cli:
+  testing_tools:
+    - Postman
+    - Insomnia
+    - ReadyAPI
+  test_frameworks:
+    - pytest
+    - Jest
+    - Cypress
+    - Playwright
+    - Selenium
+    - Rest Assured
+    - xUnit (.NET)
+    - Go
+    - JMeter
+  ci_cd:
+    - GitHub Actions
+    - GitLab
+    - Jenkins
+    - Azure DevOps
+    - Bitbucket Pipelines
+  other:
+    - Burp Suite extension
+    - Firefox browser extension
+    - standalone container
+    - cURL
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com

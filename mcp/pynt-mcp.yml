@@ -1,0 +1,116 @@
+generated: '2026-08-27'
+method: derived
+source: >-
+  derived from openapi/pynt-openapi.json after searching for a published Pynt
+  MCP server (none found)
+provider: Pynt
+providerId: pynt
+status: candidate
+description: >-
+  CANDIDATE tool surface derived from the Pynt REST API. Pynt publishes no MCP
+  server of its own. Note the irony worth recording: Pynt SELLS MCP security
+  testing (product/mcp-security, plus published research quantifying risk across
+  281 MCPs) but does not itself expose an MCP endpoint. Nothing below is
+  callable today — it is a mapping of what a Pynt MCP server could expose if the
+  company shipped one.
+deployment:
+  mode: none
+  endpoint: null
+  install: null
+  package: null
+  auth: unknown
+  verified: derived
+  note: >-
+    Probed POST tools/list against https://mcp.pynt.io/mcp (DNS/connection
+    failure, curl exit 6/000), https://api.pynt.io/mcp (404 application/json)
+    and https://www.pynt.io/mcp (405). npm has no pynt-mcp or @pynt/mcp (404).
+    No endpoint is asserted and none was invented.
+probes:
+  - url: https://mcp.pynt.io/mcp
+    method: POST tools/list
+    status: '000'
+    result: host did not resolve / no response
+  - url: https://api.pynt.io/mcp
+    method: POST tools/list
+    status: 404
+    result: '{"detail":"Not Found"}'
+  - url: https://www.pynt.io/mcp
+    method: POST tools/list
+    status: 405
+    result: Webflow site rejects POST
+candidate_tools:
+  - name: list_applications
+    description: List the applications (API estates) registered in Pynt.
+    rest: list_applications_v1_application_get
+    http: GET /v1/application
+  - name: get_application
+    description: Fetch one application by identifier, including its risk metrics.
+    rest: get_application_v1_application__application_identifier__get
+    http: GET /v1/application/{application_identifier}
+  - name: create_application
+    description: Register a new application to scan.
+    rest: create_application_v1_application_put
+    http: PUT /v1/application
+  - name: get_application_metrics
+    description: Aggregate risk and coverage metrics across all applications.
+    rest: get_application_metrics_v1_application_metrics_get
+    http: GET /v1/application/metrics
+  - name: run_scan
+    description: Start a remote API security scan.
+    rest: run_scan_v1_scan_run_remote_scan_post
+    http: POST /v1/scan/run-remote-scan
+  - name: run_har_scan
+    description: Start a remote scan from a prerecorded HAR file.
+    rest: run_har_scan_v1_scan_run_remote_har_scan_post
+    http: POST /v1/scan/run-remote-har-scan
+  - name: abort_scan
+    description: Abort an in-flight scan.
+    rest: abort_scan_v1_scan__scan_id__abort_post
+    http: POST /v1/scan/{scan_id}/abort
+  - name: get_scan_summary
+    description: Fetch the summary of one scan by id.
+    rest: get_scan_by_id_v1_scan__scan_id__summary_get
+    http: GET /v1/scan/{scan_id}/summary
+  - name: list_scans
+    description: List scan summaries, filterable.
+    rest: list_scans_summaries_v1_scan_summary_get
+    http: GET /v1/scan/summary
+  - name: get_scan_report
+    description: Retrieve the generated report for a scan.
+    rest: get_report_v1_scan__scan_id__report_get
+    http: GET /v1/scan/{scan_id}/report
+  - name: get_running_scans
+    description: List every scan currently running.
+    rest: get_all_running_scans_v1_scan_running_get
+    http: GET /v1/scan/running
+  - name: get_false_positive_analysis
+    description: Retrieve Pynt's LLM false-positive analysis for a scan's findings.
+    rest: get_false_positive_analysis_v1_scan__scan_id__false_positive_analysis_get
+    http: GET /v1/scan/{scan_id}/false-positive-analysis
+  - name: get_business_impact_analysis
+    description: Retrieve Pynt's LLM business-impact analysis for a scan's findings.
+    rest: get_business_impact_analysis_v1_scan__scan_id__business_impact_analysis_get
+    http: GET /v1/scan/{scan_id}/business-impact-analysis
+  - name: get_pentest_report
+    description: Fetch the latest automated penetration-test report for an application.
+    rest: get_latest_pentest_report_v1_application__application_id__pentest_report_get
+    http: GET /v1/application/{application_id}/pentest-report
+  - name: create_scan_schedule
+    description: Schedule recurring scans for an application.
+    rest: create_scan_schedule_v1_application__application_id__scan_schedule_post
+    http: POST /v1/application/{application_id}/scan-schedule
+  - name: list_vulnerability_instances
+    description: List vulnerability instances discovered across the estate.
+    rest: list_vulnerability_instances_v1_vulnerability_instance_get
+    http: GET /v1/vulnerability-instance
+  - name: create_jira_ticket_for_vulnerability
+    description: Open a Jira ticket for one vulnerability instance.
+    rest: create_ticket_jira_v1_vulnerability_instance__vulnerability_instance_id__ticket_jira_post
+    http: POST /v1/vulnerability-instance/{vulnerability_instance_id}/ticket/jira
+  - name: aggregate_endpoint_group_risks
+    description: Aggregate risk across endpoint groups in the API catalog.
+    rest: aggregate_risks_v1_endpoint_group_risks_get
+    http: GET /v1/endpoint-group/risks
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com

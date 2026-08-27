@@ -1,0 +1,87 @@
+generated: '2026-08-27'
+method: derived
+source: >-
+  derived from openapi/pynt-openapi.json; searched docs.pynt.io and the Pynt
+  GitHub org for an AsyncAPI document (none found)
+provider: Pynt
+providerId: pynt
+type: Webhooks
+asyncapi_published: false
+asyncapi_probes:
+  - url: https://api.pynt.io/asyncapi.yaml
+    status: 404
+    note: FastAPI app returns {"detail":"Not Found"} for any undefined path.
+  - url: https://api.pynt.io/asyncapi.json
+    status: 404
+  - url: https://docs.pynt.io/asyncapi.yaml
+    status: 307
+    note: GitBook redirect into its 404 shell, not a document.
+description: >-
+  Pynt ships no AsyncAPI document. It does carry a real event surface, but the
+  direction is unusual and worth stating precisely: the ONE webhook in the
+  contract is INBOUND — Pynt receives it from Postman — and the outbound
+  notification surface is configured through REST rules whose delivery channel
+  is not described in the contract at all.
+inbound_webhooks:
+  - name: Postman RUN_SCAN event
+    direction: inbound
+    receiver: Pynt
+    sender: Postman
+    endpoint: POST /v1/postman/webhook
+    operationId: webhook_handler_v1_postman_webhook_post
+    event_schema: PostmanWebhookRunScanEvent
+    payload_schema: PostmanWebhookRunScanPayload
+    fields:
+      - eventId
+      - eventKey (const "RUN_SCAN")
+      - payload.collectionId
+      - payload.environmentId
+    note: >-
+      Pynt exposes this so Postman can trigger a security scan of a collection
+      directly from the Postman platform. An integrator does not subscribe to
+      it; Postman calls it.
+outbound_notifications:
+  configured_via:
+    - operationId: create_notification_rule_v1_notification_rules_post
+      http: POST /v1/notification-rules
+    - operationId: update_notification_rule_v1_notification_rules__rule_id__put
+      http: PUT /v1/notification-rules/{rule_id}
+    - operationId: delete_notification_rule_v1_notification_rules__rule_id__delete
+      http: DELETE /v1/notification-rules/{rule_id}
+  rule_shape:
+    type:
+      enum:
+        - CAPI_SECURITY_TESTING
+      default: CAPI_SECURITY_TESTING
+    enabled: boolean (default true)
+    all_projects: boolean (default false)
+    project_ids: array of string
+    scan_status_triggers:
+      enum:
+        - FAILED
+        - SUCCESS
+      required: true
+    severity_levels:
+      enum:
+        - ANY
+        - CRITICAL
+        - HIGH
+        - MEDIUM
+  gap: >-
+    The rule declares WHEN to notify (scan finished FAILED or SUCCESS, filtered
+    by severity) but nowhere declares WHERE the notification goes — there is no
+    target URL, channel, or transport field in NotificationRuleCreate, and the
+    response schema NotificationRuleOut returns only a rule_id with the comment
+    "the portal owns and stores the rest, keyed by it". The delivery target is
+    therefore configured in the Pynt web portal, outside the API. An agent can
+    create a notification rule but cannot tell where its notifications will be
+    delivered, and cannot subscribe an endpoint of its own. This is the single
+    clearest event-surface gap in the contract.
+event_catalog_published: false
+note: >-
+  NOT fabricated as an AsyncAPI. Pynt publishes no channel/message document and
+  no consumer-subscribable webhook, so no AsyncAPI pointer is emitted — only a
+  Webhooks pointer describing the surface that genuinely exists.
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com

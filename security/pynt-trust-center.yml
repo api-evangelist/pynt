@@ -1,0 +1,54 @@
+generated: '2026-08-27'
+method: searched
+source: https://www.pynt.io/trust-center
+provider: Pynt
+providerId: pynt
+published: true
+trust_center:
+  url: https://www.pynt.io/trust-center
+  http_status: 200
+  fetched: '2026-08-27'
+  hosted: first-party
+  external_portal: null
+  note: >-
+    A first-party page on the Pynt marketing site, not a Vanta / Drata /
+    SafeBase portal. No downloadable report, no subprocessor list, no data
+    residency statement and no automated control evidence were found on it.
+certifications:
+  - name: SOC 2 Type II
+    status: claimed
+    verified: false
+    evidence: >-
+      Named on https://www.pynt.io/trust-center as a compliance standard Pynt
+      adheres to. No report request flow, audit date, auditor name or report
+      period is published, so the claim is a page assertion only.
+  - name: ISO 27001
+    status: not-claimed
+  - name: PCI DSS
+    status: not-claimed
+  - name: HIPAA
+    status: not-claimed
+  - name: FedRAMP
+    status: not-claimed
+policies:
+  - name: Privacy Policy
+    url: https://www.pynt.io/privacy-policy
+    http_status: 200
+  - name: Terms of Service
+    url: https://www.pynt.io/terms
+    http_status: 200
+  - name: Service Agreement / EULA
+    url: https://www.pynt.io/service-agreement
+    http_status: 200
+    note: Listed in the sitemap and linked from the trust center.
+  - name: Cookies Policy
+    url: https://www.pynt.io/cookies-policy
+    http_status: 200
+    note: Listed in the sitemap; not individually re-probed.
+vulnerability_disclosure:
+  detail: security/pynt-vulnerability-disclosure.yml
+  contact: support@pynt.io
+  policy: https://github.com/pynt-io/pynt/blob/main/SECURITY.md
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com

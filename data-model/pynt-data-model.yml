@@ -1,0 +1,245 @@
+generated: '2026-08-27'
+method: derived
+source: >-
+  derived from openapi/pynt-openapi.json — 208 component schemas, $ref links and
+  *_id reference fields
+provider: Pynt
+providerId: pynt
+description: >-
+  Entity-relationship graph for the Pynt API security platform. Derived
+  mechanically from the contract: entities are the component schemas that carry
+  a stable identifier, relationships are the *_id reference fields and $ref
+  links between them.
+identifiers:
+  format: uuid
+  evidence: >-
+    Several schemas pin the shape explicitly, e.g. IntegrationInfo.integration_id
+    is `pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$`.
+  prefixed: false
+  note: Pynt does not use human-readable id prefixes; ids are bare UUIDs.
+entities:
+  - name: Organization
+    id_field: organization_id
+    schemas:
+      - OrganizationResponse
+      - OrganizationCreateResponse
+    description: The tenant. Owns users, applications, API keys and SSO configuration.
+    operations:
+      - create_organization_v1_organization_post
+      - find_organization_by_id_v1_organization__organization_id__get
+      - update_organization_v1_organization__organization_id__patch
+      - update_organization_config_v1_organization__organization_id__config_patch
+      - get_sso_v1_organization_sso_get
+  - name: User
+    id_field: user_id
+    schemas:
+      - UserOut
+      - CreateUserResponse
+    description: A member of an organization; can be an application assignee.
+  - name: Invite
+    id_field: invite_id
+    description: A pending invitation into an organization.
+  - name: ApiKey
+    id_field: api_key_id
+    schemas:
+      - ApiKeyResponse
+      - CreateApiKeyResponse
+      - RevokeApiKeyRequest
+    description: A programmatic credential scoped to an organization and an entity.
+  - name: Application
+    id_field: app_id / application_id
+    schemas:
+      - ApplicationOut
+      - ApplicationListItemOut
+      - ApplicationMetadataOut
+      - CreateApplicationRequest
+    description: >-
+      The central entity — one API estate under test. Everything in the platform
+      hangs off an application.
+  - name: DataSource
+    id_field: data_source_type
+    schemas:
+      - DataSourceOut
+      - ApplicationDataSourceOut
+      - DataSourceStatus
+    description: >-
+      A discovery source attached to an application — Swagger/OpenAPI, Postman
+      collection, an API gateway (AWS/Azure/Kong/GCP/Gravitee), a code repo, or
+      live traffic (eBPF / AWS traffic mirroring).
+  - name: Endpoint
+    id_field: endpoint_id
+    schemas:
+      - Endpoint
+      - EndpointPropertiesInDB
+      - EndpointSource
+    description: A single discovered API endpoint in the catalog, carrying a risk score.
+  - name: EndpointGroup
+    id_field: endpoint_group_id
+    schemas:
+      - EndpointGroupOut
+      - EndpointGroupsRisk
+    description: A grouping of endpoints used for risk aggregation and export.
+  - name: Scan
+    id_field: scan_id
+    schemas:
+      - ScanSummary
+      - ScanSummaryOut
+      - ScanCurrentOut
+      - ScanDetailsMetadata
+      - ScanData
+    description: One security-testing run against an application.
+  - name: ScanSchedule
+    id_field: scan_schedule_id
+    schemas:
+      - ScanScheduleOut
+      - CreateScanScheduleRequest
+    description: Recurring scan configuration (day-of-week, day-interval or once).
+  - name: ScanProfile
+    id_field: scan_profile_id
+    schemas:
+      - ScanProfileBase
+      - ScanConfigOut
+    description: Reusable scan configuration bound to an application.
+  - name: Finding
+    id_field: finding_id
+    schemas:
+      - Finding
+      - FindingDetails
+    description: A single security finding produced by a scan.
+  - name: VulnerabilityInstance
+    id_field: vulnerability_instance_id
+    schemas:
+      - VulnerabilityInstanceOut
+    description: >-
+      A vulnerability occurrence tracked across the estate, taggable and
+      ticketable into Jira.
+  - name: PentestReport
+    id_field: pentest_id
+    schemas:
+      - PentestReportOut
+      - PentestReportListItemOut
+    description: Generated automated penetration-test report for an application.
+  - name: TrafficCollector
+    id_field: collector_id
+    schemas:
+      - TrafficCollectorOut-Input
+      - TrafficCollectorOut-Output
+    description: A deployed live-traffic collector (eBPF / mirroring) reporting into an org.
+  - name: NotificationRule
+    id_field: rule_id
+    schemas:
+      - NotificationRuleCreate
+      - NotificationRuleOut
+    description: >-
+      Trigger rule that fires on scan status (FAILED/SUCCESS) filtered by
+      severity level, scoped to all projects or a project list.
+  - name: EventLog
+    id_field: event_id
+    schemas:
+      - EventLogOut
+    description: Audit event with initiator and target references.
+  - name: Tag
+    id_field: tag_id
+    schemas:
+      - TagOut
+  - name: Integration
+    id_field: integration_id
+    schemas:
+      - IntegrationInfo
+      - ListIntegrationsResponse
+    description: A connected third-party integration (Jira ticketing, Postman).
+relationships:
+  - from: Organization
+    to: User
+    type: has_many
+    via: UserOut.organization_id
+  - from: Organization
+    to: ApiKey
+    type: has_many
+    via: ApiKeyResponse.organization_id
+  - from: Organization
+    to: TrafficCollector
+    type: has_many
+    via: TrafficCollectorOut.organization_id
+  - from: Application
+    to: User
+    type: belongs_to
+    via: ApplicationOut.assignee_id
+    note: assignee
+  - from: Application
+    to: Scan
+    type: has_one
+    via: ApplicationOut.last_scan_id
+    note: most recent scan
+  - from: Application
+    to: DataSource
+    type: has_many
+    via: GET /v1/application/{application_id}/data-sources/{data_source_type}
+  - from: Application
+    to: Endpoint
+    type: has_many
+    via: POST /v1/application/{application_id}/endpoints
+  - from: Application
+    to: ScanSchedule
+    type: has_many
+    via: ScanScheduleOut.application_id
+  - from: Application
+    to: ScanProfile
+    type: has_many
+    via: ScanProfileBase.application_id
+  - from: Application
+    to: PentestReport
+    type: has_many
+    via: GET /v1/application/{application_id}/pentest-report-list
+  - from: Application
+    to: EndpointGroup
+    type: has_many
+    via: EndpointGroupOut.application_id
+  - from: Application
+    to: VulnerabilityInstance
+    type: has_many
+    via: VulnerabilityInstanceOut.application_id
+  - from: Application
+    to: EndpointLLMAnalysis
+    type: has_many
+    via: EndpointLLMAnalysis.application_id
+  - from: Scan
+    to: Application
+    type: belongs_to
+    via: ScanSummaryOut.application_id
+  - from: Scan
+    to: Finding
+    type: has_many
+    via: ScanReportFalsePositiveAnalysis.scan_id / BusinessImpactAnalysis.finding_id
+  - from: EndpointGroup
+    to: VulnerabilityInstance
+    type: has_many
+    via: EndpointGroupOut.vulnerability_instances_ids
+  - from: Endpoint
+    to: Scan
+    type: belongs_to
+    via: EndpointAttackInfo.scan_id
+  - from: EndpointLLMAnalysis
+    to: Endpoint
+    type: belongs_to
+    via: EndpointLLMAnalysis.endpoint_id
+  - from: EventLog
+    to: Application
+    type: belongs_to
+    via: EventLogOut.application_id
+  - from: EventLog
+    to: User
+    type: belongs_to
+    via: EventLogOut.initiator_id
+  - from: VulnerabilityInstance
+    to: Integration
+    type: has_many
+    via: POST /v1/vulnerability-instance/{vulnerability_instance_id}/ticket/jira
+    note: Jira ticket creation
+counts:
+  schemas: 208
+  entities: 19
+  relationships: 21
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com

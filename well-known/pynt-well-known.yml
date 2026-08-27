@@ -1,0 +1,134 @@
+generated: '2026-08-27'
+method: probed
+source: live GET of each /.well-known/ path on every Pynt host
+provider: Pynt
+providerId: pynt
+verdict: none-served
+note: >-
+  NEGATIVE PROBE — recorded deliberately. No /.well-known/ document is served by
+  Pynt on any host. www.pynt.io returns a Webflow "Invalid .well-known request"
+  404 page for every path; api.pynt.io (FastAPI) returns {"detail":"Not Found"};
+  docs.pynt.io (GitBook) returns its 404 HTML shell. app.pynt.io is a
+  single-page-app catch-all that answers HTTP 200 with the SAME 4,704-byte
+  index.html for EVERY path including /llms.txt — that is an SPA shell, not a
+  document, and is recorded as a miss. No WellKnown or SecurityTxt pointer is
+  emitted in apis.yml because nothing real was served.
+hosts:
+  - host: www.pynt.io
+    documents:
+      - path: /.well-known/security.txt
+        status: 404
+        file: null
+      - path: /.well-known/openid-configuration
+        status: 404
+        file: null
+      - path: /.well-known/oauth-authorization-server
+        status: 404
+        file: null
+      - path: /.well-known/oauth-protected-resource
+        status: 404
+        file: null
+      - path: /.well-known/api-catalog
+        status: 404
+        file: null
+      - path: /.well-known/ai-plugin.json
+        status: 404
+        file: null
+      - path: /.well-known/agent-card.json
+        status: 404
+        file: null
+      - path: /.well-known/agent.json
+        status: 404
+        file: null
+  - host: api.pynt.io
+    documents:
+      - path: /.well-known/security.txt
+        status: 404
+        file: null
+      - path: /.well-known/openid-configuration
+        status: 404
+        file: null
+      - path: /.well-known/oauth-authorization-server
+        status: 404
+        file: null
+      - path: /.well-known/oauth-protected-resource
+        status: 404
+        file: null
+      - path: /.well-known/api-catalog
+        status: 404
+        file: null
+      - path: /.well-known/ai-plugin.json
+        status: 404
+        file: null
+      - path: /.well-known/agent-card.json
+        status: 404
+        file: null
+      - path: /.well-known/agent.json
+        status: 404
+        file: null
+  - host: docs.pynt.io
+    documents:
+      - path: /.well-known/security.txt
+        status: 404
+        file: null
+      - path: /.well-known/openid-configuration
+        status: 404
+        file: null
+      - path: /.well-known/oauth-authorization-server
+        status: 404
+        file: null
+      - path: /.well-known/oauth-protected-resource
+        status: 404
+        file: null
+      - path: /.well-known/api-catalog
+        status: 404
+        file: null
+      - path: /.well-known/ai-plugin.json
+        status: 404
+        file: null
+      - path: /.well-known/agent-card.json
+        status: 404
+        file: null
+      - path: /.well-known/agent.json
+        status: 404
+        file: null
+  - host: app.pynt.io
+    note: >-
+      SPA catch-all — every path below returned HTTP 200 with the identical
+      4,704-byte text/html index shell. Treated as a miss, not a hit.
+    documents:
+      - path: /.well-known/security.txt
+        status: 200
+        file: null
+        result: spa-shell
+      - path: /.well-known/openid-configuration
+        status: 200
+        file: null
+        result: spa-shell
+      - path: /.well-known/oauth-authorization-server
+        status: 200
+        file: null
+        result: spa-shell
+      - path: /.well-known/oauth-protected-resource
+        status: 200
+        file: null
+        result: spa-shell
+      - path: /.well-known/api-catalog
+        status: 200
+        file: null
+        result: spa-shell
+      - path: /.well-known/ai-plugin.json
+        status: 200
+        file: null
+        result: spa-shell
+      - path: /.well-known/agent-card.json
+        status: 200
+        file: null
+        result: spa-shell
+      - path: /.well-known/agent.json
+        status: 200
+        file: null
+        result: spa-shell
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com

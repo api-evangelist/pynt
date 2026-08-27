@@ -1,0 +1,87 @@
+generated: '2026-08-27'
+method: derived
+source: >-
+  derived from openapi/pynt-openapi.json (path versioning + deprecated flags);
+  searched docs.pynt.io and www.pynt.io for versioning, deprecation, SLA and
+  status pages
+provider: Pynt
+providerId: pynt
+versioning:
+  style: path
+  pattern: /v{n}
+  current: v1
+  evidence: >-
+    All 105 paths in openapi/pynt-openapi.json are prefixed /v1. info.version in
+    the spec reads "0.1.0", which is the FastAPI application version, not a
+    published API version.
+  policy_published: false
+  policy_url: null
+  note: >-
+    No versioning policy page found on docs.pynt.io or www.pynt.io. The URL
+    scheme is the only version signal.
+deprecation:
+  policy_published: false
+  policy_url: null
+  sunset_header: unknown
+  deprecation_header: unknown
+  rfc8594: false
+  note: >-
+    No deprecation or sunset policy is published, and no Sunset/Deprecation
+    response header is declared in the contract. However the spec DOES flag five
+    operations `deprecated: true`, which is a real in-contract deprecation
+    signal even without a written policy.
+  deprecated_operations:
+    - operationId: create_report_v1_scan__scan_id__report_post
+      http: POST /v1/scan/{scan_id}/report
+      tag: scan
+    - operationId: get_config_v1_config_get
+      http: GET /v1/config
+      tag: config
+    - operationId: list_applications_metadata_v1_applicationsMetadata_get
+      http: GET /v1/applicationsMetadata
+      tag: legacy
+    - operationId: community_user_v1_community_user_get
+      http: GET /v1/community/user
+      tag: legacy
+    - operationId: upload_report_v1_report_put
+      http: PUT /v1/report
+      tag: legacy
+  legacy_tag:
+    present: true
+    operations: 3
+    note: >-
+      The spec carries an explicit `legacy` tag on three operations, which is an
+      unusually honest self-declaration of what is on the way out.
+sla:
+  published: false
+  url: null
+  note: >-
+    No SLA document found. www.pynt.io/service-agreement exists in the sitemap
+    and is an EULA/service agreement, not an uptime SLA.
+status_page:
+  published: false
+  url: null
+  probes:
+    - url: https://status.pynt.io/
+      status: '000'
+      result: host did not resolve
+  note: >-
+    No status page. status.pynt.io does not resolve, and no status link appears
+    on the homepage, docs, or trust center. Pynt announces significant security
+    issues through its Slack community channel instead
+    (https://www.pynt.io/community), per its published SECURITY.md.
+changelog:
+  published: false
+  url: null
+  probes:
+    - url: https://docs.pynt.io/documentation/changelog
+      status: 404
+    - url: https://docs.pynt.io/changelog
+      status: 404
+  note: >-
+    No dated changelog or release-notes page found on the docs host. The
+    closest thing to a public release cadence is the pyntcli PyPI release
+    history (109 releases; latest 0.1.125 on 2026-02-24).
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com

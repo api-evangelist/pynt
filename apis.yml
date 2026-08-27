@@ -1,9 +1,19 @@
 aid: pynt
 name: Pynt
 description: >-
-  Pynt is an API security testing platform that helps developers identify and
-  remediate security vulnerabilities in REST APIs including CSRF, Injection
-  attacks, and insecure direct object references.
+  Pynt is an API security testing platform that discovers and secures APIs, LLM
+  endpoints and MCP servers. It wraps a team's existing functional tests — or
+  proxies live traffic — and runs automated attack simulations against whatever
+  API surface it observes, covering business-logic flaws, injection, mass
+  assignment, authentication bypass, SSRF, GraphQL introspection and alias
+  overloading, LLM prompt injection and sensitive-data exposure. Pynt builds an
+  API catalog from Swagger/OpenAPI definitions, Postman collections, API
+  gateways, code repositories and eBPF live-traffic capture, scores each
+  endpoint for risk, applies LLM false-positive and business-impact analysis to
+  its findings, and generates automated penetration-test reports. It is
+  delivered as a Python CLI that manages a Docker container, with integrations
+  across Postman, Burp Suite, Insomnia, ReadyAPI, a dozen test frameworks, and
+  the major CI/CD platforms. Pynt exposes a public REST API at api.pynt.io.
 type: Index
 accessModel:
   pricing: freemium
@@ -20,36 +30,121 @@ accessModel:
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/pynt.png
 tags:
   - API Testing
-  - Platform
+  - API Security
   - Security
+  - Application Security
+  - DAST
+  - API Discovery
+  - Vulnerability Management
+  - Penetration Testing
+  - DevSecOps
+  - LLM Security
+  - MCP Security
+  - Platform
 url: >-
   https://raw.githubusercontent.com/api-evangelist/pynt/refs/heads/main/apis.yml
 created: '2025-01-08'
-modified: '2026-03-16'
+modified: '2026-08-27'
 specificationVersion: '0.23'
 common:
-  - type: DomainSecurity
-    url: security/pynt-domain-security.yml
+  - type: Website
+    url: https://www.pynt.io/
+  - type: DeveloperPortal
+    url: https://docs.pynt.io/documentation
+  - type: Documentation
+    url: https://docs.pynt.io/documentation
+  - type: GettingStarted
+    url: https://docs.pynt.io/documentation/api-security-testing/prerequisites-for-running-pynt-scans
+  - type: Support
+    url: https://www.pynt.io/contact-us
+  - type: Community
+    url: https://www.pynt.io/community
+  - type: Blog
+    url: https://www.pynt.io/blog
   - type: GitHubOrganization
     url: https://github.com/pynt-io
   - type: LinkedIn
     url: https://www.linkedin.com/company/pynt
-  - type: LlmsText
-    url: https://www.pynt.io/llms.txt
-  - type: Blog
-    url: https://www.pynt.io/blog
+  - type: Postman
+    url: https://www.postman.com/pynt-io/pynt/overview
+  - type: SignUp
+    url: https://www.pynt.io/get-free-api-pentest
+  - type: Login
+    url: https://app.pynt.io/
+  - type: TermsOfService
+    url: https://www.pynt.io/terms
+  - type: PrivacyPolicy
+    url: https://www.pynt.io/privacy-policy
+  - type: LLMsTxt
+    url: https://docs.pynt.io/llms.txt
+  - type: Packages
+    url: packages/pynt-packages.yml
+  - type: CLI
+    url: cli/pynt-cli.yml
+  - type: Authentication
+    url: authentication/pynt-authentication.yml
+  - type: Conventions
+    url: conventions/pynt-conventions.yml
+  - type: ErrorCatalog
+    url: errors/pynt-problem-types.yml
+  - type: Lifecycle
+    url: lifecycle/pynt-lifecycle.yml
+  - type: DataModel
+    url: data-model/pynt-data-model.yml
+  - type: Conformance
+    url: conformance/pynt-conformance.yml
+  - type: Compliance
+    url: https://www.pynt.io/trust-center
+  - type: TrustCenter
+    url: security/pynt-trust-center.yml
+  - type: Security
+    url: https://github.com/pynt-io/pynt/blob/main/SECURITY.md
+  - type: VulnerabilityDisclosure
+    url: security/pynt-vulnerability-disclosure.yml
+  - type: DomainSecurity
+    url: security/pynt-domain-security.yml
+  - type: Webhooks
+    url: asyncapi/pynt-webhooks.yml
+  - type: AgentSkill
+    url: skills/_index.yml
+  - type: Plans
+    url: plans/pynt-plans-pricing.yml
+  - type: RateLimits
+    url: rate-limits/pynt-rate-limits.yml
 apis:
   - aid: pynt:pynt
-    name: Pynt
-    tags: []
-    humanURL: https://www.pynt.io/
+    name: Pynt API
+    tags:
+      - API Security
+      - API Testing
+      - Vulnerability Management
+      - API Discovery
+    humanURL: https://docs.pynt.io/documentation
+    baseURL: https://api.pynt.io
     properties:
-      - url: https://www.pynt.io/learning-hub/api-security-guide/api-security
+      - url: openapi/pynt-openapi.json
+        type: OpenAPI
+      - url: overlays/pynt-openapi-overlay.yaml
+        type: Overlay
+      - url: https://api.pynt.io/docs
+        type: APIReference
+      - url: https://docs.pynt.io/documentation
         type: Documentation
+      - url: mcp/pynt-mcp.yml
+        type: MCPCandidate
     description: >-
-      Common security vulnerabilities in REST APIs include Cross-Site Request
-      Forgery (CSRF), Injection attacks, and insecure direct object references.
-      Pynt helps identify and fix these issues through automated security testing.
+      The REST API behind the Pynt platform. OpenAPI 3.1.0, 105 paths and 134
+      operations across applications (API estates), discovery data sources,
+      endpoints and endpoint groups, scans and scan schedules, findings and
+      vulnerability instances, LLM false-positive and business-impact analyses,
+      automated pentest reports, Jira and Postman integrations, traffic
+      collectors, notification rules, API keys, users, invites and
+      organizations. Secured by header API keys; every path is 401 anonymously.
 maintainers:
   - FN: Kin Lane
     email: kin@apievangelist.com
+x-enrichment:
+  date: '2026-08-27'
+  status: enriched
+  artifacts_added: 22
+  pass: local-v1

@@ -1,0 +1,120 @@
+generated: '2026-08-27'
+method: searched
+source: >-
+  derived from openapi/pynt-openapi.json securitySchemes, then upgraded from
+  https://docs.pynt.io/documentation/security-testing-integrations/pynt-on-ci-cd/how-to-get-pynt-id-for-ci-cd-authentication.md
+  and https://docs.pynt.io/documentation/api-security-testing/how-to-install-pynt-cli.md
+docs: https://docs.pynt.io/documentation/security-testing-integrations/pynt-on-ci-cd/how-to-get-pynt-id-for-ci-cd-authentication.md
+provider: Pynt
+providerId: pynt
+summary:
+  types:
+    - apiKey
+  api_key_in:
+    - header
+  oauth2: false
+  oidc: false
+  mtls: false
+  note: >-
+    All five declared securitySchemes are `apiKey in: header`. There is no
+    OAuth 2.0 and no OpenID Connect surface on the API
+    (/.well-known/oauth-authorization-server and
+    /.well-known/openid-configuration both 404 on every host). Pynt DOES support
+    tenant SSO into its own portal via Okta and Microsoft Entra ID, but that is
+    inbound identity for the web app, not an API authorization server.
+schemes:
+  - name: API Key
+    type: apiKey
+    in: header
+    parameter: X-API-Key
+    sources:
+      - openapi/pynt-openapi.json
+    note: >-
+      The customer-facing programmatic credential. Created via
+      POST /v1/api-key/ (create_api_key_v1_api_key__post), listed via
+      GET /v1/api-key/, and revoked via POST /v1/api-key/revoke
+      (revoke_api_key_v1_api_key_revoke_post).
+  - name: Bearer Token
+    type: apiKey
+    in: header
+    parameter: Authorization
+    sources:
+      - openapi/pynt-openapi.json
+    note: >-
+      MODELLING DEFECT worth flagging: semantically this is an HTTP bearer
+      token, but it is declared as `apiKey in: header name: Authorization`
+      rather than `type: http, scheme: bearer`. Generated clients and security
+      scanners will not treat it as a bearer token. Issued by the auth flow
+      below.
+  - name: System API Key
+    type: apiKey
+    in: header
+    parameter: X-System-API-Key
+    sources:
+      - openapi/pynt-openapi.json
+    note: >-
+      Internal/system-tier credential. Appears on operations such as
+      create_notification_rule_v1_notification_rules_post. Not a credential a
+      normal customer integration would hold.
+  - name: Organization ID
+    type: apiKey
+    in: header
+    parameter: X-Organization-ID
+    sources:
+      - openapi/pynt-openapi.json
+    note: Tenant selector, not a secret. Scopes a request to one organization.
+  - name: Operator Organization Context
+    type: apiKey
+    in: header
+    parameter: context
+    sources:
+      - openapi/pynt-openapi.json
+    note: >-
+      Operator impersonation/context header. Declared as a securityScheme but is
+      a context selector rather than a credential.
+flows:
+  - name: device code (CLI login)
+    kind: device authorization
+    operations:
+      - store_code_for_device_v1_auth_device_code__device_code__put
+      - claim_device_code_v1_auth_device_code__device_code__get
+      - login_with_authorization_code_v1_auth_login_post
+      - issue_access_token_from_refresh_token_v1_auth_refresh_post
+    description: >-
+      How the Pynt CLI authenticates a human. First run opens a browser login;
+      the CLI stores the device code, claims it, exchanges an authorization code
+      at POST /v1/auth/login (body AuthorizationCodeExchangeRequest), and
+      refreshes at POST /v1/auth/refresh. Once authenticated the CLI does not
+      prompt again until the session expires.
+    source: https://docs.pynt.io/documentation/api-security-testing/how-to-install-pynt-cli.md
+  - name: PYNT_ID (CI/CD)
+    kind: static credential
+    variable: PYNT_ID
+    description: >-
+      For non-interactive CI/CD use, Pynt issues a "Pynt ID" obtained from
+      Settings → General → Pynt ID in the platform, or by running `pynt pynt-id`.
+      It is exported as an environment variable. The Linux binary build REQUIRES
+      it because, per Pynt's own docs, "Pynt authentication is not implemented
+      yet" for that build.
+    source: https://docs.pynt.io/documentation/security-testing-integrations/pynt-on-ci-cd/how-to-get-pynt-id-for-ci-cd-authentication.md
+verification:
+  probes:
+    - url: https://api.pynt.io/v1/auth/check
+      status: 401
+      body: '{"detail":"Unauthorized"}'
+      fetched: '2026-08-27'
+    - url: https://api.pynt.io/v1/application
+      status: 401
+      fetched: '2026-08-27'
+  note: >-
+    The contract declares no root-level `security` requirement, but every
+    operation probed anonymously returned 401, so the API is secured by default
+    in practice.
+scopes:
+  published: false
+  note: >-
+    No OAuth scopes, no permission strings and no role model are published. No
+    scopes/ artifact is emitted because there is nothing to record.
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com

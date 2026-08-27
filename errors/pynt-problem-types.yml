@@ -1,0 +1,84 @@
+generated: '2026-08-27'
+method: derived
+source: >-
+  derived from openapi/pynt-openapi.json response objects, plus live
+  unauthenticated probes of api.pynt.io
+provider: Pynt
+providerId: pynt
+format: bespoke
+rfc9457: false
+description: >-
+  Error catalog for the Pynt API. The contract is a FastAPI application and the
+  error envelope is FastAPI's default: a JSON object with a single `detail` key.
+  It is NOT RFC 9457 application/problem+json — no type, title, status or
+  instance members are emitted, and the content type is application/json.
+envelope:
+  media_type: application/json
+  shape: '{"detail": <string | array of validation errors>}'
+  fields:
+    - name: detail
+      type: string or array
+      description: >-
+        Human-readable message for auth/permission failures; for 422 it is an
+        array of ValidationError objects.
+  observed:
+    url: https://api.pynt.io/v1/auth/check
+    status: 401
+    body: '{"detail":"Unauthorized"}'
+    fetched: '2026-08-27'
+validation_error_schema:
+  name: HTTPValidationError
+  ref: '#/components/schemas/HTTPValidationError'
+  member: detail
+  item: ValidationError
+  item_fields:
+    - loc
+    - msg
+    - type
+  note: >-
+    The 422 body is FastAPI/Pydantic's standard validation array. `loc` is a
+    JSON-pointer-like path array identifying the offending parameter or body
+    field, which is the most machine-actionable error signal the API emits.
+problem_types:
+  - status: 422
+    name: Validation Error
+    schema: HTTPValidationError
+    media_type: application/json
+    documented_on_operations: 113
+    remediation: >-
+      Read detail[].loc to locate the failing parameter or body field and
+      detail[].msg for the constraint that was violated. Correct and retry — the
+      request as sent will never succeed.
+  - status: 401
+    name: Unauthorized
+    media_type: application/json
+    documented_on_operations: 0
+    observed: true
+    remediation: >-
+      Supply one of the declared header credentials (X-API-Key, Authorization,
+      or X-System-API-Key) — see authentication/pynt-authentication.yml. NOT
+      declared in the OpenAPI responses; observed live on every /v1 path probed
+      anonymously.
+  - status: 404
+    name: Not Found
+    media_type: application/json
+    documented_on_operations: 0
+    observed: true
+    remediation: >-
+      Path does not exist on api.pynt.io. Observed as {"detail":"Not Found"}.
+      NOT declared in the OpenAPI responses.
+gaps:
+  - >-
+    The spec declares only 200/201/202/204 and 422. Every authentication,
+    authorization, not-found, conflict, rate-limit and server-error response an
+    agent will actually meet is UNDOCUMENTED in the contract — 401 and 404 were
+    confirmed live but appear on zero operations.
+  - >-
+    No 429 is declared or documented anywhere, and no rate-limit response
+    headers were observed. See rate-limits/pynt-rate-limits.yml.
+  - >-
+    Adopting RFC 9457 (application/problem+json with type/title/status/detail)
+    would make these machine-classifiable; today only the 422 array is.
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com

@@ -1,0 +1,59 @@
+generated: '2026-08-27'
+method: generated
+source: >-
+  Authored from openapi/pynt-openapi.json. Every operationId referenced in every
+  skill below was grepped out of the contract, not invented. Pynt publishes no
+  AGENTS.md and no first-party agent skills (searched docs.pynt.io llms.txt and
+  the pynt-io GitHub org).
+provider: Pynt
+providerId: pynt
+api: Pynt
+base_url: https://api.pynt.io
+skills:
+  - name: pynt-run-api-security-scan
+    file: pynt-run-api-security-scan.md
+    description: >-
+      Run a Pynt security scan against a registered application, poll to
+      completion, abort if needed, and read the findings with Pynt's
+      false-positive and business-impact analyses applied.
+    operations: 6
+  - name: pynt-onboard-application
+    file: pynt-onboard-application.md
+    description: >-
+      Register a new application, attach an API discovery source, seed
+      endpoints, and put it on a recurring scan schedule.
+    operations: 7
+  - name: pynt-triage-vulnerabilities
+    file: pynt-triage-vulnerabilities.md
+    description: >-
+      Work Pynt findings end to end — false-positive check, business-impact
+      ranking, relevance and tags, Jira tickets, risk roll-up and export.
+    operations: 9
+  - name: pynt-generate-pentest-report
+    file: pynt-generate-pentest-report.md
+    description: >-
+      Generate, retrieve and download an automated penetration-test report for
+      an application.
+    operations: 5
+cross_cutting_rules:
+  auth: authentication/pynt-authentication.yml
+  errors: errors/pynt-problem-types.yml
+  conventions: conventions/pynt-conventions.yml
+  reversibility: conventions/pynt-conventions.yml#reversibility
+  rate_limits: rate-limits/pynt-rate-limits.yml
+warnings:
+  - >-
+    A Pynt scan sends real attack traffic at a real API. Every skill that starts
+    a scan must confirm the target and the human's authority to test it first.
+  - >-
+    No idempotency key exists anywhere on this API. Retrying a write duplicates
+    it — a second scan, a second Jira ticket, a second report.
+  - >-
+    No DELETE in this contract has a restore. Deletes are permanent as far as
+    the published API is concerned.
+  - >-
+    No pagination grammar is published. Narrow list calls with the `filter`
+    parameter; do not assume a page cursor exists.
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com

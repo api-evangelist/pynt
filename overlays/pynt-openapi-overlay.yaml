@@ -1,0 +1,123 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for the Pynt API
+  version: 1.0.0
+extends: ../openapi/pynt-openapi.json
+x-provenance:
+  generated: '2026-08-27'
+  method: generated
+  source: >-
+    Authored by the API Evangelist enrichment pipeline from artifacts in this
+    repo. Every value below is either an observed fact (base URL, live 401
+    behavior, deprecated flags already in the spec) or a pointer to a repo
+    artifact. Nothing here invents provider behavior.
+  note: >-
+    The upstream document at https://api.pynt.io/openapi.json is a FastAPI
+    auto-generated spec with no servers[], no description, no contact, no
+    licence, no tag descriptions, and only 422 declared on its error responses.
+    This overlay records what would have to be added to make it usable by an
+    agent, WITHOUT mutating openapi/_original/pynt-openapi.json.
+actions:
+  - target: $.info
+    description: Give the contract a real description, contact and terms.
+    update:
+      description: >-
+        The Pynt API drives the Pynt API security testing platform: register
+        applications (API estates), attach discovery sources, run and schedule
+        security scans, and read findings, risk scores, LLM false-positive and
+        business-impact analyses, and generated pentest reports.
+      contact:
+        name: Pynt Support
+        email: support@pynt.io
+        url: https://www.pynt.io/contact-us
+      termsOfService: https://www.pynt.io/terms
+      x-privacy-policy: https://www.pynt.io/privacy-policy
+      x-trust-center: https://www.pynt.io/trust-center
+      x-documentation: https://docs.pynt.io/documentation
+      x-api-evangelist-note: >-
+        info.version "0.1.0" is the FastAPI application version, not a published
+        API version. The API version is v1, carried in every path.
+  - target: $
+    description: >-
+      Declare the production server. The upstream document ships no servers[]
+      block at all, which leaves a consumer with a spec they cannot call.
+    update:
+      servers:
+        - url: https://api.pynt.io
+          description: >-
+            Pynt production API. Confirmed live 2026-08-27: GET
+            /v1/auth/check, /v1/application and /v1/scan/summary all return HTTP
+            401 {"detail":"Unauthorized"} anonymously, and the spec itself is
+            served from this host at /openapi.json with Swagger UI at /docs.
+  - target: $
+    description: Apply a default security requirement — the upstream spec has none at the root.
+    update:
+      x-api-evangelist-security-note: >-
+        Every operation probed rejects anonymous requests with 401, so the API
+        is effectively secured by default even though the root `security` key is
+        absent. Operations declare their accepted schemes individually.
+  - target: $.components.securitySchemes['Bearer Token']
+    description: >-
+      Flag a modelling defect. The Bearer Token scheme is declared as
+      `apiKey in: header name: Authorization` rather than `http scheme: bearer`,
+      so generated clients and scanners will not treat it as a bearer token.
+    update:
+      description: >-
+        Modelled as an apiKey on the Authorization header. Semantically this is
+        an HTTP bearer token; declaring it as `type: http, scheme: bearer` would
+        let tooling handle it correctly.
+  - target: $.paths['/v1/scan/run-remote-scan'].post
+    description: Record reversibility, since scans are active tests against a live target.
+    update:
+      x-reversibility:
+        reversal: abort_scan_v1_scan__scan_id__abort_post
+        reversal_path: POST /v1/scan/{scan_id}/abort
+        kind: cancel
+        window: null
+        grade: documented
+        note: >-
+          An in-flight scan can be aborted. No window and no statement about
+          what a partially completed active security test leaves behind on the
+          target is published. See conventions/pynt-conventions.yml.
+  - target: $.paths['/v1/application/{application_id}'].delete
+    description: Record that this write has no reversal.
+    update:
+      x-reversibility:
+        reversal: null
+        kind: irreversible
+        note: >-
+          No restore or undelete operation exists anywhere in the contract.
+          Deleting an application is permanent as far as the published API is
+          concerned.
+  - target: $.paths['/v1/notification-rules'].post
+    description: Record the delivery-target gap in the notification surface.
+    update:
+      x-api-evangelist-note: >-
+        NotificationRuleCreate declares WHEN to notify (scan_status_triggers
+        FAILED/SUCCESS, severity_levels) but carries no target URL, channel or
+        transport field, and NotificationRuleOut returns only a rule_id. The
+        delivery destination is owned by the Pynt web portal, outside this API,
+        so an agent cannot subscribe an endpoint of its own. See
+        asyncapi/pynt-webhooks.yml.
+  - target: $.paths['/v1/postman/webhook'].post
+    description: Clarify webhook direction.
+    update:
+      x-webhook-direction: inbound
+      x-api-evangelist-note: >-
+        This is a RECEIVER — Postman calls Pynt here with a RUN_SCAN event to
+        trigger a collection scan. It is not a webhook an integrator subscribes
+        to.
+x-artifact-index:
+  authentication: ../authentication/pynt-authentication.yml
+  conventions: ../conventions/pynt-conventions.yml
+  errors: ../errors/pynt-problem-types.yml
+  lifecycle: ../lifecycle/pynt-lifecycle.yml
+  data_model: ../data-model/pynt-data-model.yml
+  conformance: ../conformance/pynt-conformance.yml
+  webhooks: ../asyncapi/pynt-webhooks.yml
+  rate_limits: ../rate-limits/pynt-rate-limits.yml
+  plans: ../plans/pynt-plans-pricing.yml
+  packages: ../packages/pynt-packages.yml
+  cli: ../cli/pynt-cli.yml
+  mcp: ../mcp/pynt-mcp.yml
+  skills: ../skills/_index.yml

@@ -1,0 +1,186 @@
+generated: '2026-08-27'
+method: derived
+source: >-
+  derived from openapi/pynt-openapi.json plus live probes of api.pynt.io;
+  searched docs.pynt.io for cross-cutting semantics
+provider: Pynt
+providerId: pynt
+description: >-
+  Cross-cutting runtime semantics for the Pynt API (https://api.pynt.io). The
+  contract is a FastAPI application; several conventions below are read from the
+  framework's observable behavior rather than from provider prose, because Pynt
+  publishes no API-reference narrative — only the machine contract at
+  /openapi.json and its Swagger UI at /docs.
+authentication:
+  style: header api key
+  schemes:
+    - X-API-Key
+    - Authorization
+    - X-System-API-Key
+  context_headers:
+    - X-Organization-ID
+    - context
+  oauth2: false
+  detail: authentication/pynt-authentication.yml
+  note: >-
+    Five securitySchemes, all declared `apiKey in: header`. Note the Bearer
+    Token scheme is modelled as an apiKey on the Authorization header rather
+    than as http/bearer, so tooling will not automatically treat it as a bearer
+    token. There is also a device-code login flow
+    (PUT/GET /v1/auth/device-code/{device_code}, POST /v1/auth/login,
+    POST /v1/auth/refresh) used by the Pynt CLI.
+idempotency:
+  supported: false
+  header: null
+  scope: null
+  retention: null
+  evidence: >-
+    No Idempotency-Key parameter appears on any of the 134 operations, and no
+    idempotency semantics are documented. Write operations use PUT, POST, PATCH
+    and DELETE with no replay protection. A retried POST /v1/scan/run-remote-scan
+    would start a second scan.
+  note: >-
+    NOT emitted as an Idempotency pointer in apis.yml — the provider does not
+    support it.
+pagination:
+  supported: partial
+  style: filter-expression
+  params:
+    - name: filter
+      appears_on: 18
+      note: >-
+        A `filter` query parameter is the dominant list-shaping mechanism (18
+        operations). Its grammar is not documented publicly.
+    - name: where
+      appears_on: 4
+  count_endpoints:
+    - GET /v1/application/count
+    - GET /v1/application/metadata/count
+    - GET /v1/scan/summary/count
+  note: >-
+    Pynt pairs list endpoints with dedicated `/count` endpoints rather than
+    returning a total in the list envelope. No limit/offset, page/per_page,
+    or cursor parameter was found on any list operation, and no Link header is
+    documented — so an agent cannot page a large result set from the contract
+    alone. This is a real gap, not an omission in this artifact.
+field_expansion:
+  supported: false
+sparse_fieldsets:
+  supported: false
+metadata:
+  supported: true
+  note: >-
+    Applications carry a first-class metadata surface
+    (GET /v1/application/metadata, GET /v1/application/{application_id}/metadata)
+    and vulnerability instances carry user-settable tags
+    (PUT /v1/vulnerability-instance/{id}/tags).
+request_id_tracing:
+  supported: false
+  header: null
+  evidence: >-
+    No X-Request-Id / X-Correlation-Id / traceparent header was returned on the
+    live 401 responses observed on 2026-08-27, and none is declared in the
+    contract. Response headers observed: date, content-type, content-length,
+    server (uvicorn).
+versioning:
+  style: path
+  current: v1
+  detail: lifecycle/pynt-lifecycle.yml
+error_envelope:
+  media_type: application/json
+  shape: '{"detail": ...}'
+  rfc9457: false
+  detail: errors/pynt-problem-types.yml
+rate_limit_signaling:
+  headers_observed: []
+  status_on_exhaustion: unknown
+  documented: false
+  detail: rate-limits/pynt-rate-limits.yml
+  note: >-
+    No RateLimit-*, X-RateLimit-* or Retry-After header was present on any live
+    response observed, and no 429 is declared on any operation.
+dry_run_mode:
+  supported: false
+  note: >-
+    No dry-run, preview, validate-only or simulate parameter exists on any write
+    operation. Pynt scans are themselves active tests against a target, which
+    makes the absence of a rehearsal mode materially more consequential here
+    than on a typical CRUD API.
+reversibility:
+  grade: documented
+  credit: 0.4
+  read_only: false
+  note: >-
+    Reversal paths EXIST but no window is stated anywhere. Graded `documented`
+    rather than `verified` for exactly that reason. No retention or restore
+    window is published on docs.pynt.io, so none is asserted here.
+  surfaces:
+    - write_operation: run_scan_v1_scan_run_remote_scan_post
+      http: POST /v1/scan/run-remote-scan
+      reversal: abort_scan_v1_scan__scan_id__abort_post
+      reversal_http: POST /v1/scan/{scan_id}/abort
+      reversal_kind: cancel
+      window: null
+      window_source: null
+      note: >-
+        An in-flight scan can be aborted. The contract states no deadline and no
+        guarantee about what a partially completed scan leaves behind on the
+        target — an aborted active security test is not the same as one that
+        never ran.
+    - write_operation: run_har_scan_v1_scan_run_remote_har_scan_post
+      http: POST /v1/scan/run-remote-har-scan
+      reversal: abort_scan_v1_scan__scan_id__abort_post
+      reversal_http: POST /v1/scan/{scan_id}/abort
+      reversal_kind: cancel
+      window: null
+      window_source: null
+    - write_operation: create_application_v1_application_put
+      http: PUT /v1/application
+      reversal: delete_application_by_id_v1_application__application_id__delete
+      reversal_http: DELETE /v1/application/{application_id}
+      reversal_kind: delete
+      window: null
+      window_source: null
+      note: >-
+        This reverses the CREATE, not the DELETE. There is no restore or undelete
+        operation anywhere in the contract — a deleted application, data source,
+        scan schedule, user, invite, notification rule, collector or Jira/Postman
+        integration is gone with no published recovery path. An agent should
+        treat every DELETE on this API as irreversible.
+    - write_operation: create_api_key_v1_api_key__post
+      http: POST /v1/api-key/
+      reversal: revoke_api_key_v1_api_key_revoke_post
+      reversal_http: POST /v1/api-key/revoke
+      reversal_kind: revoke
+      window: null
+      window_source: null
+    - write_operation: create_scan_schedule_v1_application__application_id__scan_schedule_post
+      http: POST /v1/application/{application_id}/scan-schedule
+      reversal: update_scan_schedule_state_v1_application__application_id__scan_schedule__scan_schedule_id__state_patch
+      reversal_http: PATCH /v1/application/{application_id}/scan-schedule/{scan_schedule_id}/state
+      reversal_kind: disable
+      window: null
+      window_source: null
+      note: >-
+        A schedule can be disabled via its state endpoint rather than deleted,
+        which is the only soft-reversal in the contract.
+  irreversible:
+    - DELETE /v1/application/{application_id}
+    - DELETE /v1/application/{application_id}/data-sources/{data_source_type}
+    - DELETE /v1/application/{application_id}/scan-schedule/{scan_schedule_id}
+    - DELETE /v1/user/{user_id}
+    - DELETE /v1/invite/{invite_id}
+    - DELETE /v1/ticketing/jira
+    - DELETE /v1/postman
+    - DELETE /v1/traffic/collector/{collector_id}
+    - DELETE /v1/notification-rules/{rule_id}
+    - DELETE /v1/nats/{application_id}/poids-map
+cross_links:
+  errors: errors/pynt-problem-types.yml
+  lifecycle: lifecycle/pynt-lifecycle.yml
+  authentication: authentication/pynt-authentication.yml
+  rate_limits: rate-limits/pynt-rate-limits.yml
+  data_model: data-model/pynt-data-model.yml
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com
