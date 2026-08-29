@@ -1,0 +1,313 @@
+openapi: 3.2.0
+info:
+  title: Pynt Organization API
+  version: 0.1.0
+  description: 'Operations tagged organization across 2 of this provider''s published API definitions: pynt-openapi.json, pynt-openapi.json. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.pynt.io
+  description: Pynt production API
+tags:
+- name: organization
+paths:
+  /v1/organization:
+    post:
+      tags:
+      - organization
+      summary: Create Organization
+      description: Create a new organization. SystemAdmin only. No tenant_id required.
+      operationId: create_organization_v1_organization_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrganizationCreateRequest'
+        required: true
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizationCreateResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - Bearer Token: []
+  /v1/organization/sso:
+    get:
+      tags:
+      - organization
+      summary: Get Sso
+      operationId: get_sso_v1_organization_sso_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SSOResponse'
+      security:
+      - Bearer Token: []
+      - Operator Organization Context: []
+  /v1/organization/{organization_id}:
+    get:
+      tags:
+      - organization
+      summary: Find Organization By Id
+      operationId: find_organization_by_id_v1_organization__organization_id__get
+      security:
+      - API Key: []
+      - Bearer Token: []
+      - System API Key: []
+      - Organization ID: []
+      - Operator Organization Context: []
+      parameters:
+      - name: organization_id
+        in: path
+        required: true
+        schema:
+          type: string
+          pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
+          title: Organization Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizationResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    patch:
+      tags:
+      - organization
+      summary: Update Organization
+      operationId: update_organization_v1_organization__organization_id__patch
+      security:
+      - API Key: []
+      - Bearer Token: []
+      - System API Key: []
+      - Organization ID: []
+      - Operator Organization Context: []
+      parameters:
+      - name: organization_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Organization Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrganizationUpdateModel'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/organization/{organization_id}/config:
+    patch:
+      tags:
+      - organization
+      summary: Update Organization Config
+      operationId: update_organization_config_v1_organization__organization_id__config_patch
+      security:
+      - Bearer Token: []
+      - Operator Organization Context: []
+      - API Key: []
+      - Bearer Token: []
+      - System API Key: []
+      - Organization ID: []
+      parameters:
+      - name: organization_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Organization Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrganizationConfigUpdateModel'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizationConfigResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    OrganizationUpdateModel:
+      properties:
+        name:
+          type: string
+          maxLength: 30
+          pattern: ^[a-zA-Z0-9_\-\s]*$
+          title: Name
+      type: object
+      required:
+      - name
+      title: OrganizationUpdateModel
+    OrganizationConfigResponse:
+      properties:
+        allow_collect_data:
+          type: boolean
+          title: Allow Collect Data
+        allow_collect_data_since:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Allow Collect Data Since
+        local_only_mode:
+          type: boolean
+          title: Local Only Mode
+      type: object
+      required:
+      - allow_collect_data
+      - allow_collect_data_since
+      - local_only_mode
+      title: OrganizationConfigResponse
+    OrganizationResponse:
+      properties:
+        organization_id:
+          type: string
+          title: Organization Id
+        name:
+          type: string
+          title: Name
+        license_expiration:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: License Expiration
+        config:
+          $ref: '#/components/schemas/OrganizationConfigResponse'
+      type: object
+      required:
+      - organization_id
+      - name
+      - config
+      title: OrganizationResponse
+    OrganizationCreateResponse:
+      properties:
+        organization_id:
+          type: string
+          title: Organization Id
+      type: object
+      required:
+      - organization_id
+      title: OrganizationCreateResponse
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    OrganizationCreateRequest:
+      properties:
+        name:
+          type: string
+          title: Name
+      type: object
+      required:
+      - name
+      title: OrganizationCreateRequest
+    SSOResponse:
+      properties:
+        identity_provider:
+          type: string
+          title: Identity Provider
+      type: object
+      required:
+      - identity_provider
+      title: SSOResponse
+    OrganizationConfigUpdateModel:
+      properties:
+        allow_collect_data:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Allow Collect Data
+        local_only_mode:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Local Only Mode
+      type: object
+      title: OrganizationConfigUpdateModel
+  securitySchemes:
+    API_Key:
+      type: apiKey
+      in: header
+      name: X-API-Key
+    Bearer_Token:
+      type: apiKey
+      in: header
+      name: Authorization
+    System_API_Key:
+      type: apiKey
+      in: header
+      name: X-System-API-Key
+    Organization_ID:
+      type: apiKey
+      in: header
+      name: X-Organization-ID
+    Operator_Organization_Context:
+      type: apiKey
+      in: header
+      name: context
+x-refined-from:
+- pynt-openapi.json
+- pynt-openapi.json

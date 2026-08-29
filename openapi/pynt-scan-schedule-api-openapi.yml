@@ -1,0 +1,656 @@
+openapi: 3.2.0
+info:
+  title: Pynt Scan Schedule API
+  version: 0.1.0
+  description: 'Operations tagged scan-schedule across 2 of this provider''s published API definitions: pynt-openapi.json, pynt-openapi.json. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.pynt.io
+  description: Pynt production API
+tags:
+- name: scan-schedule
+paths:
+  /v1/application/{application_id}/scan-schedule:
+    post:
+      tags:
+      - scan-schedule
+      summary: Create Scan Schedule
+      operationId: create_scan_schedule_v1_application__application_id__scan_schedule_post
+      security:
+      - Bearer Token: []
+      - Operator Organization Context: []
+      - API Key: []
+      - Bearer Token: []
+      - System API Key: []
+      - Organization ID: []
+      parameters:
+      - name: application_id
+        in: path
+        required: true
+        schema:
+          type: string
+          pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
+          title: Application Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateScanScheduleRequest'
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScanScheduleOut'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    get:
+      tags:
+      - scan-schedule
+      summary: Get Scan Schedule By Application
+      operationId: get_scan_schedule_by_application_v1_application__application_id__scan_schedule_get
+      security:
+      - Bearer Token: []
+      - Operator Organization Context: []
+      - API Key: []
+      - Bearer Token: []
+      - System API Key: []
+      - Organization ID: []
+      parameters:
+      - name: application_id
+        in: path
+        required: true
+        schema:
+          type: string
+          pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
+          title: Application Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScanScheduleOut'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/application/{application_id}/scan-schedule/{scan_schedule_id}:
+    patch:
+      tags:
+      - scan-schedule
+      summary: Update Scan Schedule
+      operationId: update_scan_schedule_v1_application__application_id__scan_schedule__scan_schedule_id__patch
+      security:
+      - Bearer Token: []
+      - Operator Organization Context: []
+      - API Key: []
+      - Bearer Token: []
+      - System API Key: []
+      - Organization ID: []
+      parameters:
+      - name: application_id
+        in: path
+        required: true
+        schema:
+          type: string
+          pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
+          title: Application Id
+      - name: scan_schedule_id
+        in: path
+        required: true
+        schema:
+          type: string
+          pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
+          title: Scan Schedule Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateScanScheduleRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScanScheduleOut'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    delete:
+      tags:
+      - scan-schedule
+      summary: Delete Scan Schedule
+      operationId: delete_scan_schedule_v1_application__application_id__scan_schedule__scan_schedule_id__delete
+      security:
+      - Bearer Token: []
+      - Operator Organization Context: []
+      - API Key: []
+      - Bearer Token: []
+      - System API Key: []
+      - Organization ID: []
+      parameters:
+      - name: application_id
+        in: path
+        required: true
+        schema:
+          type: string
+          pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
+          title: Application Id
+      - name: scan_schedule_id
+        in: path
+        required: true
+        schema:
+          type: string
+          pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
+          title: Scan Schedule Id
+      responses:
+        '204':
+          description: Successful Response
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/application/{application_id}/scan-schedule/{scan_schedule_id}/state:
+    patch:
+      tags:
+      - scan-schedule
+      summary: Update Scan Schedule State
+      operationId: update_scan_schedule_state_v1_application__application_id__scan_schedule__scan_schedule_id__state_patch
+      security:
+      - Bearer Token: []
+      - Operator Organization Context: []
+      - API Key: []
+      - Bearer Token: []
+      - System API Key: []
+      - Organization ID: []
+      parameters:
+      - name: application_id
+        in: path
+        required: true
+        schema:
+          type: string
+          pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
+          title: Application Id
+      - name: scan_schedule_id
+        in: path
+        required: true
+        schema:
+          type: string
+          pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
+          title: Scan Schedule Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateScanScheduleStateRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/scan-schedule:
+    get:
+      tags:
+      - scan-schedule
+      summary: List All Scan Schedules
+      operationId: list_all_scan_schedules_v1_scan_schedule_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ScanScheduleOut'
+                type: array
+                title: Response List All Scan Schedules V1 Scan Schedule Get
+      security:
+      - Bearer Token: []
+      - Operator Organization Context: []
+      - API Key: []
+      - Bearer Token: []
+      - System API Key: []
+      - Organization ID: []
+components:
+  schemas:
+    UpdateScanScheduleStateRequest:
+      properties:
+        state:
+          type: string
+          enum:
+          - active
+          - paused
+          title: State
+      type: object
+      required:
+      - state
+      title: UpdateScanScheduleStateRequest
+    AppScanTargetOut:
+      properties:
+        integration_type:
+          type: string
+          const: app
+          title: Integration Type
+          default: app
+      type: object
+      title: AppScanTargetOut
+      description: 'Scan target for a Pynt application''s built collection.
+
+
+        The client supplies only the integration type; the collection''s S3 location
+
+        is derived server-side from the application''s assigned poid.'
+    OnlyOnceSpec:
+      properties:
+        schedule_type:
+          type: string
+          const: only_once
+          title: Schedule Type
+          default: only_once
+        run_at:
+          type: string
+          format: date-time
+          title: Run At
+      type: object
+      required:
+      - run_at
+      title: OnlyOnceSpec
+    NewmanScanTargetOut:
+      properties:
+        integration_type:
+          type: string
+          const: newman
+          title: Integration Type
+          default: newman
+        collection_to_test:
+          type: string
+          minLength: 1
+          title: Collection To Test
+        environment_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Environment Name
+        api_key:
+          type: string
+          minLength: 1
+          title: Api Key
+      type: object
+      required:
+      - collection_to_test
+      - api_key
+      title: NewmanScanTargetOut
+    CreateDayOfWeekSpec:
+      properties:
+        time_local:
+          type: string
+          format: time
+          title: Time Local
+        schedule_type:
+          type: string
+          const: day_of_week
+          title: Schedule Type
+          default: day_of_week
+        days:
+          items:
+            $ref: '#/components/schemas/DayOfWeek'
+          type: array
+          minItems: 1
+          title: Days
+      type: object
+      required:
+      - time_local
+      - days
+      title: CreateDayOfWeekSpec
+    SyncStatus:
+      type: string
+      enum:
+      - pending
+      - synced
+      - failed
+      title: SyncStatus
+    DayOfWeek:
+      type: string
+      enum:
+      - sunday
+      - monday
+      - tuesday
+      - wednesday
+      - thursday
+      - friday
+      - saturday
+      title: DayOfWeek
+    HarScanTargetOut:
+      properties:
+        integration_type:
+          type: string
+          const: har
+          title: Integration Type
+          default: har
+        har_path:
+          type: string
+          minLength: 1
+          title: Har Path
+        capture_domains:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Capture Domains
+      type: object
+      required:
+      - har_path
+      title: HarScanTargetOut
+    CreateScanScheduleRequest:
+      properties:
+        spec:
+          oneOf:
+          - $ref: '#/components/schemas/CreateDayOfWeekSpec'
+          - $ref: '#/components/schemas/CreateDayIntervalSpec'
+          - $ref: '#/components/schemas/CreateOnlyOnceSpec'
+          title: Spec
+          discriminator:
+            propertyName: schedule_type
+            mapping:
+              day_interval: '#/components/schemas/CreateDayIntervalSpec'
+              day_of_week: '#/components/schemas/CreateDayOfWeekSpec'
+              only_once: '#/components/schemas/CreateOnlyOnceSpec'
+        target:
+          oneOf:
+          - $ref: '#/components/schemas/HarScanTargetOut'
+          - $ref: '#/components/schemas/NewmanScanTargetOut'
+          - $ref: '#/components/schemas/AppScanTargetOut'
+          title: Target
+          discriminator:
+            propertyName: integration_type
+            mapping:
+              app: '#/components/schemas/AppScanTargetOut'
+              har: '#/components/schemas/HarScanTargetOut'
+              newman: '#/components/schemas/NewmanScanTargetOut'
+      type: object
+      required:
+      - spec
+      - target
+      title: CreateScanScheduleRequest
+    CreateDayIntervalSpec:
+      properties:
+        time_local:
+          type: string
+          format: time
+          title: Time Local
+        schedule_type:
+          type: string
+          const: day_interval
+          title: Schedule Type
+          default: day_interval
+        interval_days:
+          type: integer
+          minimum: 1.0
+          title: Interval Days
+      type: object
+      required:
+      - time_local
+      - interval_days
+      title: CreateDayIntervalSpec
+    UpdateScanScheduleRequest:
+      properties:
+        spec:
+          anyOf:
+          - oneOf:
+            - $ref: '#/components/schemas/DayOfWeekSpec-Input'
+            - $ref: '#/components/schemas/DayIntervalSpec-Input'
+            - $ref: '#/components/schemas/OnlyOnceSpec'
+            discriminator:
+              propertyName: schedule_type
+              mapping:
+                day_interval: '#/components/schemas/DayIntervalSpec-Input'
+                day_of_week: '#/components/schemas/DayOfWeekSpec-Input'
+                only_once: '#/components/schemas/OnlyOnceSpec'
+          - type: 'null'
+          title: Spec
+        target:
+          anyOf:
+          - oneOf:
+            - $ref: '#/components/schemas/HarScanTargetOut'
+            - $ref: '#/components/schemas/NewmanScanTargetOut'
+            - $ref: '#/components/schemas/AppScanTargetOut'
+            discriminator:
+              propertyName: integration_type
+              mapping:
+                app: '#/components/schemas/AppScanTargetOut'
+                har: '#/components/schemas/HarScanTargetOut'
+                newman: '#/components/schemas/NewmanScanTargetOut'
+          - type: 'null'
+          title: Target
+      type: object
+      title: UpdateScanScheduleRequest
+    DayOfWeekSpec-Output:
+      properties:
+        schedule_type:
+          type: string
+          const: day_of_week
+          title: Schedule Type
+          default: day_of_week
+        days:
+          items:
+            $ref: '#/components/schemas/DayOfWeek'
+          type: array
+          minItems: 1
+          title: Days
+        time_utc:
+          type: string
+          title: Time Utc
+      type: object
+      required:
+      - days
+      - time_utc
+      title: DayOfWeekSpec
+    ScanScheduleOut:
+      properties:
+        scan_schedule_id:
+          type: string
+          title: Scan Schedule Id
+        application_id:
+          type: string
+          title: Application Id
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+        spec:
+          oneOf:
+          - $ref: '#/components/schemas/DayOfWeekSpec-Output'
+          - $ref: '#/components/schemas/DayIntervalSpec-Output'
+          - $ref: '#/components/schemas/OnlyOnceSpec'
+          title: Spec
+          discriminator:
+            propertyName: schedule_type
+            mapping:
+              day_interval: '#/components/schemas/DayIntervalSpec-Output'
+              day_of_week: '#/components/schemas/DayOfWeekSpec-Output'
+              only_once: '#/components/schemas/OnlyOnceSpec'
+        target:
+          oneOf:
+          - $ref: '#/components/schemas/HarScanTargetOut'
+          - $ref: '#/components/schemas/NewmanScanTargetOut'
+          - $ref: '#/components/schemas/AppScanTargetOut'
+          title: Target
+          discriminator:
+            propertyName: integration_type
+            mapping:
+              app: '#/components/schemas/AppScanTargetOut'
+              har: '#/components/schemas/HarScanTargetOut'
+              newman: '#/components/schemas/NewmanScanTargetOut'
+        state:
+          $ref: '#/components/schemas/ScheduleState'
+        sync_status:
+          $ref: '#/components/schemas/SyncStatus'
+      type: object
+      required:
+      - scan_schedule_id
+      - application_id
+      - created_at
+      - spec
+      - target
+      - state
+      - sync_status
+      title: ScanScheduleOut
+    DayOfWeekSpec-Input:
+      properties:
+        schedule_type:
+          type: string
+          const: day_of_week
+          title: Schedule Type
+          default: day_of_week
+        days:
+          items:
+            $ref: '#/components/schemas/DayOfWeek'
+          type: array
+          minItems: 1
+          title: Days
+        time_utc:
+          type: string
+          format: time
+          title: Time Utc
+      type: object
+      required:
+      - days
+      - time_utc
+      title: DayOfWeekSpec
+    CreateOnlyOnceSpec:
+      properties:
+        schedule_type:
+          type: string
+          const: only_once
+          title: Schedule Type
+          default: only_once
+        run_at:
+          type: string
+          format: date-time
+          title: Run At
+      type: object
+      required:
+      - run_at
+      title: CreateOnlyOnceSpec
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    DayIntervalSpec-Input:
+      properties:
+        schedule_type:
+          type: string
+          const: day_interval
+          title: Schedule Type
+          default: day_interval
+        interval_days:
+          type: integer
+          minimum: 1.0
+          title: Interval Days
+        time_utc:
+          type: string
+          format: time
+          title: Time Utc
+      type: object
+      required:
+      - interval_days
+      - time_utc
+      title: DayIntervalSpec
+    DayIntervalSpec-Output:
+      properties:
+        schedule_type:
+          type: string
+          const: day_interval
+          title: Schedule Type
+          default: day_interval
+        interval_days:
+          type: integer
+          minimum: 1.0
+          title: Interval Days
+        time_utc:
+          type: string
+          title: Time Utc
+      type: object
+      required:
+      - interval_days
+      - time_utc
+      title: DayIntervalSpec
+    ScheduleState:
+      type: string
+      enum:
+      - active
+      - paused
+      - completed
+      title: ScheduleState
+  securitySchemes:
+    API_Key:
+      type: apiKey
+      in: header
+      name: X-API-Key
+    Bearer_Token:
+      type: apiKey
+      in: header
+      name: Authorization
+    System_API_Key:
+      type: apiKey
+      in: header
+      name: X-System-API-Key
+    Organization_ID:
+      type: apiKey
+      in: header
+      name: X-Organization-ID
+    Operator_Organization_Context:
+      type: apiKey
+      in: header
+      name: context
+x-refined-from:
+- pynt-openapi.json
+- pynt-openapi.json

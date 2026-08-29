@@ -1,0 +1,279 @@
+openapi: 3.2.0
+info:
+  title: Pynt Auth API
+  version: 0.1.0
+  description: 'Operations tagged auth across 2 of this provider''s published API definitions: pynt-openapi.json, pynt-openapi.json. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.pynt.io
+  description: Pynt production API
+tags:
+- name: auth
+paths:
+  /v1/auth/check:
+    get:
+      tags:
+      - auth
+      summary: Check Auth
+      operationId: check_auth_v1_auth_check_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdentityResponse'
+      security:
+      - API Key: []
+      - Bearer Token: []
+      - Operator Organization Context: []
+  /v1/auth/device-code/{device_code}:
+    put:
+      tags:
+      - auth
+      summary: Store Code For Device
+      operationId: store_code_for_device_v1_auth_device_code__device_code__put
+      parameters:
+      - name: device_code
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Device Code
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthorizationCodeExchangeRequest'
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    get:
+      tags:
+      - auth
+      summary: Claim Device Code
+      operationId: claim_device_code_v1_auth_device_code__device_code__get
+      parameters:
+      - name: device_code
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Device Code
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeviceTokenResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/auth/login:
+    post:
+      tags:
+      - auth
+      summary: Login With Authorization Code
+      operationId: login_with_authorization_code_v1_auth_login_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthorizationCodeExchangeRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/auth/refresh:
+    post:
+      tags:
+      - auth
+      summary: Issue Access Token From Refresh Token
+      operationId: issue_access_token_from_refresh_token_v1_auth_refresh_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Body_issue_access_token_from_refresh_token_v1_auth_refresh_post'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RefreshTokenResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    IdentityResponse:
+      properties:
+        organization_id:
+          type: string
+          title: Organization Id
+        user_id:
+          type: string
+          title: User Id
+      type: object
+      required:
+      - organization_id
+      - user_id
+      title: IdentityResponse
+    RefreshTokenResponse:
+      properties:
+        token:
+          type: string
+          title: Token
+      type: object
+      required:
+      - token
+      title: RefreshTokenResponse
+    AuthorizationCodeExchangeRequest:
+      properties:
+        authorization_code:
+          type: string
+          title: Authorization Code
+        redirect_uri:
+          type: string
+          title: Redirect Uri
+      type: object
+      required:
+      - authorization_code
+      - redirect_uri
+      title: AuthorizationCodeExchangeRequest
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    DeviceTokenResponse:
+      properties:
+        access_token:
+          type: string
+          title: Access Token
+        refresh_token:
+          type: string
+          title: Refresh Token
+        token_type:
+          type: string
+          const: Bearer
+          title: Token Type
+      type: object
+      required:
+      - access_token
+      - refresh_token
+      - token_type
+      title: DeviceTokenResponse
+    LoginResponse:
+      properties:
+        access_token:
+          type: string
+          title: Access Token
+        refresh_token:
+          type: string
+          title: Refresh Token
+        token_type:
+          type: string
+          const: Bearer
+          title: Token Type
+          default: Bearer
+        user_id:
+          type: string
+          title: User Id
+        email:
+          type: string
+          title: Email
+      type: object
+      required:
+      - access_token
+      - refresh_token
+      - user_id
+      - email
+      title: LoginResponse
+    Body_issue_access_token_from_refresh_token_v1_auth_refresh_post:
+      properties:
+        refresh_token:
+          type: string
+          minLength: 1
+          title: Refresh Token
+      type: object
+      required:
+      - refresh_token
+      title: Body_issue_access_token_from_refresh_token_v1_auth_refresh_post
+  securitySchemes:
+    API_Key:
+      type: apiKey
+      in: header
+      name: X-API-Key
+    Bearer_Token:
+      type: apiKey
+      in: header
+      name: Authorization
+    System_API_Key:
+      type: apiKey
+      in: header
+      name: X-System-API-Key
+    Organization_ID:
+      type: apiKey
+      in: header
+      name: X-Organization-ID
+    Operator_Organization_Context:
+      type: apiKey
+      in: header
+      name: context
+x-refined-from:
+- pynt-openapi.json
+- pynt-openapi.json

@@ -1,0 +1,233 @@
+openapi: 3.2.0
+info:
+  title: Pynt Scan False Positive Analysis API
+  version: 0.1.0
+  description: 'Operations tagged scan-false-positive-analysis across 2 of this provider''s published API definitions: pynt-openapi.json, pynt-openapi.json. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.pynt.io
+  description: Pynt production API
+tags:
+- name: scan-false-positive-analysis
+paths:
+  /v1/scan/{scan_id}/false-positive-analysis:
+    get:
+      tags:
+      - scan-false-positive-analysis
+      summary: Get False Positive Analysis
+      operationId: get_false_positive_analysis_v1_scan__scan_id__false_positive_analysis_get
+      security:
+      - API Key: []
+      - Bearer Token: []
+      - System API Key: []
+      - Organization ID: []
+      - Operator Organization Context: []
+      parameters:
+      - name: scan_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Scan Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScanReportFalsePositiveAnalysis'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/scan/{scan_id}/false-positive-analysis/{finding_id}/approved:
+    put:
+      tags:
+      - scan-false-positive-analysis
+      summary: Update Finding Approval
+      operationId: update_finding_approval_v1_scan__scan_id__false_positive_analysis__finding_id__approved_put
+      security:
+      - Bearer Token: []
+      - Operator Organization Context: []
+      - API Key: []
+      - Bearer Token: []
+      - System API Key: []
+      - Organization ID: []
+      parameters:
+      - name: scan_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Scan Id
+      - name: finding_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Finding Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApprovalUpdateRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    ApprovalUpdateRequest:
+      properties:
+        value:
+          $ref: '#/components/schemas/Conclusion'
+      type: object
+      required:
+      - value
+      title: ApprovalUpdateRequest
+    FalsePositiveClaim-Output:
+      properties:
+        finding_id:
+          type: string
+          format: uuid
+          title: Finding Id
+        category:
+          type: string
+          title: Category
+        subcategory:
+          type: string
+          title: Subcategory
+        prompt:
+          type: string
+          title: Prompt
+        approved:
+          $ref: '#/components/schemas/Conclusion'
+          default: Inconclusive
+        false_positive_result:
+          $ref: '#/components/schemas/FalsePositiveLLMResult'
+      type: object
+      required:
+      - finding_id
+      - category
+      - subcategory
+      - prompt
+      - false_positive_result
+      title: FalsePositiveClaim
+      description: Represents a claim that a finding is a false positive.
+    FalsePositiveLLMResult:
+      properties:
+        is_false_positive:
+          $ref: '#/components/schemas/Conclusion'
+          description: Is the finding a false positive? YES, NO, or INCONCLUSIVE.
+        reason:
+          type: string
+          title: Reason
+          description: Reason for the false positive determination.
+        confidence:
+          type: number
+          maximum: 1.0
+          minimum: 0.0
+          title: Confidence
+          description: Confidence of the false positive between 0 and 1.
+      type: object
+      required:
+      - is_false_positive
+      - reason
+      - confidence
+      title: FalsePositiveLLMResult
+      description: The direct, typed result from an LLM for a false positive query.
+    ScanReportFalsePositiveAnalysis:
+      properties:
+        scan_id:
+          type: string
+          format: uuid
+          title: Scan Id
+        claims:
+          items:
+            $ref: '#/components/schemas/FalsePositiveClaim-Output'
+          type: array
+          minItems: 1
+          title: Claims
+      type: object
+      required:
+      - scan_id
+      - claims
+      title: ScanReportFalsePositiveAnalysis
+      description: Represents a collection of false positive claims for a specific scan.
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    Conclusion:
+      type: string
+      enum:
+      - 'Yes'
+      - 'No'
+      - Inconclusive
+      title: Conclusion
+      description: 'Enum for the conclusion of a false positive analysis:
+
+        YES, NO, or INCONCLUSIVE.'
+  securitySchemes:
+    API_Key:
+      type: apiKey
+      in: header
+      name: X-API-Key
+    Bearer_Token:
+      type: apiKey
+      in: header
+      name: Authorization
+    System_API_Key:
+      type: apiKey
+      in: header
+      name: X-System-API-Key
+    Organization_ID:
+      type: apiKey
+      in: header
+      name: X-Organization-ID
+    Operator_Organization_Context:
+      type: apiKey
+      in: header
+      name: context
+x-refined-from:
+- pynt-openapi.json
+- pynt-openapi.json

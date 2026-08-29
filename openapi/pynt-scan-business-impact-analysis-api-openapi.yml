@@ -1,0 +1,264 @@
+openapi: 3.2.0
+info:
+  title: Pynt Scan Business Impact Analysis API
+  version: 0.1.0
+  description: 'Operations tagged scan-business-impact-analysis across 2 of this provider''s published API definitions: pynt-openapi.json, pynt-openapi.json. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.pynt.io
+  description: Pynt production API
+tags:
+- name: scan-business-impact-analysis
+paths:
+  /v1/scan/{scan_id}/business-impact-analysis:
+    get:
+      tags:
+      - scan-business-impact-analysis
+      summary: Get Business Impact Analysis
+      operationId: get_business_impact_analysis_v1_scan__scan_id__business_impact_analysis_get
+      security:
+      - API Key: []
+      - Bearer Token: []
+      - System API Key: []
+      - Organization ID: []
+      - Operator Organization Context: []
+      parameters:
+      - name: scan_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Scan Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScanReportBusinessImpactAnalysis'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/scan/{scan_id}/business-impact-analysis/{finding_id}/approved:
+    put:
+      tags:
+      - scan-business-impact-analysis
+      summary: Update Finding Approval
+      operationId: update_finding_approval_v1_scan__scan_id__business_impact_analysis__finding_id__approved_put
+      security:
+      - Bearer Token: []
+      - Operator Organization Context: []
+      - API Key: []
+      - Bearer Token: []
+      - System API Key: []
+      - Organization ID: []
+      parameters:
+      - name: scan_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Scan Id
+      - name: finding_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Finding Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApprovalUpdateRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    BusinessImpactAnalysis-Output:
+      properties:
+        finding_id:
+          type: string
+          format: uuid
+          title: Finding Id
+        category:
+          type: string
+          title: Category
+        subcategory:
+          type: string
+          title: Subcategory
+        prompt:
+          type: string
+          title: Prompt
+        approved:
+          $ref: '#/components/schemas/Conclusion'
+          default: Inconclusive
+        business_impact_result:
+          $ref: '#/components/schemas/BusinessImpactLLMResult-Output'
+      type: object
+      required:
+      - finding_id
+      - category
+      - subcategory
+      - prompt
+      - business_impact_result
+      title: BusinessImpactAnalysis
+      description: Represents a claim that a finding is a false positive.
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    BusinessImpactLLMResult-Output:
+      properties:
+        entities_relationship:
+          $ref: '#/components/schemas/EntitiesRelationships'
+          description: Relationships between the entities
+        business_implication:
+          type: string
+          title: Business Implication
+          description: Business implications of the attack
+      type: object
+      required:
+      - entities_relationship
+      - business_implication
+      title: BusinessImpactLLMResult
+      description: The direct, typed result from an LLM for a business impact query.
+    ApprovalUpdateRequest:
+      properties:
+        value:
+          $ref: '#/components/schemas/Conclusion'
+      type: object
+      required:
+      - value
+      title: ApprovalUpdateRequest
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ScanReportBusinessImpactAnalysis:
+      properties:
+        scan_id:
+          type: string
+          format: uuid
+          title: Scan Id
+        impact_analysis:
+          items:
+            $ref: '#/components/schemas/BusinessImpactAnalysis-Output'
+          type: array
+          minItems: 1
+          title: Impact Analysis
+      type: object
+      required:
+      - scan_id
+      - impact_analysis
+      title: ScanReportBusinessImpactAnalysis
+      description: Represents a collection of business impact analysis for a specific scan.
+    Conclusion:
+      type: string
+      enum:
+      - 'Yes'
+      - 'No'
+      - Inconclusive
+      title: Conclusion
+      description: 'Enum for the conclusion of a false positive analysis:
+
+        YES, NO, or INCONCLUSIVE.'
+    EntitiesRelationships:
+      properties:
+        relationships:
+          items:
+            $ref: '#/components/schemas/EntityRelationship'
+          type: array
+          title: Relationships
+          description: List of entity relationships
+      type: object
+      required:
+      - relationships
+      title: EntitiesRelationships
+      description: Represents a collection of entity relationships.
+      example:
+        relationships:
+        - entity1: user
+          entity2: invoice
+          relationship_type: owns
+    EntityRelationship:
+      properties:
+        entity1:
+          type: string
+          title: Entity1
+          description: First entity in the relationship
+        entity2:
+          type: string
+          title: Entity2
+          description: Second entity in the relationship
+        relationship_type:
+          type: string
+          title: Relationship Type
+          description: Relationship type
+      type: object
+      required:
+      - entity1
+      - entity2
+      - relationship_type
+      title: EntityRelationship
+  securitySchemes:
+    API_Key:
+      type: apiKey
+      in: header
+      name: X-API-Key
+    Bearer_Token:
+      type: apiKey
+      in: header
+      name: Authorization
+    System_API_Key:
+      type: apiKey
+      in: header
+      name: X-System-API-Key
+    Organization_ID:
+      type: apiKey
+      in: header
+      name: X-Organization-ID
+    Operator_Organization_Context:
+      type: apiKey
+      in: header
+      name: context
+x-refined-from:
+- pynt-openapi.json
+- pynt-openapi.json

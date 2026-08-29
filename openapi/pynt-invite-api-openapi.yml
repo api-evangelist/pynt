@@ -1,0 +1,377 @@
+openapi: 3.2.0
+info:
+  title: Pynt Invite API
+  version: 0.1.0
+  description: 'Operations tagged invite across 2 of this provider''s published API definitions: pynt-openapi.json, pynt-openapi.json. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.pynt.io
+  description: Pynt production API
+tags:
+- name: invite
+paths:
+  /v1/invite:
+    get:
+      tags:
+      - invite
+      summary: List Invites
+      operationId: list_invites_v1_invite_get
+      security:
+      - Bearer Token: []
+      - Operator Organization Context: []
+      parameters:
+      - name: filter
+        in: query
+        required: false
+        schema:
+          type: string
+          title: Filter
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/InviteInDB'
+                title: Response List Invites V1 Invite Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    post:
+      tags:
+      - invite
+      summary: Create Invite
+      operationId: create_invite_v1_invite_post
+      security:
+      - Bearer Token: []
+      - Operator Organization Context: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Body_create_invite_v1_invite_post'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InviteInDB'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/invite/{invite_id}:
+    get:
+      tags:
+      - invite
+      summary: Get Invite By Id
+      operationId: get_invite_by_id_v1_invite__invite_id__get
+      security:
+      - Bearer Token: []
+      - Operator Organization Context: []
+      parameters:
+      - name: invite_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Invite Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InviteInDB'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    delete:
+      tags:
+      - invite
+      summary: Delete Invite
+      operationId: delete_invite_v1_invite__invite_id__delete
+      security:
+      - Bearer Token: []
+      - Operator Organization Context: []
+      parameters:
+      - name: invite_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Invite Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: boolean
+                title: Response Delete Invite V1 Invite  Invite Id  Delete
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/invite/count:
+    get:
+      tags:
+      - invite
+      summary: Count Invites
+      operationId: count_invites_v1_invite_count_get
+      security:
+      - Bearer Token: []
+      - Operator Organization Context: []
+      parameters:
+      - name: where
+        in: query
+        required: false
+        schema:
+          type: string
+          title: Where
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CountOut'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/invite/accept:
+    post:
+      tags:
+      - invite
+      summary: Accept Invite
+      operationId: accept_invite_v1_invite_accept_post
+      security:
+      - Bearer Token: []
+      parameters:
+      - name: invite_id
+        in: query
+        required: true
+        schema:
+          type: string
+          pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
+          title: Invite Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserOut'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    InviteStatus:
+      type: string
+      enum:
+      - pending
+      - accepted
+      - rejected
+      - deleted
+      title: InviteStatus
+    Body_create_invite_v1_invite_post:
+      properties:
+        email:
+          type: string
+          pattern: \b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b
+          title: Email
+          examples:
+          - test@test.com
+        role:
+          $ref: '#/components/schemas/UserRole'
+      type: object
+      required:
+      - email
+      - role
+      title: Body_create_invite_v1_invite_post
+    CountOut:
+      properties:
+        count:
+          type: integer
+          title: Count
+      type: object
+      required:
+      - count
+      title: CountOut
+    UserOut:
+      properties:
+        uid:
+          type: string
+          title: Uid
+        first_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: First Name
+        last_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Last Name
+        role:
+          $ref: '#/components/schemas/UserRole'
+        email:
+          type: string
+          title: Email
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+        organization_id:
+          type: string
+          title: Organization Id
+        user_id:
+          type: string
+          title: User Id
+        name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Name
+        lastname:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Lastname
+      type: object
+      required:
+      - uid
+      - first_name
+      - last_name
+      - role
+      - email
+      - created_at
+      - organization_id
+      - user_id
+      - name
+      - lastname
+      title: UserOut
+    UserRole:
+      type: string
+      enum:
+      - Admin
+      - User
+      - SystemAdmin
+      title: UserRole
+    InviteInDB:
+      properties:
+        invite_id:
+          type: string
+          pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
+          title: Invite Id
+        status:
+          $ref: '#/components/schemas/InviteStatus'
+        email:
+          type: string
+          title: Email
+        organization_id:
+          type: string
+          pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
+          title: Organization Id
+        inviter:
+          type: string
+          pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
+          title: Inviter
+        role:
+          $ref: '#/components/schemas/UserRole'
+          default: User
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+        deleted_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Deleted At
+        org_id:
+          type: string
+          title: Org Id
+      type: object
+      required:
+      - status
+      - email
+      - organization_id
+      - inviter
+      - org_id
+      title: InviteInDB
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+  securitySchemes:
+    API_Key:
+      type: apiKey
+      in: header
+      name: X-API-Key
+    Bearer_Token:
+      type: apiKey
+      in: header
+      name: Authorization
+    System_API_Key:
+      type: apiKey
+      in: header
+      name: X-System-API-Key
+    Organization_ID:
+      type: apiKey
+      in: header
+      name: X-Organization-ID
+    Operator_Organization_Context:
+      type: apiKey
+      in: header
+      name: context
+x-refined-from:
+- pynt-openapi.json
+- pynt-openapi.json

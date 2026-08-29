@@ -1,0 +1,182 @@
+openapi: 3.2.0
+info:
+  title: Pynt Event Logs API
+  version: 0.1.0
+  description: 'Operations tagged event-logs across 2 of this provider''s published API definitions: pynt-openapi.json, pynt-openapi.json. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.pynt.io
+  description: Pynt production API
+tags:
+- name: event-logs
+paths:
+  /v1/event-logs:
+    get:
+      tags:
+      - event-logs
+      summary: Get Filtered Event Log
+      operationId: get_filtered_event_log_v1_event_logs_get
+      security:
+      - API Key: []
+      - Bearer Token: []
+      - System API Key: []
+      - Organization ID: []
+      - Operator Organization Context: []
+      parameters:
+      - name: filter
+        in: query
+        required: false
+        schema:
+          type: string
+          title: Filter
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedEventLogOut'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    EventLogType:
+      type: string
+      enum:
+      - authentication
+      - application_management
+      - user_management
+      - organization_management
+      - integration
+      - label_management
+      - source_management
+      - reporting
+      - scan_management
+      - api_management
+      - vulnerability_management
+      - ticket_management
+      - unknown
+      title: EventLogType
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    PaginatedEventLogOut:
+      properties:
+        events:
+          items:
+            $ref: '#/components/schemas/EventLogOut'
+          type: array
+          title: Events
+        total:
+          type: integer
+          title: Total
+      type: object
+      required:
+      - events
+      - total
+      title: PaginatedEventLogOut
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    EventLogOut:
+      properties:
+        event_id:
+          type: string
+          title: Event Id
+        timestamp:
+          type: string
+          format: date-time
+          title: Timestamp
+        initiator_email:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Initiator Email
+        initiator_id:
+          type: string
+          title: Initiator Id
+        event_type:
+          $ref: '#/components/schemas/EventLogType'
+        event_title:
+          type: string
+          title: Event Title
+        target_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Target Name
+        target_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Target Id
+        application_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Application Id
+        application_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Application Name
+      type: object
+      required:
+      - event_id
+      - timestamp
+      - initiator_email
+      - initiator_id
+      - event_type
+      - event_title
+      title: EventLogOut
+  securitySchemes:
+    API_Key:
+      type: apiKey
+      in: header
+      name: X-API-Key
+    Bearer_Token:
+      type: apiKey
+      in: header
+      name: Authorization
+    System_API_Key:
+      type: apiKey
+      in: header
+      name: X-System-API-Key
+    Organization_ID:
+      type: apiKey
+      in: header
+      name: X-Organization-ID
+    Operator_Organization_Context:
+      type: apiKey
+      in: header
+      name: context
+x-refined-from:
+- pynt-openapi.json
+- pynt-openapi.json

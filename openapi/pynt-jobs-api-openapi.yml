@@ -1,0 +1,143 @@
+openapi: 3.2.0
+info:
+  title: Pynt Jobs API
+  version: 0.1.0
+  description: 'Operations tagged jobs across 2 of this provider''s published API definitions: pynt-openapi.json, pynt-openapi.json. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.pynt.io
+  description: Pynt production API
+tags:
+- name: jobs
+paths:
+  /v1/scan-jobs/dequeue:
+    post:
+      tags:
+      - jobs
+      summary: Dequeue Job
+      operationId: dequeue_job_v1_scan_jobs_dequeue_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DequeueJobRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DequeueJobResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - API Key: []
+      - Bearer Token: []
+      - System API Key: []
+      - Organization ID: []
+      - Operator Organization Context: []
+components:
+  schemas:
+    K8sScanJobTarget:
+      properties:
+        type:
+          type: string
+          const: K8S
+          title: Type
+        cluster_name:
+          type: string
+          title: Cluster Name
+      type: object
+      required:
+      - type
+      - cluster_name
+      title: K8sScanJobTarget
+    DequeueJobRequest:
+      properties:
+        target:
+          oneOf:
+          - $ref: '#/components/schemas/K8sScanJobTarget'
+          title: Target
+          discriminator:
+            propertyName: type
+            mapping:
+              K8S: '#/components/schemas/K8sScanJobTarget'
+      type: object
+      required:
+      - target
+      title: DequeueJobRequest
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    DequeueJobResponse:
+      properties:
+        job_id:
+          type: string
+          title: Job Id
+        harl_url:
+          type: string
+          title: Harl Url
+        application_id:
+          type: string
+          title: Application Id
+      type: object
+      required:
+      - job_id
+      - harl_url
+      - application_id
+      title: DequeueJobResponse
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+  securitySchemes:
+    API_Key:
+      type: apiKey
+      in: header
+      name: X-API-Key
+    Bearer_Token:
+      type: apiKey
+      in: header
+      name: Authorization
+    System_API_Key:
+      type: apiKey
+      in: header
+      name: X-System-API-Key
+    Organization_ID:
+      type: apiKey
+      in: header
+      name: X-Organization-ID
+    Operator_Organization_Context:
+      type: apiKey
+      in: header
+      name: context
+x-refined-from:
+- pynt-openapi.json
+- pynt-openapi.json

@@ -1,0 +1,2554 @@
+openapi: 3.2.0
+info:
+  title: Pynt Application API
+  version: 0.1.0
+  description: 'Operations tagged application across 2 of this provider''s published API definitions: pynt-openapi.json, pynt-openapi.json. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.pynt.io
+  description: Pynt production API
+tags:
+- name: application
+paths:
+  /v1/application/{application_id}/endpoint-llm-analysis:
+    get:
+      tags:
+      - application
+      summary: Get Endpoint Llm Analysis
+      operationId: get_endpoint_llm_analysis_v1_application__application_id__endpoint_llm_analysis_get
+      security:
+      - API Key: []
+      - Bearer Token: []
+      - System API Key: []
+      - Organization ID: []
+      - Operator Organization Context: []
+      parameters:
+      - name: application_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Application Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/EndpointLLMAnalysis'
+                title: Response Get Endpoint Llm Analysis V1 Application  Application Id  Endpoint Llm Analysis Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/application/{application_id}/scan-schedule:
+    post:
+      tags:
+      - application
+      summary: Create Scan Schedule
+      operationId: create_scan_schedule_v1_application__application_id__scan_schedule_post
+      security:
+      - Bearer Token: []
+      - Operator Organization Context: []
+      - API Key: []
+      - Bearer Token: []
+      - System API Key: []
+      - Organization ID: []
+      parameters:
+      - name: application_id
+        in: path
+        required: true
+        schema:
+          type: string
+          pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
+          title: Application Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateScanScheduleRequest'
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScanScheduleOut'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    get:
+      tags:
+      - application
+      summary: Get Scan Schedule By Application
+      operationId: get_scan_schedule_by_application_v1_application__application_id__scan_schedule_get
+      security:
+      - Bearer Token: []
+      - Operator Organization Context: []
+      - API Key: []
+      - Bearer Token: []
+      - System API Key: []
+      - Organization ID: []
+      parameters:
+      - name: application_id
+        in: path
+        required: true
+        schema:
+          type: string
+          pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
+          title: Application Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScanScheduleOut'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/application/{application_id}/scan-schedule/{scan_schedule_id}:
+    patch:
+      tags:
+      - application
+      summary: Update Scan Schedule
+      operationId: update_scan_schedule_v1_application__application_id__scan_schedule__scan_schedule_id__patch
+      security:
+      - Bearer Token: []
+      - Operator Organization Context: []
+      - API Key: []
+      - Bearer Token: []
+      - System API Key: []
+      - Organization ID: []
+      parameters:
+      - name: application_id
+        in: path
+        required: true
+        schema:
+          type: string
+          pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
+          title: Application Id
+      - name: scan_schedule_id
+        in: path
+        required: true
+        schema:
+          type: string
+          pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
+          title: Scan Schedule Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateScanScheduleRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScanScheduleOut'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    delete:
+      tags:
+      - application
+      summary: Delete Scan Schedule
+      operationId: delete_scan_schedule_v1_application__application_id__scan_schedule__scan_schedule_id__delete
+      security:
+      - Bearer Token: []
+      - Operator Organization Context: []
+      - API Key: []
+      - Bearer Token: []
+      - System API Key: []
+      - Organization ID: []
+      parameters:
+      - name: application_id
+        in: path
+        required: true
+        schema:
+          type: string
+          pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
+          title: Application Id
+      - name: scan_schedule_id
+        in: path
+        required: true
+        schema:
+          type: string
+          pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
+          title: Scan Schedule Id
+      responses:
+        '204':
+          description: Successful Response
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/application/{application_id}/scan-schedule/{scan_schedule_id}/state:
+    patch:
+      tags:
+      - application
+      summary: Update Scan Schedule State
+      operationId: update_scan_schedule_state_v1_application__application_id__scan_schedule__scan_schedule_id__state_patch
+      security:
+      - Bearer Token: []
+      - Operator Organization Context: []
+      - API Key: []
+      - Bearer Token: []
+      - System API Key: []
+      - Organization ID: []
+      parameters:
+      - name: application_id
+        in: path
+        required: true
+        schema:
+          type: string
+          pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
+          title: Application Id
+      - name: scan_schedule_id
+        in: path
+        required: true
+        schema:
+          type: string
+          pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
+          title: Scan Schedule Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateScanScheduleStateRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/application:
+    get:
+      tags:
+      - application
+      summary: List Applications
+      operationId: list_applications_v1_application_get
+      security:
+      - API Key: []
+      - Bearer Token: []
+      - System API Key: []
+      - Organization ID: []
+      - Operator Organization Context: []
+      parameters:
+      - name: filter
+        in: query
+        required: false
+        schema:
+          type: string
+          title: Filter
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                anyOf:
+                - type: array
+                  items:
+                    $ref: '#/components/schemas/ApplicationListItemOut'
+                - type: 'null'
+                title: Response List Applications V1 Application Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    put:
+      tags:
+      - application
+      summary: Create Application
+      operationId: create_application_v1_application_put
+      security:
+      - API Key: []
+      - Bearer Token: []
+      - System API Key: []
+      - Organization ID: []
+      - Operator Organization Context: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateApplicationRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApplicationOut'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/application/count:
+    get:
+      tags:
+      - application
+      summary: Count Applications
+      operationId: count_applications_v1_application_count_get
+      security:
+      - API Key: []
+      - Bearer Token: []
+      - System API Key: []
+      - Organization ID: []
+      - Operator Organization Context: []
+      parameters:
+      - name: where
+        in: query
+        required: false
+        schema:
+          type: string
+          title: Where
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CountOut'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/application/metadata:
+    get:
+      tags:
+      - application
+      summary: List Application Metadatas
+      operationId: list_application_metadatas_v1_application_metadata_get
+      security:
+      - API Key: []
+      - Bearer Token: []
+      - System API Key: []
+      - Organization ID: []
+      - Operator Organization Context: []
+      parameters:
+      - name: filter
+        in: query
+        required: false
+        schema:
+          type: string
+          title: Filter
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApplicationMetadataListOut'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/application/metadata/count:
+    get:
+      tags:
+      - application
+      summary: Count Application Metadatas
+      operationId: count_application_metadatas_v1_application_metadata_count_get
+      security:
+      - API Key: []
+      - Bearer Token: []
+      - System API Key: []
+      - Organization ID: []
+      - Operator Organization Context: []
+      parameters:
+      - name: where
+        in: query
+        required: false
+        schema:
+          type: string
+          title: Where
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CountOut'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/application/metrics:
+    get:
+      tags:
+      - application
+      summary: Get Application Metrics
+      operationId: get_application_metrics_v1_application_metrics_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApplicationsMetrics'
+      security:
+      - API Key: []
+      - Bearer Token: []
+      - System API Key: []
+      - Organization ID: []
+      - Operator Organization Context: []
+  /v1/application/{application_identifier}:
+    get:
+      tags:
+      - application
+      summary: Get Application
+      operationId: get_application_v1_application__application_identifier__get
+      security:
+      - API Key: []
+      - Bearer Token: []
+      - System API Key: []
+      - Organization ID: []
+      - Operator Organization Context: []
+      parameters:
+      - name: application_identifier
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Application Identifier
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                anyOf:
+                - $ref: '#/components/schemas/ApplicationOut'
+                - type: 'null'
+                title: Response Get Application V1 Application  Application Identifier  Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/application/{application_id}:
+    post:
+      tags:
+      - application
+      summary: Update Application
+      operationId: update_application_v1_application__application_id__post
+      security:
+      - API Key: []
+      - Bearer Token: []
+      - System API Key: []
+      - Organization ID: []
+      - Operator Organization Context: []
+      - Bearer Token: []
+      parameters:
+      - name: application_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Application Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateApplicationRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApplicationOut'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    delete:
+      tags:
+      - application
+      summary: Delete Application By Id
+      operationId: delete_application_by_id_v1_application__application_id__delete
+      security:
+      - Bearer Token: []
+      - Operator Organization Context: []
+      - API Key: []
+      - Bearer Token: []
+      - System API Key: []
+      - Organization ID: []
+      parameters:
+      - name: application_id
+        in: path
+        required: true
+        schema:
+          type: string
+          pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
+          title: Application Id
+      responses:
+        '204':
+          description: Successful Response
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/application/{application_id}/metadata:
+    get:
+      tags:
+      - application
+      summary: Get Application Metadata By Id
+      operationId: get_application_metadata_by_id_v1_application__application_id__metadata_get
+      security:
+      - API Key: []
+      - Bearer Token: []
+      - System API Key: []
+      - Organization ID: []
+      - Operator Organization Context: []
+      parameters:
+      - name: application_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Application Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApplicationMetadataOut'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/application/{application_id}/metrics:
+    get:
+      tags:
+      - application
+      summary: Get Single Application Metrics
+      operationId: get_single_application_metrics_v1_application__application_id__metrics_get
+      security:
+      - API Key: []
+      - Bearer Token: []
+      - System API Key: []
+      - Organization ID: []
+      - Operator Organization Context: []
+      parameters:
+      - name: application_id
+        in: path
+        required: true
+        schema:
+          type: string
+          pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
+          title: Application Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SingleApplicationMetrics'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/application/{application_id}/scans/running:
+    get:
+      tags:
+      - application
+      summary: Get Running Scans By Application Id
+      operationId: get_running_scans_by_application_id_v1_application__application_id__scans_running_get
+      security:
+      - API Key: []
+      - Bearer Token: []
+      - System API Key: []
+      - Organization ID: []
+      - Operator Organization Context: []
+      parameters:
+      - name: application_id
+        in: path
+        required: true
+        schema:
+          type: string
+          pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
+          title: Application Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ScanSummaryProgressOut'
+                title: Response Get Running Scans By Application Id V1 Application  Application Id  Scans Running Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/application/{application_id}/data-sources/{data_source_type}:
+    get:
+      tags:
+      - application
+      summary: Get Data Source
+      operationId: get_data_source_v1_application__application_id__data_sources__data_source_type__get
+      security:
+      - API Key: []
+      - Bearer Token: []
+      - System API Key: []
+      - Organization ID: []
+      - Operator Organization Context: []
+      parameters:
+      - name: application_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Application Id
+      - name: data_source_type
+        in: path
+        required: true
+        schema:
+          anyOf:
+          - $ref: '#/components/schemas/DocsLinkType'
+          - $ref: '#/components/schemas/SourceFileType'
+          - $ref: '#/components/schemas/ScanType'
+          title: Data Source Type
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataSourceOut'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    delete:
+      tags:
+      - application
+      summary: Delete Data Source
+      operationId: delete_data_source_v1_application__application_id__data_sources__data_source_type__delete
+      security:
+      - Bearer Token: []
+      - Operator Organization Context: []
+      - API Key: []
+      - Bearer Token: []
+      - System API Key: []
+      - Organization ID: []
+      parameters:
+      - name: application_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Application Id
+      - name: data_source_type
+        in: path
+        required: true
+        schema:
+          anyOf:
+          - $ref: '#/components/schemas/DocsLinkType'
+          - $ref: '#/components/schemas/SourceFileType'
+          - $ref: '#/components/schemas/ScanType'
+          title: Data Source Type
+      responses:
+        '204':
+          description: Successful Response
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/application/{application_id}/data-sources/Live Traffic:
+    put:
+      tags:
+      - application
+      summary: Legacy Live Traffic Put
+      operationId: legacy_live_traffic_put_v1_application__application_id__data_sources_Live_Traffic_put
+      security:
+      - API Key: []
+      - Bearer Token: []
+      - System API Key: []
+      - Organization ID: []
+      - Operator Organization Context: []
+      parameters:
+      - name: application_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Application Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LiveTrafficUpdateDataSourceRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataSourceOut'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/application/{application_id}/data-sources:
+    post:
+      tags:
+      - application
+      summary: Upsert Data Source
+      operationId: upsert_data_source_v1_application__application_id__data_sources_post
+      security:
+      - API Key: []
+      - Bearer Token: []
+      - System API Key: []
+      - Organization ID: []
+      - Operator Organization Context: []
+      parameters:
+      - name: application_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Application Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateDataSourceRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataSourceOut'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/application/{application_id}/endpoints:
+    post:
+      tags:
+      - application
+      summary: Create Endpoints
+      operationId: create_endpoints_v1_application__application_id__endpoints_post
+      security:
+      - API Key: []
+      - Bearer Token: []
+      - System API Key: []
+      - Organization ID: []
+      - Operator Organization Context: []
+      parameters:
+      - name: application_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Application Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Body_create_endpoints_v1_application__application_id__endpoints_post'
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/application/{application_id}/pentest-report:
+    get:
+      tags:
+      - application
+      summary: Get Latest Pentest Report
+      operationId: get_latest_pentest_report_v1_application__application_id__pentest_report_get
+      security:
+      - API Key: []
+      - Bearer Token: []
+      - System API Key: []
+      - Organization ID: []
+      - Operator Organization Context: []
+      parameters:
+      - name: application_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Application Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PentestReportOut'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    post:
+      tags:
+      - application
+      summary: Create Pentest Report
+      operationId: create_pentest_report_v1_application__application_id__pentest_report_post
+      security:
+      - API Key: []
+      - Bearer Token: []
+      - System API Key: []
+      - Organization ID: []
+      - Operator Organization Context: []
+      parameters:
+      - name: application_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Application Id
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PentestReportOut'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/application/{application_id}/pentest-report/{pentest_id}:
+    get:
+      tags:
+      - application
+      summary: Get Pentest Report
+      operationId: get_pentest_report_v1_application__application_id__pentest_report__pentest_id__get
+      security:
+      - API Key: []
+      - Bearer Token: []
+      - System API Key: []
+      - Organization ID: []
+      - Operator Organization Context: []
+      parameters:
+      - name: application_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Application Id
+      - name: pentest_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Pentest Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PentestReportOut'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/application/{application_id}/pentest-report-list:
+    get:
+      tags:
+      - application
+      summary: List Pentest Reports
+      operationId: list_pentest_reports_v1_application__application_id__pentest_report_list_get
+      security:
+      - API Key: []
+      - Bearer Token: []
+      - System API Key: []
+      - Organization ID: []
+      - Operator Organization Context: []
+      parameters:
+      - name: application_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Application Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PentestReportListItemOut'
+                title: Response List Pentest Reports V1 Application  Application Id  Pentest Report List Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    PiiItem:
+      properties:
+        field_name:
+          type: string
+          title: Field Name
+        value:
+          type: string
+          title: Value
+      type: object
+      required:
+      - field_name
+      - value
+      title: PiiItem
+    UpdateScanScheduleStateRequest:
+      properties:
+        state:
+          type: string
+          enum:
+          - active
+          - paused
+          title: State
+      type: object
+      required:
+      - state
+      title: UpdateScanScheduleStateRequest
+    CountOut:
+      properties:
+        count:
+          type: integer
+          title: Count
+      type: object
+      required:
+      - count
+      title: CountOut
+    LastScansStatusSummary:
+      properties:
+        completed:
+          type: integer
+          title: Completed
+          default: 0
+        did_not_run:
+          type: integer
+          title: Did Not Run
+          default: 0
+        not_scanned:
+          type: integer
+          title: Not Scanned
+          default: 0
+        running:
+          type: integer
+          title: Running
+          default: 0
+        pending:
+          type: integer
+          title: Pending
+          default: 0
+        scheduled:
+          type: integer
+          title: Scheduled
+          default: 0
+        aborted:
+          type: integer
+          title: Aborted
+          default: 0
+      type: object
+      title: LastScansStatusSummary
+    AppScanTargetOut:
+      properties:
+        integration_type:
+          type: string
+          const: app
+          title: Integration Type
+          default: app
+      type: object
+      title: AppScanTargetOut
+      description: 'Scan target for a Pynt application''s built collection.
+
+
+        The client supplies only the integration type; the collection''s S3 location
+
+        is derived server-side from the application''s assigned poid.'
+    NewmanScanTargetOut:
+      properties:
+        integration_type:
+          type: string
+          const: newman
+          title: Integration Type
+          default: newman
+        collection_to_test:
+          type: string
+          minLength: 1
+          title: Collection To Test
+        environment_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Environment Name
+        api_key:
+          type: string
+          minLength: 1
+          title: Api Key
+      type: object
+      required:
+      - collection_to_test
+      - api_key
+      title: NewmanScanTargetOut
+    OnlyOnceSpec:
+      properties:
+        schedule_type:
+          type: string
+          const: only_once
+          title: Schedule Type
+          default: only_once
+        run_at:
+          type: string
+          format: date-time
+          title: Run At
+      type: object
+      required:
+      - run_at
+      title: OnlyOnceSpec
+    CreateDayOfWeekSpec:
+      properties:
+        time_local:
+          type: string
+          format: time
+          title: Time Local
+        schedule_type:
+          type: string
+          const: day_of_week
+          title: Schedule Type
+          default: day_of_week
+        days:
+          items:
+            $ref: '#/components/schemas/DayOfWeek'
+          type: array
+          minItems: 1
+          title: Days
+      type: object
+      required:
+      - time_local
+      - days
+      title: CreateDayOfWeekSpec
+    SwaggerDataSource:
+      properties:
+        url:
+          type: string
+          minLength: 1
+          format: uri
+          title: Url
+          description: URL to the file
+        type:
+          type: string
+          const: swagger
+          title: Type
+      type: object
+      required:
+      - url
+      - type
+      title: SwaggerDataSource
+    ScanDuration:
+      properties:
+        numberLong:
+          anyOf:
+          - type: string
+          - type: integer
+          - type: 'null'
+          title: Numberlong
+      type: object
+      title: ScanDuration
+    SyncStatus:
+      type: string
+      enum:
+      - pending
+      - synced
+      - failed
+      title: SyncStatus
+    DocsLinkType:
+      type: string
+      enum:
+      - swagger
+      - postman_collection
+      title: DocsLinkType
+    SeveritySummary:
+      properties:
+        info:
+          type: integer
+          title: Info
+          default: 0
+        low:
+          type: integer
+          title: Low
+          default: 0
+        medium:
+          type: integer
+          title: Medium
+          default: 0
+        high:
+          type: integer
+          title: High
+          default: 0
+        critical:
+          type: integer
+          title: Critical
+          default: 0
+      type: object
+      title: SeveritySummary
+    DayOfWeek:
+      type: string
+      enum:
+      - sunday
+      - monday
+      - tuesday
+      - wednesday
+      - thursday
+      - friday
+      - saturday
+      title: DayOfWeek
+    SourceFileType:
+      type: string
+      enum:
+      - swagger_file
+      - postman_file
+      - har_file
+      title: SourceFileType
+    CreateApplicationRequest:
+      properties:
+        name:
+          type: string
+          minLength: 3
+          title: Name
+        assignee_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Assignee Id
+        tags:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Tags
+        last_tested_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Last Tested At
+        last_scan_status:
+          anyOf:
+          - $ref: '#/components/schemas/ScanExecutionStatus'
+          - type: 'null'
+        last_scan_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Last Scan Id
+        assignee:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Assignee
+        poid:
+          anyOf:
+          - type: string
+            pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
+          - type: 'null'
+          title: Poid
+      type: object
+      required:
+      - name
+      title: CreateApplicationRequest
+    HarScanTargetOut:
+      properties:
+        integration_type:
+          type: string
+          const: har
+          title: Integration Type
+          default: har
+        har_path:
+          type: string
+          minLength: 1
+          title: Har Path
+        capture_domains:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Capture Domains
+      type: object
+      required:
+      - har_path
+      title: HarScanTargetOut
+    CreateScanScheduleRequest:
+      properties:
+        spec:
+          oneOf:
+          - $ref: '#/components/schemas/CreateDayOfWeekSpec'
+          - $ref: '#/components/schemas/CreateDayIntervalSpec'
+          - $ref: '#/components/schemas/CreateOnlyOnceSpec'
+          title: Spec
+          discriminator:
+            propertyName: schedule_type
+            mapping:
+              day_interval: '#/components/schemas/CreateDayIntervalSpec'
+              day_of_week: '#/components/schemas/CreateDayOfWeekSpec'
+              only_once: '#/components/schemas/CreateOnlyOnceSpec'
+        target:
+          oneOf:
+          - $ref: '#/components/schemas/HarScanTargetOut'
+          - $ref: '#/components/schemas/NewmanScanTargetOut'
+          - $ref: '#/components/schemas/AppScanTargetOut'
+          title: Target
+          discriminator:
+            propertyName: integration_type
+            mapping:
+              app: '#/components/schemas/AppScanTargetOut'
+              har: '#/components/schemas/HarScanTargetOut'
+              newman: '#/components/schemas/NewmanScanTargetOut'
+      type: object
+      required:
+      - spec
+      - target
+      title: CreateScanScheduleRequest
+    CreateDayIntervalSpec:
+      properties:
+        time_local:
+          type: string
+          format: time
+          title: Time Local
+        schedule_type:
+          type: string
+          const: day_interval
+          title: Schedule Type
+          default: day_interval
+        interval_days:
+          type: integer
+          minimum: 1.0
+          title: Interval Days
+      type: object
+      required:
+      - time_local
+      - interval_days
+      title: CreateDayIntervalSpec
+    ApplicationsMetrics:
+      properties:
+        risk_summary:
+          $ref: '#/components/schemas/AggregatedRisks'
+          default:
+            unscanned: 0
+            none: 0
+            low: 0
+            medium: 0
+            high: 0
+            critical: 0
+        last_scans_status_summary:
+          $ref: '#/components/schemas/LastScansStatusSummary'
+          default:
+            completed: 0
+            did_not_run: 0
+            not_scanned: 0
+            running: 0
+            pending: 0
+            scheduled: 0
+            aborted: 0
+      type: object
+      title: ApplicationsMetrics
+    ScanSummaryProgressOut:
+      properties:
+        errors:
+          type: integer
+          title: Errors
+        functional_test_name:
+          type: string
+          title: Functional Test Name
+        endpoints:
+          items:
+            $ref: '#/components/schemas/Endpoint'
+          type: array
+          title: Endpoints
+        scan_timestamp:
+          type: string
+          format: date-time
+          title: Scan Timestamp
+        scan_status:
+          type: string
+          title: Scan Status
+        number_of_requests:
+          type: integer
+          title: Number Of Requests
+        unique_endpoints:
+          type: integer
+          title: Unique Endpoints
+        warnings:
+          type: integer
+          title: Warnings
+        source:
+          $ref: '#/components/schemas/Source'
+        scan_id:
+          type: string
+          title: Scan Id
+        number_of_tests:
+          type: integer
+          title: Number Of Tests
+        passed_tests:
+          type: integer
+          title: Passed Tests
+        scan_duration:
+          anyOf:
+          - type: integer
+          - $ref: '#/components/schemas/ScanDuration'
+          title: Scan Duration
+        severity_map_count:
+          anyOf:
+          - additionalProperties:
+              type: integer
+            type: object
+          - type: 'null'
+          title: Severity Map Count
+        first_name:
+          anyOf:
+          - type: string
+          - items:
+              anyOf:
+              - type: string
+              - type: 'null'
+            type: array
+          - type: 'null'
+          title: First Name
+        last_name:
+          anyOf:
+          - type: string
+          - items:
+              anyOf:
+              - type: string
+              - type: 'null'
+            type: array
+          - type: 'null'
+          title: Last Name
+        application_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Application Id
+        application:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Application
+        tags:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Tags
+        pynt_collection_uploaded:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Pynt Collection Uploaded
+          default: false
+        progress_type:
+          $ref: '#/components/schemas/ScanSummaryProgressType'
+        scan_progress:
+          type: integer
+          title: Scan Progress
+      additionalProperties: true
+      type: object
+      required:
+      - errors
+      - functional_test_name
+      - endpoints
+      - scan_timestamp
+      - scan_status
+      - number_of_requests
+      - unique_endpoints
+      - warnings
+      - source
+      - scan_id
+      - number_of_tests
+      - passed_tests
+      - scan_duration
+      - first_name
+      - last_name
+      - application_id
+      - application
+      - progress_type
+      - scan_progress
+      title: ScanSummaryProgressOut
+    UpdateScanScheduleRequest:
+      properties:
+        spec:
+          anyOf:
+          - oneOf:
+            - $ref: '#/components/schemas/DayOfWeekSpec-Input'
+            - $ref: '#/components/schemas/DayIntervalSpec-Input'
+            - $ref: '#/components/schemas/OnlyOnceSpec'
+            discriminator:
+              propertyName: schedule_type
+              mapping:
+                day_interval: '#/components/schemas/DayIntervalSpec-Input'
+                day_of_week: '#/components/schemas/DayOfWeekSpec-Input'
+                only_once: '#/components/schemas/OnlyOnceSpec'
+          - type: 'null'
+          title: Spec
+        target:
+          anyOf:
+          - oneOf:
+            - $ref: '#/components/schemas/HarScanTargetOut'
+            - $ref: '#/components/schemas/NewmanScanTargetOut'
+            - $ref: '#/components/schemas/AppScanTargetOut'
+            discriminator:
+              propertyName: integration_type
+              mapping:
+                app: '#/components/schemas/AppScanTargetOut'
+                har: '#/components/schemas/HarScanTargetOut'
+                newman: '#/components/schemas/NewmanScanTargetOut'
+          - type: 'null'
+          title: Target
+      type: object
+      title: UpdateScanScheduleRequest
+    DayOfWeekSpec-Output:
+      properties:
+        schedule_type:
+          type: string
+          const: day_of_week
+          title: Schedule Type
+          default: day_of_week
+        days:
+          items:
+            $ref: '#/components/schemas/DayOfWeek'
+          type: array
+          minItems: 1
+          title: Days
+        time_utc:
+          type: string
+          title: Time Utc
+      type: object
+      required:
+      - days
+      - time_utc
+      title: DayOfWeekSpec
+    ApplicationListItemOut:
+      properties:
+        name:
+          type: string
+          minLength: 3
+          title: Name
+        assignee_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Assignee Id
+        tags:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Tags
+        last_tested_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Last Tested At
+        last_scan_status:
+          anyOf:
+          - $ref: '#/components/schemas/ScanExecutionStatus'
+          - type: 'null'
+        last_scan_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Last Scan Id
+        assignee:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Assignee
+        app_id:
+          type: string
+          pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
+          title: App Id
+        assigned_application:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Assigned Application
+      type: object
+      required:
+      - name
+      title: ApplicationListItemOut
+    ScanSummaryProgressType:
+      type: string
+      enum:
+      - scan
+      title: ScanSummaryProgressType
+    PathParameter:
+      properties:
+        param_value:
+          type: string
+          title: Param Value
+        suggested_name:
+          type: string
+          title: Suggested Name
+      type: object
+      required:
+      - param_value
+      - suggested_name
+      title: PathParameter
+    ScanScheduleOut:
+      properties:
+        scan_schedule_id:
+          type: string
+          title: Scan Schedule Id
+        application_id:
+          type: string
+          title: Application Id
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+        spec:
+          oneOf:
+          - $ref: '#/components/schemas/DayOfWeekSpec-Output'
+          - $ref: '#/components/schemas/DayIntervalSpec-Output'
+          - $ref: '#/components/schemas/OnlyOnceSpec'
+          title: Spec
+          discriminator:
+            propertyName: schedule_type
+            mapping:
+              day_interval: '#/components/schemas/DayIntervalSpec-Output'
+              day_of_week: '#/components/schemas/DayOfWeekSpec-Output'
+              only_once: '#/components/schemas/OnlyOnceSpec'
+        target:
+          oneOf:
+          - $ref: '#/components/schemas/HarScanTargetOut'
+          - $ref: '#/components/schemas/NewmanScanTargetOut'
+          - $ref: '#/components/schemas/AppScanTargetOut'
+          title: Target
+          discriminator:
+            propertyName: integration_type
+            mapping:
+              app: '#/components/schemas/AppScanTargetOut'
+              har: '#/components/schemas/HarScanTargetOut'
+              newman: '#/components/schemas/NewmanScanTargetOut'
+        state:
+          $ref: '#/components/schemas/ScheduleState'
+        sync_status:
+          $ref: '#/components/schemas/SyncStatus'
+      type: object
+      required:
+      - scan_schedule_id
+      - application_id
+      - created_at
+      - spec
+      - target
+      - state
+      - sync_status
+      title: ScanScheduleOut
+    CreateEndpointRequest:
+      properties:
+        path:
+          type: string
+          title: Path
+        method:
+          type: string
+          title: Method
+        host:
+          type: string
+          title: Host
+        endpoint_type:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Endpoint Type
+        source:
+          $ref: '#/components/schemas/EndpointSource'
+        properties:
+          $ref: '#/components/schemas/EndpointPropertiesInDB'
+      type: object
+      required:
+      - path
+      - method
+      - host
+      - endpoint_type
+      - source
+      - properties
+      title: CreateEndpointRequest
+    PostmanCollectionDataSource:
+      properties:
+        url:
+          type: string
+          minLength: 1
+          format: uri
+          title: Url
+          description: URL to the file
+        type:
+          type: string
+          const: postman_collection
+          title: Type
+      type: object
+      required:
+      - url
+      - type
+      title: PostmanCollectionDataSource
+    SwaggerFileDataSource:
+      properties:
+        path:
+          type: string
+          minLength: 1
+          title: Path
+          description: Path to the file in the bucket
+        type:
+          type: string
+          const: swagger_file
+          title: Type
+      type: object
+      required:
+      - path
+      - type
+      title: SwaggerFileDataSource
+    PentestReportStatus:
+      type: string
+      enum:
+      - SUCCEEDED
+      - FAILED
+      - PENDING
+      title: PentestReportStatus
+    DayOfWeekSpec-Input:
+      properties:
+        schedule_type:
+          type: string
+          const: day_of_week
+          title: Schedule Type
+          default: day_of_week
+        days:
+          items:
+            $ref: '#/components/schemas/DayOfWeek'
+          type: array
+          minItems: 1
+          title: Days
+        time_utc:
+          type: string
+          format: time
+          title: Time Utc
+      type: object
+      required:
+      - days
+      - time_utc
+      title: DayOfWeekSpec
+    YesNoQuestion:
+      properties:
+        verdict:
+          type: boolean
+          title: Verdict
+        reason:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Reason
+      type: object
+      required:
+      - verdict
+      title: YesNoQuestion
+    CreateOnlyOnceSpec:
+      properties:
+        schedule_type:
+          type: string
+          const: only_once
+          title: Schedule Type
+          default: only_once
+        run_at:
+          type: string
+          format: date-time
+          title: Run At
+      type: object
+      required:
+      - run_at
+      title: CreateOnlyOnceSpec
+    DataSourceOut:
+      properties:
+        properties:
+          oneOf:
+          - $ref: '#/components/schemas/SwaggerDataSource'
+          - $ref: '#/components/schemas/SwaggerFileDataSource'
+          - $ref: '#/components/schemas/PostmanCollectionDataSource'
+          - $ref: '#/components/schemas/PostmanFileDataSource'
+          - $ref: '#/components/schemas/HarFileDataSource'
+          - $ref: '#/components/schemas/ScanDataSource'
+          title: Properties
+          discriminator:
+            propertyName: type
+            mapping:
+              har_file: '#/components/schemas/HarFileDataSource'
+              postman_collection: '#/components/schemas/PostmanCollectionDataSource'
+              postman_file: '#/components/schemas/PostmanFileDataSource'
+              scan: '#/components/schemas/ScanDataSource'
+              swagger: '#/components/schemas/SwaggerDataSource'
+              swagger_file: '#/components/schemas/SwaggerFileDataSource'
+        type:
+          anyOf:
+          - $ref: '#/components/schemas/DocsLinkType'
+          - $ref: '#/components/schemas/SourceFileType'
+          - $ref: '#/components/schemas/ScanType'
+          title: Type
+        status:
+          $ref: '#/components/schemas/DataSourceStatus'
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+        updated_at:
+          type: string
+          format: date-time
+          title: Updated At
+      type: object
+      required:
+      - properties
+      - type
+      - status
+      - created_at
+      - updated_at
+      title: DataSourceOut
+    AggregatedRisks:
+      properties:
+        unscanned:
+          type: integer
+          title: Unscanned
+          default: 0
+        none:
+          type: integer
+          title: None
+          default: 0
+        low:
+          type: integer
+          title: Low
+          default: 0
+        medium:
+          type: integer
+          title: Medium
+          default: 0
+        high:
+          type: integer
+          title: High
+          default: 0
+        critical:
+          type: integer
+          title: Critical
+          default: 0
+      type: object
+      title: AggregatedRisks
+    ApplicationMetadataListOut:
+      properties:
+        count:
+          type: integer
+          title: Count
+        data:
+          items:
+            $ref: '#/components/schemas/ApplicationMetadataOut'
+          type: array
+          title: Data
+      type: object
+      required:
+      - count
+      - data
+      title: ApplicationMetadataListOut
+    ApplicationMetadataOut:
+      properties:
+        name:
+          type: string
+          minLength: 3
+          title: Name
+        assignee_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Assignee Id
+        tags:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Tags
+        last_tested_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Last Tested At
+        last_scan_status:
+          anyOf:
+          - $ref: '#/components/schemas/ScanExecutionStatus'
+          - type: 'null'
+        last_scan_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Last Scan Id
+        assignee:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Assignee
+        app_id:
+          type: string
+          pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
+          title: App Id
+        assignee_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Assignee Name
+        assigned_application:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Assigned Application
+        number_of_endpoint_groups:
+          type: integer
+          title: Number Of Endpoint Groups
+        vulnerability_instances:
+          type: integer
+          title: Vulnerability Instances
+        risk:
+          type: integer
+          title: Risk
+        data_sources:
+          additionalProperties:
+            $ref: '#/components/schemas/ApplicationDataSourceOut'
+          type: object
+          title: Data Sources
+      type: object
+      required:
+      - name
+      - number_of_endpoint_groups
+      - vulnerability_instances
+      - risk
+      - data_sources
+      title: ApplicationMetadataOut
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    Endpoint:
+      properties:
+        path:
+          type: string
+          title: Path
+        method:
+          type: string
+          title: Method
+      additionalProperties: true
+      type: object
+      required:
+      - path
+      - method
+      title: Endpoint
+    Source:
+      properties:
+        integration:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Integration
+        user:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User
+        integraion:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Integraion
+      additionalProperties: true
+      type: object
+      required:
+      - integration
+      - integraion
+      title: Source
+    DataSourceStatus:
+      type: string
+      enum:
+      - SUCCEEDED
+      - FAILED
+      - PENDING
+      title: DataSourceStatus
+    PostmanFileDataSource:
+      properties:
+        path:
+          type: string
+          minLength: 1
+          title: Path
+          description: Path to the file in the bucket
+        type:
+          type: string
+          const: postman_file
+          title: Type
+      type: object
+      required:
+      - path
+      - type
+      title: PostmanFileDataSource
+    DayIntervalSpec-Input:
+      properties:
+        schedule_type:
+          type: string
+          const: day_interval
+          title: Schedule Type
+          default: day_interval
+        interval_days:
+          type: integer
+          minimum: 1.0
+          title: Interval Days
+        time_utc:
+          type: string
+          format: time
+          title: Time Utc
+      type: object
+      required:
+      - interval_days
+      - time_utc
+      title: DayIntervalSpec
+    PentestReportOut:
+      properties:
+        pentest_id:
+          type: string
+          title: Pentest Id
+        url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Url
+        status:
+          $ref: '#/components/schemas/PentestReportStatus'
+      type: object
+      required:
+      - pentest_id
+      - url
+      - status
+      title: PentestReportOut
+    LiveTrafficUpdateDataSourceRequest:
+      properties:
+        data_source:
+          oneOf:
+          - $ref: '#/components/schemas/SwaggerDataSource'
+          - $ref: '#/components/schemas/SwaggerFileDataSource'
+          - $ref: '#/components/schemas/PostmanCollectionDataSource'
+          - $ref: '#/components/schemas/PostmanFileDataSource'
+          - $ref: '#/components/schemas/HarFileDataSource'
+          - $ref: '#/components/schemas/ScanDataSource'
+          title: Data Source
+          discriminator:
+            propertyName: type
+            mapping:
+              har_file: '#/components/schemas/HarFileDataSource'
+              postman_collection: '#/components/schemas/PostmanCollectionDataSource'
+              postman_file: '#/components/schemas/PostmanFileDataSource'
+              scan: '#/components/schemas/ScanDataSource'
+              swagger: '#/components/schemas/SwaggerDataSource'
+              swagger_file: '#/components/schemas/SwaggerFileDataSource'
+      type: object
+      required:
+      - data_source
+      title: LiveTrafficUpdateDataSourceRequest
+    EndpointLLMAnalysis:
+      properties:
+        endpoint:
+          type: string
+          title: Endpoint
+        method:
+          type: string
+          title: Method
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+        regex:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Regex
+        crud:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Crud
+        is_login:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Is Login
+        positive_response:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Positive Response
+        risk:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Risk
+        resource_identifiers:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Resource Identifiers
+        user_identifiers:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: User Identifiers
+        path_parameters:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/PathParameter'
+            type: array
+          - type: 'null'
+          title: Path Parameters
+        pii:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/PiiItem'
+            type: array
+          - type: 'null'
+          title: Pii
+        prone_to_bruteforce:
+          anyOf:
+          - $ref: '#/components/schemas/YesNoQuestion'
+          - type: 'null'
+        spam_generation:
+          anyOf:
+          - $ref: '#/components/schemas/YesNoQuestion'
+          - type: 'null'
+        otp_bomb:
+          anyOf:
+          - $ref: '#/components/schemas/YesNoQuestion'
+          - type: 'null'
+        computational_heavy:
+          anyOf:
+          - $ref: '#/components/schemas/YesNoQuestion'
+          - type: 'null'
+        sensitive_business_flow:
+          anyOf:
+          - $ref: '#/components/schemas/YesNoQuestion'
+          - type: 'null'
+        excessive_data_exposure:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Excessive Data Exposure
+        access_level:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Level
+        test_for_bola:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Test For Bola
+        test_for_bfla:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Test For Bfla
+        mass_assignment:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Mass Assignment
+        authentication:
+          anyOf:
+          - $ref: '#/components/schemas/AuthenticationInfo'
+          - type: 'null'
+        canonized_path:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Canonized Path
+        unique_value_requirement:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Unique Value Requirement
+        more_info_needed:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: More Info Needed
+        application_id:
+          type: string
+          title: Application Id
+        endpoint_id:
+          type: string
+          title: Endpoint Id
+      type: object
+      required:
+      - endpoint
+      - method
+      - application_id
+      - endpoint_id
+      title: EndpointLLMAnalysis
+      description: Business model — extends the LLM schema with application-level fields.
+    UpdateApplicationRequest:
+      properties:
+        name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Name
+        assignee_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Assignee Id
+        tags:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Tags
+        poid:
+          anyOf:
+          - type: string
+            pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
+          - type: 'null'
+          title: Poid
+      type: object
+      title: UpdateApplicationRequest
+    PentestReportListItemOut:
+      properties:
+        pentest_id:
+          type: string
+          title: Pentest Id
+        status:
+          $ref: '#/components/schemas/PentestReportStatus'
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+      type: object
+      required:
+      - pentest_id
+      - status
+      - created_at
+      title: PentestReportListItemOut
+    ScanDataSource:
+      properties:
+        scan_id:
+          type: string
+          title: Scan Id
+        type:
+          type: string
+          const: scan
+          title: Type
+      type: object
+      required:
+      - scan_id
+      - type
+      title: ScanDataSource
+    SingleApplicationMetrics:
+      properties:
+        last_scan_status:
+          anyOf:
+          - $ref: '#/components/schemas/ScanExecutionStatus'
+          - type: 'null'
+        last_scan_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Last Scan Id
+        risk:
+          type: integer
+          title: Risk
+        vulnerability_severity_summary:
+          $ref: '#/components/schemas/SeveritySummary'
+          default:
+            info: 0
+            low: 0
+            medium: 0
+            high: 0
+            critical: 0
+        api_risk_score_summary:
+          $ref: '#/components/schemas/AggregatedRisks'
+          default:
+            unscanned: 0
+            none: 0
+            low: 0
+            medium: 0
+            high: 0
+            critical: 0
+      type: object
+      required:
+      - risk
+      title: SingleApplicationMetrics
+    HarFileDataSource:
+      properties:
+        path:
+          type: string
+          minLength: 1
+          title: Path
+          description: Path to the file in the bucket
+        type:
+          type: string
+          const: har_file
+          title: Type
+      type: object
+      required:
+      - path
+      - type
+      title: HarFileDataSource
+    ScanType:
+      type: string
+      enum:
+      - scan
+      title: ScanType
+    UpdateDataSourceRequest:
+      properties:
+        status:
+          $ref: '#/components/schemas/DataSourceStatus'
+          description: Status of the data source
+          default: PENDING
+        properties:
+          oneOf:
+          - $ref: '#/components/schemas/SwaggerDataSource'
+          - $ref: '#/components/schemas/SwaggerFileDataSource'
+          - $ref: '#/components/schemas/PostmanCollectionDataSource'
+          - $ref: '#/components/schemas/PostmanFileDataSource'
+          - $ref: '#/components/schemas/HarFileDataSource'
+          - $ref: '#/components/schemas/ScanDataSource'
+          title: Properties
+          discriminator:
+            propertyName: type
+            mapping:
+              har_file: '#/components/schemas/HarFileDataSource'
+              postman_collection: '#/components/schemas/PostmanCollectionDataSource'
+              postman_file: '#/components/schemas/PostmanFileDataSource'
+              scan: '#/components/schemas/ScanDataSource'
+              swagger: '#/components/schemas/SwaggerDataSource'
+              swagger_file: '#/components/schemas/SwaggerFileDataSource'
+      type: object
+      required:
+      - properties
+      title: UpdateDataSourceRequest
+    ApplicationOut:
+      properties:
+        name:
+          type: string
+          minLength: 3
+          title: Name
+        assignee_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Assignee Id
+        tags:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Tags
+        last_tested_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Last Tested At
+        last_scan_status:
+          anyOf:
+          - $ref: '#/components/schemas/ScanExecutionStatus'
+          - type: 'null'
+        last_scan_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Last Scan Id
+        assignee:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Assignee
+        app_id:
+          type: string
+          pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
+          title: App Id
+      type: object
+      required:
+      - name
+      title: ApplicationOut
+    DayIntervalSpec-Output:
+      properties:
+        schedule_type:
+          type: string
+          const: day_interval
+          title: Schedule Type
+          default: day_interval
+        interval_days:
+          type: integer
+          minimum: 1.0
+          title: Interval Days
+        time_utc:
+          type: string
+          title: Time Utc
+      type: object
+      required:
+      - interval_days
+      - time_utc
+      title: DayIntervalSpec
+    EndpointPropertiesInDB:
+      properties:
+        authenticated:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Authenticated
+        protocol:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Protocol
+        endpoint_status:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Endpoint Status
+        last_scan:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Last Scan
+        last_scan_time:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Last Scan Time
+        request_bodies:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Request Bodies
+        response_bodies:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Response Bodies
+      type: object
+      title: EndpointPropertiesInDB
+    EndpointSource:
+      properties:
+        name:
+          type: string
+          title: Name
+        value:
+          type: string
+          title: Value
+      type: object
+      required:
+      - name
+      - value
+      title: EndpointSource
+    ScanExecutionStatus:
+      type: string
+      enum:
+      - Pending
+      - running
+      - Completed
+      - Did not run
+      - Aborted
+      - Cancelled
+      - Scheduled
+      title: ScanExecutionStatus
+    ScheduleState:
+      type: string
+      enum:
+      - active
+      - paused
+      - completed
+      title: ScheduleState
+    AuthenticationInfo:
+      properties:
+        method:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Method
+        name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Name
+      type: object
+      title: AuthenticationInfo
+    ApplicationDataSourceOut:
+      properties:
+        status:
+          type: string
+          title: Status
+      type: object
+      required:
+      - status
+      title: ApplicationDataSourceOut
+    Body_create_endpoints_v1_application__application_id__endpoints_post:
+      properties:
+        create_endpoint_requests:
+          items:
+            $ref: '#/components/schemas/CreateEndpointRequest'
+          type: array
+          title: Create Endpoint Requests
+      type: object
+      required:
+      - create_endpoint_requests
+      title: Body_create_endpoints_v1_application__application_id__endpoints_post
+  securitySchemes:
+    API_Key:
+      type: apiKey
+      in: header
+      name: X-API-Key
+    Bearer_Token:
+      type: apiKey
+      in: header
+      name: Authorization
+    System_API_Key:
+      type: apiKey
+      in: header
+      name: X-System-API-Key
+    Organization_ID:
+      type: apiKey
+      in: header
+      name: X-Organization-ID
+    Operator_Organization_Context:
+      type: apiKey
+      in: header
+      name: context
+x-refined-from:
+- pynt-openapi.json
+- pynt-openapi.json

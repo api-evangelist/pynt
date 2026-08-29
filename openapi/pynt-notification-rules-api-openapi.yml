@@ -1,0 +1,223 @@
+openapi: 3.2.0
+info:
+  title: Pynt Notification Rules API
+  version: 0.1.0
+  description: 'Operations tagged notification-rules across 2 of this provider''s published API definitions: pynt-openapi.json, pynt-openapi.json. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.pynt.io
+  description: Pynt production API
+tags:
+- name: notification-rules
+paths:
+  /v1/notification-rules:
+    post:
+      tags:
+      - notification-rules
+      summary: Create Notification Rule
+      operationId: create_notification_rule_v1_notification_rules_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NotificationRuleCreate'
+        required: true
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotificationRuleOut'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - System API Key: []
+      - API Key: []
+      - Bearer Token: []
+      - Organization ID: []
+      - Operator Organization Context: []
+  /v1/notification-rules/{rule_id}:
+    put:
+      tags:
+      - notification-rules
+      summary: Update Notification Rule
+      operationId: update_notification_rule_v1_notification_rules__rule_id__put
+      security:
+      - System API Key: []
+      - API Key: []
+      - Bearer Token: []
+      - Organization ID: []
+      - Operator Organization Context: []
+      parameters:
+      - name: rule_id
+        in: path
+        required: true
+        schema:
+          type: string
+          pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
+          title: Rule Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NotificationRuleCreate'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotificationRuleOut'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    delete:
+      tags:
+      - notification-rules
+      summary: Delete Notification Rule
+      operationId: delete_notification_rule_v1_notification_rules__rule_id__delete
+      security:
+      - System API Key: []
+      - API Key: []
+      - Bearer Token: []
+      - Organization ID: []
+      - Operator Organization Context: []
+      parameters:
+      - name: rule_id
+        in: path
+        required: true
+        schema:
+          type: string
+          pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
+          title: Rule Id
+      responses:
+        '204':
+          description: Successful Response
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    NotificationRuleCreate:
+      properties:
+        type:
+          $ref: '#/components/schemas/NotificationServiceType'
+          default: CAPI_SECURITY_TESTING
+        enabled:
+          type: boolean
+          title: Enabled
+          default: true
+        all_projects:
+          type: boolean
+          title: All Projects
+          default: false
+        project_ids:
+          items:
+            type: string
+          type: array
+          title: Project Ids
+        scan_status_triggers:
+          items:
+            $ref: '#/components/schemas/ScanStatusTriggerCondition'
+          type: array
+          title: Scan Status Triggers
+        severity_levels:
+          items:
+            type: string
+            enum:
+            - ANY
+            - CRITICAL
+            - HIGH
+            - MEDIUM
+          type: array
+          title: Severity Levels
+      type: object
+      required:
+      - scan_status_triggers
+      title: NotificationRuleCreate
+    NotificationRuleOut:
+      properties:
+        rule_id:
+          type: string
+          title: Rule Id
+      type: object
+      required:
+      - rule_id
+      title: NotificationRuleOut
+      description: Only the stable rule id — the portal owns and stores the rest, keyed by it.
+    ScanStatusTriggerCondition:
+      type: string
+      enum:
+      - FAILED
+      - SUCCESS
+      title: ScanStatusTriggerCondition
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    NotificationServiceType:
+      type: string
+      enum:
+      - CAPI_SECURITY_TESTING
+      title: NotificationServiceType
+  securitySchemes:
+    API_Key:
+      type: apiKey
+      in: header
+      name: X-API-Key
+    Bearer_Token:
+      type: apiKey
+      in: header
+      name: Authorization
+    System_API_Key:
+      type: apiKey
+      in: header
+      name: X-System-API-Key
+    Organization_ID:
+      type: apiKey
+      in: header
+      name: X-Organization-ID
+    Operator_Organization_Context:
+      type: apiKey
+      in: header
+      name: context
+x-refined-from:
+- pynt-openapi.json
+- pynt-openapi.json

@@ -1,0 +1,243 @@
+openapi: 3.2.0
+info:
+  title: Pynt API Key API
+  version: 0.1.0
+  description: 'Operations tagged api-key across 2 of this provider''s published API definitions: pynt-openapi.json, pynt-openapi.json. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.pynt.io
+  description: Pynt production API
+tags:
+- name: api-key
+paths:
+  /v1/api-key/:
+    post:
+      tags:
+      - api-key
+      summary: Create Api Key
+      operationId: create_api_key_v1_api_key__post
+      security:
+      - Bearer Token: []
+      - Operator Organization Context: []
+      - API Key: []
+      - Bearer Token: []
+      - System API Key: []
+      - Organization ID: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateApiKeyRequest'
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateApiKeyResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    get:
+      tags:
+      - api-key
+      summary: List Api Keys
+      operationId: list_api_keys_v1_api_key__get
+      security:
+      - Bearer Token: []
+      - Operator Organization Context: []
+      - API Key: []
+      - Bearer Token: []
+      - System API Key: []
+      - Organization ID: []
+      parameters:
+      - name: filter
+        in: query
+        required: false
+        schema:
+          type: string
+          title: Filter
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ApiKeyResponse'
+                title: Response List Api Keys V1 Api Key  Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/api-key/revoke:
+    post:
+      tags:
+      - api-key
+      summary: Revoke Api Key
+      operationId: revoke_api_key_v1_api_key_revoke_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RevokeApiKeyRequest'
+        required: true
+      responses:
+        '204':
+          description: Successful Response
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - Bearer Token: []
+      - Operator Organization Context: []
+      - API Key: []
+      - Bearer Token: []
+      - System API Key: []
+      - Organization ID: []
+components:
+  schemas:
+    RevokeApiKeyRequest:
+      properties:
+        api_key_id:
+          type: string
+          title: Api Key Id
+          description: The API key id to revoke
+      type: object
+      required:
+      - api_key_id
+      title: RevokeApiKeyRequest
+    ApiKeyResponse:
+      properties:
+        entity_id:
+          type: string
+          title: Entity Id
+        organization_id:
+          type: string
+          format: uuid
+          title: Organization Id
+        created_by:
+          type: string
+          format: uuid
+          title: Created By
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+        updated_at:
+          type: string
+          format: date-time
+          title: Updated At
+        expires_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Expires At
+        key_suffix:
+          type: string
+          title: Key Suffix
+        name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Name
+      type: object
+      required:
+      - entity_id
+      - organization_id
+      - created_by
+      - created_at
+      - updated_at
+      - expires_at
+      - key_suffix
+      title: ApiKeyResponse
+    CreateApiKeyRequest:
+      properties:
+        expires_after:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Expires After
+          description: The number of days after which the API key should expire
+        api_key_name:
+          type: string
+          title: Api Key Name
+          description: The name of the API key
+      type: object
+      required:
+      - api_key_name
+      title: CreateApiKeyRequest
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    CreateApiKeyResponse:
+      properties:
+        api_key:
+          type: string
+          title: Api Key
+          description: The generated API key (plain text)
+      type: object
+      required:
+      - api_key
+      title: CreateApiKeyResponse
+  securitySchemes:
+    API_Key:
+      type: apiKey
+      in: header
+      name: X-API-Key
+    Bearer_Token:
+      type: apiKey
+      in: header
+      name: Authorization
+    System_API_Key:
+      type: apiKey
+      in: header
+      name: X-System-API-Key
+    Organization_ID:
+      type: apiKey
+      in: header
+      name: X-Organization-ID
+    Operator_Organization_Context:
+      type: apiKey
+      in: header
+      name: context
+x-refined-from:
+- pynt-openapi.json
+- pynt-openapi.json

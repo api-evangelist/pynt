@@ -1,0 +1,219 @@
+openapi: 3.2.0
+info:
+  title: Pynt Postman API
+  version: 0.1.0
+  description: 'Operations tagged postman across 2 of this provider''s published API definitions: pynt-openapi.json, pynt-openapi.json. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.pynt.io
+  description: Pynt production API
+tags:
+- name: postman
+paths:
+  /v1/postman:
+    put:
+      tags:
+      - postman
+      summary: Set Credentials
+      operationId: set_credentials_v1_postman_put
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostmanSetCredentialsRequest'
+        required: true
+      responses:
+        '204':
+          description: Successful Response
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - API Key: []
+      - Bearer Token: []
+      - System API Key: []
+      - Organization ID: []
+      - Operator Organization Context: []
+    post:
+      tags:
+      - postman
+      summary: Connect Postman
+      operationId: connect_postman_v1_postman_post
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PostmanConnectResponse'
+      security:
+      - API Key: []
+      - Bearer Token: []
+      - System API Key: []
+      - Organization ID: []
+      - Operator Organization Context: []
+    delete:
+      tags:
+      - postman
+      summary: Delete Integration
+      operationId: delete_integration_v1_postman_delete
+      responses:
+        '204':
+          description: Successful Response
+      security:
+      - Bearer Token: []
+      - Operator Organization Context: []
+      - API Key: []
+      - Bearer Token: []
+      - System API Key: []
+      - Organization ID: []
+  /v1/postman/webhook:
+    post:
+      tags:
+      - postman
+      summary: Webhook Handler
+      operationId: webhook_handler_v1_postman_webhook_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              oneOf:
+              - additionalProperties: true
+                type: object
+              - $ref: '#/components/schemas/PostmanWebhookRunScanEvent'
+              title: Event
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: string
+                title: Response Webhook Handler V1 Postman Webhook Post
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - API Key: []
+      - API Key: []
+      - Bearer Token: []
+      - System API Key: []
+      - Organization ID: []
+      - Operator Organization Context: []
+components:
+  schemas:
+    PostmanWebhookRunScanPayload:
+      properties:
+        collectionId:
+          type: string
+          pattern: ^[a-f0-9\-]+$
+          title: Collectionid
+        environmentId:
+          anyOf:
+          - type: string
+            pattern: ^[a-f0-9\-]+$
+          - type: 'null'
+          title: Environmentid
+      type: object
+      required:
+      - collectionId
+      title: PostmanWebhookRunScanPayload
+    PostmanSetCredentialsRequest:
+      properties:
+        client_id:
+          type: string
+          title: Client Id
+        client_secret:
+          type: string
+          title: Client Secret
+      type: object
+      required:
+      - client_id
+      - client_secret
+      title: PostmanSetCredentialsRequest
+    PostmanConnectResponse:
+      properties:
+        api_key:
+          type: string
+          title: Api Key
+      type: object
+      required:
+      - api_key
+      title: PostmanConnectResponse
+    PostmanWebhookRunScanEvent:
+      properties:
+        eventId:
+          type: string
+          title: Eventid
+        eventKey:
+          type: string
+          const: RUN_SCAN
+          title: Eventkey
+        payload:
+          $ref: '#/components/schemas/PostmanWebhookRunScanPayload'
+      type: object
+      required:
+      - eventId
+      - eventKey
+      - payload
+      title: PostmanWebhookRunScanEvent
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+  securitySchemes:
+    API_Key:
+      type: apiKey
+      in: header
+      name: X-API-Key
+    Bearer_Token:
+      type: apiKey
+      in: header
+      name: Authorization
+    System_API_Key:
+      type: apiKey
+      in: header
+      name: X-System-API-Key
+    Organization_ID:
+      type: apiKey
+      in: header
+      name: X-Organization-ID
+    Operator_Organization_Context:
+      type: apiKey
+      in: header
+      name: context
+x-refined-from:
+- pynt-openapi.json
+- pynt-openapi.json

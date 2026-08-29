@@ -58,6 +58,8 @@ created: '2025-01-08'
 modified: '2026-08-27'
 specificationVersion: '0.23'
 common:
+  - type: Overlay
+    url: overlays/pynt-openapi-overlay.yaml
   - type: Website
     url: https://www.pynt.io/
   - type: DeveloperPortal
@@ -123,34 +125,520 @@ common:
   - type: RateLimits
     url: rate-limits/pynt-rate-limits.yml
 apis:
-  - aid: pynt:pynt
-    name: Pynt API
-    tags:
-      - API Security
-      - API Testing
-      - Vulnerability Management
-      - API Discovery
-    humanURL: https://docs.pynt.io/documentation
-    baseURL: https://api.pynt.io
-    properties:
-      - url: openapi/pynt-openapi.json
-        type: OpenAPI
-      - url: overlays/pynt-openapi-overlay.yaml
-        type: Overlay
-      - url: https://api.pynt.io/docs
-        type: APIReference
-      - url: https://docs.pynt.io/documentation
-        type: Documentation
-      - url: mcp/pynt-mcp.yml
-        type: MCPCandidate
-    description: >-
-      The REST API behind the Pynt platform. OpenAPI 3.1.0, 105 paths and 134
-      operations across applications (API estates), discovery data sources,
-      endpoints and endpoint groups, scans and scan schedules, findings and
-      vulnerability instances, LLM false-positive and business-impact analyses,
-      automated pentest reports, Jira and Postman integrations, traffic
-      collectors, notification rules, API keys, users, invites and
-      organizations. Secured by header API keys; every path is 401 anonymously.
+- aid: pynt:pynt-alive-api
+  name: Pynt Alive API
+  description: The Alive API from Pynt — 1 operation(s) for alive.
+  humanURL: https://docs.pynt.io/documentation
+  baseURL: https://api.pynt.io
+  tags:
+  - Alive
+  properties:
+  - type: OpenAPI
+    url: openapi/pynt-alive-api-openapi.yml
+  - type: APIReference
+    url: https://api.pynt.io/docs
+  - type: Documentation
+    url: https://docs.pynt.io/documentation
+  - type: MCPCandidate
+    url: mcp/pynt-mcp.yml
+- aid: pynt:pynt-api-key-api
+  name: Pynt API Key API
+  description: The api-key API from Pynt — 2 operation(s) for api-key.
+  humanURL: https://docs.pynt.io/documentation
+  baseURL: https://api.pynt.io
+  tags:
+  - api-key
+  properties:
+  - type: OpenAPI
+    url: openapi/pynt-api-key-api-openapi.yml
+  - type: APIReference
+    url: https://api.pynt.io/docs
+  - type: Documentation
+    url: https://docs.pynt.io/documentation
+  - type: MCPCandidate
+    url: mcp/pynt-mcp.yml
+- aid: pynt:pynt-application-api
+  name: Pynt Application API
+  description: The application API from Pynt — 21 operation(s) for application.
+  humanURL: https://docs.pynt.io/documentation
+  baseURL: https://api.pynt.io
+  tags:
+  - application
+  properties:
+  - type: OpenAPI
+    url: openapi/pynt-application-api-openapi.yml
+  - type: APIReference
+    url: https://api.pynt.io/docs
+  - type: Documentation
+    url: https://docs.pynt.io/documentation
+  - type: MCPCandidate
+    url: mcp/pynt-mcp.yml
+- aid: pynt:pynt-artifacts-api
+  name: Pynt Artifacts API
+  description: The artifacts API from Pynt — 2 operation(s) for artifacts.
+  humanURL: https://docs.pynt.io/documentation
+  baseURL: https://api.pynt.io
+  tags:
+  - artifacts
+  properties:
+  - type: OpenAPI
+    url: openapi/pynt-artifacts-api-openapi.yml
+  - type: APIReference
+    url: https://api.pynt.io/docs
+  - type: Documentation
+    url: https://docs.pynt.io/documentation
+  - type: MCPCandidate
+    url: mcp/pynt-mcp.yml
+- aid: pynt:pynt-auth-api
+  name: Pynt Auth API
+  description: The auth API from Pynt — 4 operation(s) for auth.
+  humanURL: https://docs.pynt.io/documentation
+  baseURL: https://api.pynt.io
+  tags:
+  - auth
+  properties:
+  - type: OpenAPI
+    url: openapi/pynt-auth-api-openapi.yml
+  - type: APIReference
+    url: https://api.pynt.io/docs
+  - type: Documentation
+    url: https://docs.pynt.io/documentation
+  - type: MCPCandidate
+    url: mcp/pynt-mcp.yml
+- aid: pynt:pynt-aws-marketplace-api
+  name: Pynt Aws Marketplace API
+  description: The aws-marketplace API from Pynt — 2 operation(s) for aws-marketplace.
+  humanURL: https://docs.pynt.io/documentation
+  baseURL: https://api.pynt.io
+  tags:
+  - aws-marketplace
+  properties:
+  - type: OpenAPI
+    url: openapi/pynt-aws-marketplace-api-openapi.yml
+  - type: APIReference
+    url: https://api.pynt.io/docs
+  - type: Documentation
+    url: https://docs.pynt.io/documentation
+  - type: MCPCandidate
+    url: mcp/pynt-mcp.yml
+- aid: pynt:pynt-config-api
+  name: Pynt Config API
+  description: The config API from Pynt — 1 operation(s) for config.
+  humanURL: https://docs.pynt.io/documentation
+  baseURL: https://api.pynt.io
+  tags:
+  - config
+  properties:
+  - type: OpenAPI
+    url: openapi/pynt-config-api-openapi.yml
+  - type: APIReference
+    url: https://api.pynt.io/docs
+  - type: Documentation
+    url: https://docs.pynt.io/documentation
+  - type: MCPCandidate
+    url: mcp/pynt-mcp.yml
+- aid: pynt:pynt-endpoint-group-api
+  name: Pynt Endpoint Group API
+  description: The endpoint-group API from Pynt — 4 operation(s) for endpoint-group.
+  humanURL: https://docs.pynt.io/documentation
+  baseURL: https://api.pynt.io
+  tags:
+  - endpoint-group
+  properties:
+  - type: OpenAPI
+    url: openapi/pynt-endpoint-group-api-openapi.yml
+  - type: APIReference
+    url: https://api.pynt.io/docs
+  - type: Documentation
+    url: https://docs.pynt.io/documentation
+  - type: MCPCandidate
+    url: mcp/pynt-mcp.yml
+- aid: pynt:pynt-endpoint-llm-analysis-api
+  name: Pynt Endpoint Llm Analysis API
+  description: The endpoint-llm-analysis API from Pynt — 1 operation(s) for endpoint-llm-analysis.
+  humanURL: https://docs.pynt.io/documentation
+  baseURL: https://api.pynt.io
+  tags:
+  - endpoint-llm-analysis
+  properties:
+  - type: OpenAPI
+    url: openapi/pynt-endpoint-llm-analysis-api-openapi.yml
+  - type: APIReference
+    url: https://api.pynt.io/docs
+  - type: Documentation
+    url: https://docs.pynt.io/documentation
+  - type: MCPCandidate
+    url: mcp/pynt-mcp.yml
+- aid: pynt:pynt-event-logs-api
+  name: Pynt Event Logs API
+  description: The event-logs API from Pynt — 1 operation(s) for event-logs.
+  humanURL: https://docs.pynt.io/documentation
+  baseURL: https://api.pynt.io
+  tags:
+  - event-logs
+  properties:
+  - type: OpenAPI
+    url: openapi/pynt-event-logs-api-openapi.yml
+  - type: APIReference
+    url: https://api.pynt.io/docs
+  - type: Documentation
+    url: https://docs.pynt.io/documentation
+  - type: MCPCandidate
+    url: mcp/pynt-mcp.yml
+- aid: pynt:pynt-evidence-api
+  name: Pynt Evidence API
+  description: The evidence API from Pynt — 1 operation(s) for evidence.
+  humanURL: https://docs.pynt.io/documentation
+  baseURL: https://api.pynt.io
+  tags:
+  - evidence
+  properties:
+  - type: OpenAPI
+    url: openapi/pynt-evidence-api-openapi.yml
+  - type: APIReference
+    url: https://api.pynt.io/docs
+  - type: Documentation
+    url: https://docs.pynt.io/documentation
+  - type: MCPCandidate
+    url: mcp/pynt-mcp.yml
+- aid: pynt:pynt-integrations-api
+  name: Pynt Integrations API
+  description: The integrations API from Pynt — 1 operation(s) for integrations.
+  humanURL: https://docs.pynt.io/documentation
+  baseURL: https://api.pynt.io
+  tags:
+  - integrations
+  properties:
+  - type: OpenAPI
+    url: openapi/pynt-integrations-api-openapi.yml
+  - type: APIReference
+    url: https://api.pynt.io/docs
+  - type: Documentation
+    url: https://docs.pynt.io/documentation
+  - type: MCPCandidate
+    url: mcp/pynt-mcp.yml
+- aid: pynt:pynt-invite-api
+  name: Pynt Invite API
+  description: The invite API from Pynt — 4 operation(s) for invite.
+  humanURL: https://docs.pynt.io/documentation
+  baseURL: https://api.pynt.io
+  tags:
+  - invite
+  properties:
+  - type: OpenAPI
+    url: openapi/pynt-invite-api-openapi.yml
+  - type: APIReference
+    url: https://api.pynt.io/docs
+  - type: Documentation
+    url: https://docs.pynt.io/documentation
+  - type: MCPCandidate
+    url: mcp/pynt-mcp.yml
+- aid: pynt:pynt-jobs-api
+  name: Pynt Jobs API
+  description: The jobs API from Pynt — 1 operation(s) for jobs.
+  humanURL: https://docs.pynt.io/documentation
+  baseURL: https://api.pynt.io
+  tags:
+  - jobs
+  properties:
+  - type: OpenAPI
+    url: openapi/pynt-jobs-api-openapi.yml
+  - type: APIReference
+    url: https://api.pynt.io/docs
+  - type: Documentation
+    url: https://docs.pynt.io/documentation
+  - type: MCPCandidate
+    url: mcp/pynt-mcp.yml
+- aid: pynt:pynt-legacy-api
+  name: Pynt Legacy API
+  description: The legacy API from Pynt — 3 operation(s) for legacy.
+  humanURL: https://docs.pynt.io/documentation
+  baseURL: https://api.pynt.io
+  tags:
+  - legacy
+  properties:
+  - type: OpenAPI
+    url: openapi/pynt-legacy-api-openapi.yml
+  - type: APIReference
+    url: https://api.pynt.io/docs
+  - type: Documentation
+    url: https://docs.pynt.io/documentation
+  - type: MCPCandidate
+    url: mcp/pynt-mcp.yml
+- aid: pynt:pynt-llm-prompt-api
+  name: Pynt Llm Prompt API
+  description: The llm-prompt API from Pynt — 2 operation(s) for llm-prompt.
+  humanURL: https://docs.pynt.io/documentation
+  baseURL: https://api.pynt.io
+  tags:
+  - llm-prompt
+  properties:
+  - type: OpenAPI
+    url: openapi/pynt-llm-prompt-api-openapi.yml
+  - type: APIReference
+    url: https://api.pynt.io/docs
+  - type: Documentation
+    url: https://docs.pynt.io/documentation
+  - type: MCPCandidate
+    url: mcp/pynt-mcp.yml
+- aid: pynt:pynt-nats-api
+  name: Pynt Nats API
+  description: The nats API from Pynt — 3 operation(s) for nats.
+  humanURL: https://docs.pynt.io/documentation
+  baseURL: https://api.pynt.io
+  tags:
+  - nats
+  properties:
+  - type: OpenAPI
+    url: openapi/pynt-nats-api-openapi.yml
+  - type: APIReference
+    url: https://api.pynt.io/docs
+  - type: Documentation
+    url: https://docs.pynt.io/documentation
+  - type: MCPCandidate
+    url: mcp/pynt-mcp.yml
+- aid: pynt:pynt-notification-rules-api
+  name: Pynt Notification Rules API
+  description: The notification-rules API from Pynt — 2 operation(s) for notification-rules.
+  humanURL: https://docs.pynt.io/documentation
+  baseURL: https://api.pynt.io
+  tags:
+  - notification-rules
+  properties:
+  - type: OpenAPI
+    url: openapi/pynt-notification-rules-api-openapi.yml
+  - type: APIReference
+    url: https://api.pynt.io/docs
+  - type: Documentation
+    url: https://docs.pynt.io/documentation
+  - type: MCPCandidate
+    url: mcp/pynt-mcp.yml
+- aid: pynt:pynt-organization-api
+  name: Pynt Organization API
+  description: The organization API from Pynt — 4 operation(s) for organization.
+  humanURL: https://docs.pynt.io/documentation
+  baseURL: https://api.pynt.io
+  tags:
+  - organization
+  properties:
+  - type: OpenAPI
+    url: openapi/pynt-organization-api-openapi.yml
+  - type: APIReference
+    url: https://api.pynt.io/docs
+  - type: Documentation
+    url: https://docs.pynt.io/documentation
+  - type: MCPCandidate
+    url: mcp/pynt-mcp.yml
+- aid: pynt:pynt-postman-api
+  name: Pynt Postman API
+  description: The postman API from Pynt — 2 operation(s) for postman.
+  humanURL: https://docs.pynt.io/documentation
+  baseURL: https://api.pynt.io
+  tags:
+  - postman
+  properties:
+  - type: OpenAPI
+    url: openapi/pynt-postman-api-openapi.yml
+  - type: APIReference
+    url: https://api.pynt.io/docs
+  - type: Documentation
+    url: https://docs.pynt.io/documentation
+  - type: MCPCandidate
+    url: mcp/pynt-mcp.yml
+- aid: pynt:pynt-postman-proxy-api
+  name: Pynt Postman Proxy API
+  description: The postman-proxy API from Pynt — 1 operation(s) for postman-proxy.
+  humanURL: https://docs.pynt.io/documentation
+  baseURL: https://api.pynt.io
+  tags:
+  - postman-proxy
+  properties:
+  - type: OpenAPI
+    url: openapi/pynt-postman-proxy-api-openapi.yml
+  - type: APIReference
+    url: https://api.pynt.io/docs
+  - type: Documentation
+    url: https://docs.pynt.io/documentation
+  - type: MCPCandidate
+    url: mcp/pynt-mcp.yml
+- aid: pynt:pynt-scan-api
+  name: Pynt Scan API
+  description: The scan API from Pynt — 26 operation(s) for scan.
+  humanURL: https://docs.pynt.io/documentation
+  baseURL: https://api.pynt.io
+  tags:
+  - scan
+  properties:
+  - type: OpenAPI
+    url: openapi/pynt-scan-api-openapi.yml
+  - type: APIReference
+    url: https://api.pynt.io/docs
+  - type: Documentation
+    url: https://docs.pynt.io/documentation
+  - type: MCPCandidate
+    url: mcp/pynt-mcp.yml
+- aid: pynt:pynt-scan-business-impact-analysis-api
+  name: Pynt Scan Business Impact Analysis API
+  description: >-
+    The scan-business-impact-analysis API from Pynt — 2 operation(s) for scan-business-impact-analysis.
+  humanURL: https://docs.pynt.io/documentation
+  baseURL: https://api.pynt.io
+  tags:
+  - scan-business-impact-analysis
+  properties:
+  - type: OpenAPI
+    url: openapi/pynt-scan-business-impact-analysis-api-openapi.yml
+  - type: APIReference
+    url: https://api.pynt.io/docs
+  - type: Documentation
+    url: https://docs.pynt.io/documentation
+  - type: MCPCandidate
+    url: mcp/pynt-mcp.yml
+- aid: pynt:pynt-scan-false-positive-analysis-api
+  name: Pynt Scan False Positive Analysis API
+  description: >-
+    The scan-false-positive-analysis API from Pynt — 2 operation(s) for scan-false-positive-analysis.
+  humanURL: https://docs.pynt.io/documentation
+  baseURL: https://api.pynt.io
+  tags:
+  - scan-false-positive-analysis
+  properties:
+  - type: OpenAPI
+    url: openapi/pynt-scan-false-positive-analysis-api-openapi.yml
+  - type: APIReference
+    url: https://api.pynt.io/docs
+  - type: Documentation
+    url: https://docs.pynt.io/documentation
+  - type: MCPCandidate
+    url: mcp/pynt-mcp.yml
+- aid: pynt:pynt-scan-profile-api
+  name: Pynt Scan Profile API
+  description: The scan-profile API from Pynt — 1 operation(s) for scan-profile.
+  humanURL: https://docs.pynt.io/documentation
+  baseURL: https://api.pynt.io
+  tags:
+  - scan-profile
+  properties:
+  - type: OpenAPI
+    url: openapi/pynt-scan-profile-api-openapi.yml
+  - type: APIReference
+    url: https://api.pynt.io/docs
+  - type: Documentation
+    url: https://docs.pynt.io/documentation
+  - type: MCPCandidate
+    url: mcp/pynt-mcp.yml
+- aid: pynt:pynt-scan-schedule-api
+  name: Pynt Scan Schedule API
+  description: The scan-schedule API from Pynt — 4 operation(s) for scan-schedule.
+  humanURL: https://docs.pynt.io/documentation
+  baseURL: https://api.pynt.io
+  tags:
+  - scan-schedule
+  properties:
+  - type: OpenAPI
+    url: openapi/pynt-scan-schedule-api-openapi.yml
+  - type: APIReference
+    url: https://api.pynt.io/docs
+  - type: Documentation
+    url: https://docs.pynt.io/documentation
+  - type: MCPCandidate
+    url: mcp/pynt-mcp.yml
+- aid: pynt:pynt-tag-api
+  name: Pynt Tag API
+  description: The tag API from Pynt — 1 operation(s) for tag.
+  humanURL: https://docs.pynt.io/documentation
+  baseURL: https://api.pynt.io
+  tags:
+  - tag
+  properties:
+  - type: OpenAPI
+    url: openapi/pynt-tag-api-openapi.yml
+  - type: APIReference
+    url: https://api.pynt.io/docs
+  - type: Documentation
+    url: https://docs.pynt.io/documentation
+  - type: MCPCandidate
+    url: mcp/pynt-mcp.yml
+- aid: pynt:pynt-ticketing-api
+  name: Pynt Ticketing API
+  description: The ticketing API from Pynt — 3 operation(s) for ticketing.
+  humanURL: https://docs.pynt.io/documentation
+  baseURL: https://api.pynt.io
+  tags:
+  - ticketing
+  properties:
+  - type: OpenAPI
+    url: openapi/pynt-ticketing-api-openapi.yml
+  - type: APIReference
+    url: https://api.pynt.io/docs
+  - type: Documentation
+    url: https://docs.pynt.io/documentation
+  - type: MCPCandidate
+    url: mcp/pynt-mcp.yml
+- aid: pynt:pynt-traffic-collector-api
+  name: Pynt Traffic Collector API
+  description: The traffic-collector API from Pynt — 2 operation(s) for traffic-collector.
+  humanURL: https://docs.pynt.io/documentation
+  baseURL: https://api.pynt.io
+  tags:
+  - traffic-collector
+  properties:
+  - type: OpenAPI
+    url: openapi/pynt-traffic-collector-api-openapi.yml
+  - type: APIReference
+    url: https://api.pynt.io/docs
+  - type: Documentation
+    url: https://docs.pynt.io/documentation
+  - type: MCPCandidate
+    url: mcp/pynt-mcp.yml
+- aid: pynt:pynt-traffic-filter-api
+  name: Pynt Traffic Filter API
+  description: The traffic-filter API from Pynt — 1 operation(s) for traffic-filter.
+  humanURL: https://docs.pynt.io/documentation
+  baseURL: https://api.pynt.io
+  tags:
+  - traffic-filter
+  properties:
+  - type: OpenAPI
+    url: openapi/pynt-traffic-filter-api-openapi.yml
+  - type: APIReference
+    url: https://api.pynt.io/docs
+  - type: Documentation
+    url: https://docs.pynt.io/documentation
+  - type: MCPCandidate
+    url: mcp/pynt-mcp.yml
+- aid: pynt:pynt-user-api
+  name: Pynt User API
+  description: The user API from Pynt — 3 operation(s) for user.
+  humanURL: https://docs.pynt.io/documentation
+  baseURL: https://api.pynt.io
+  tags:
+  - user
+  properties:
+  - type: OpenAPI
+    url: openapi/pynt-user-api-openapi.yml
+  - type: APIReference
+    url: https://api.pynt.io/docs
+  - type: Documentation
+    url: https://docs.pynt.io/documentation
+  - type: MCPCandidate
+    url: mcp/pynt-mcp.yml
+- aid: pynt:pynt-vulnerability-instance-api
+  name: Pynt Vulnerability Instance API
+  description: The vulnerability-instance API from Pynt — 5 operation(s) for vulnerability-instance.
+  humanURL: https://docs.pynt.io/documentation
+  baseURL: https://api.pynt.io
+  tags:
+  - vulnerability-instance
+  properties:
+  - type: OpenAPI
+    url: openapi/pynt-vulnerability-instance-api-openapi.yml
+  - type: APIReference
+    url: https://api.pynt.io/docs
+  - type: Documentation
+    url: https://docs.pynt.io/documentation
+  - type: MCPCandidate
+    url: mcp/pynt-mcp.yml
 maintainers:
   - FN: Kin Lane
     email: kin@apievangelist.com

@@ -1,0 +1,279 @@
+openapi: 3.2.0
+info:
+  title: Pynt Legacy API
+  version: 0.1.0
+  description: 'Operations tagged legacy across 2 of this provider''s published API definitions: pynt-openapi.json, pynt-openapi.json. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.pynt.io
+  description: Pynt production API
+tags:
+- name: legacy
+paths:
+  /v1/applicationsMetadata:
+    get:
+      tags:
+      - legacy
+      summary: List Applications Metadata
+      description: Use /v1/application/metadata instead
+      operationId: list_applications_metadata_v1_applicationsMetadata_get
+      deprecated: true
+      security:
+      - API Key: []
+      - Bearer Token: []
+      - System API Key: []
+      - Organization ID: []
+      - Operator Organization Context: []
+      parameters:
+      - name: application_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Application Id
+      - name: filter
+        in: query
+        required: false
+        schema:
+          type: string
+          title: Filter
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ApplicationMetadataOut'
+                title: Response List Applications Metadata V1 Applicationsmetadata Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/community/user:
+    get:
+      tags:
+      - legacy
+      summary: Community User
+      operationId: community_user_v1_community_user_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommunityUserResponse'
+      deprecated: true
+      security:
+      - Bearer Token: []
+  /v1/report:
+    put:
+      tags:
+      - legacy
+      summary: Upload Report
+      description: Use /v1/scan/{scan_id}/report instead
+      operationId: upload_report_v1_report_put
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UploadReportRequest'
+        required: true
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      deprecated: true
+      security:
+      - API Key: []
+      - Bearer Token: []
+      - System API Key: []
+      - Organization ID: []
+      - Operator Organization Context: []
+components:
+  schemas:
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    CommunityUserResponse:
+      properties:
+        user-id:
+          type: string
+          title: User-Id
+      type: object
+      required:
+      - user-id
+      title: CommunityUserResponse
+    ScanExecutionStatus:
+      type: string
+      enum:
+      - Pending
+      - running
+      - Completed
+      - Did not run
+      - Aborted
+      - Cancelled
+      - Scheduled
+      title: ScanExecutionStatus
+    ApplicationMetadataOut:
+      properties:
+        name:
+          type: string
+          minLength: 3
+          title: Name
+        assignee_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Assignee Id
+        tags:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Tags
+        last_tested_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Last Tested At
+        last_scan_status:
+          anyOf:
+          - $ref: '#/components/schemas/ScanExecutionStatus'
+          - type: 'null'
+        last_scan_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Last Scan Id
+        assignee:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Assignee
+        app_id:
+          type: string
+          pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
+          title: App Id
+        assignee_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Assignee Name
+        assigned_application:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Assigned Application
+        number_of_endpoint_groups:
+          type: integer
+          title: Number Of Endpoint Groups
+        vulnerability_instances:
+          type: integer
+          title: Vulnerability Instances
+        risk:
+          type: integer
+          title: Risk
+        data_sources:
+          additionalProperties:
+            $ref: '#/components/schemas/ApplicationDataSourceOut'
+          type: object
+          title: Data Sources
+      type: object
+      required:
+      - name
+      - number_of_endpoint_groups
+      - vulnerability_instances
+      - risk
+      - data_sources
+      title: ApplicationMetadataOut
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ApplicationDataSourceOut:
+      properties:
+        status:
+          type: string
+          title: Status
+      type: object
+      required:
+      - status
+      title: ApplicationDataSourceOut
+    UploadReportRequest:
+      properties:
+        scan_id:
+          anyOf:
+          - type: string
+            pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
+          - type: 'null'
+          title: Scan Id
+          deprecated: true
+        report:
+          type: string
+          title: Report
+      type: object
+      required:
+      - report
+      title: UploadReportRequest
+  securitySchemes:
+    API_Key:
+      type: apiKey
+      in: header
+      name: X-API-Key
+    Bearer_Token:
+      type: apiKey
+      in: header
+      name: Authorization
+    System_API_Key:
+      type: apiKey
+      in: header
+      name: X-System-API-Key
+    Organization_ID:
+      type: apiKey
+      in: header
+      name: X-Organization-ID
+    Operator_Organization_Context:
+      type: apiKey
+      in: header
+      name: context
+x-refined-from:
+- pynt-openapi.json
+- pynt-openapi.json

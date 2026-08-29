@@ -1,0 +1,217 @@
+openapi: 3.2.0
+info:
+  title: Pynt Traffic Filter API
+  version: 0.1.0
+  description: 'Operations tagged traffic-filter across 2 of this provider''s published API definitions: pynt-openapi.json, pynt-openapi.json. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.pynt.io
+  description: Pynt production API
+tags:
+- name: traffic-filter
+paths:
+  /v1/traffic/filter:
+    get:
+      tags:
+      - traffic-filter
+      summary: Get Traffic Filters
+      operationId: get_traffic_filters_v1_traffic_filter_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrafficFilter-Output'
+      security:
+      - API Key: []
+      - Bearer Token: []
+      - System API Key: []
+      - Organization ID: []
+      - Operator Organization Context: []
+    put:
+      tags:
+      - traffic-filter
+      summary: Update Traffic Filter
+      operationId: update_traffic_filter_v1_traffic_filter_put
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TrafficFilter-Input'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - Bearer Token: []
+      - Operator Organization Context: []
+      - API Key: []
+      - Bearer Token: []
+      - System API Key: []
+      - Organization ID: []
+    post:
+      tags:
+      - traffic-filter
+      summary: Create Traffic Filter
+      operationId: create_traffic_filter_v1_traffic_filter_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TrafficFilter-Input'
+        required: true
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrafficFilter-Output'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - Bearer Token: []
+      - Operator Organization Context: []
+      - API Key: []
+      - Bearer Token: []
+      - System API Key: []
+      - Organization ID: []
+components:
+  schemas:
+    FilterType:
+      type: string
+      enum:
+      - system
+      - user
+      title: FilterType
+    FilterAction:
+      type: string
+      enum:
+      - capture
+      - ignore
+      title: FilterAction
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    TrafficFilter-Output:
+      properties:
+        filter_data:
+          items:
+            $ref: '#/components/schemas/TrafficFilterEntry'
+          type: array
+          title: Filter Data
+      type: object
+      title: TrafficFilter
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    TrafficFilter-Input:
+      properties:
+        filter_data:
+          items:
+            $ref: '#/components/schemas/TrafficFilterEntry'
+          type: array
+          title: Filter Data
+      type: object
+      title: TrafficFilter
+    TrafficFilterEntry:
+      properties:
+        name:
+          type: string
+          title: Name
+        action:
+          $ref: '#/components/schemas/FilterAction'
+        host:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Host
+        port:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Port
+        path:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Path
+        method:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Method
+        status_code:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Status Code
+        filter_type:
+          $ref: '#/components/schemas/FilterType'
+          default: user
+      type: object
+      required:
+      - name
+      - action
+      title: TrafficFilterEntry
+  securitySchemes:
+    API_Key:
+      type: apiKey
+      in: header
+      name: X-API-Key
+    Bearer_Token:
+      type: apiKey
+      in: header
+      name: Authorization
+    System_API_Key:
+      type: apiKey
+      in: header
+      name: X-System-API-Key
+    Organization_ID:
+      type: apiKey
+      in: header
+      name: X-Organization-ID
+    Operator_Organization_Context:
+      type: apiKey
+      in: header
+      name: context
+x-refined-from:
+- pynt-openapi.json
+- pynt-openapi.json

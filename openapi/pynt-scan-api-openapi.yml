@@ -1,0 +1,2537 @@
+openapi: 3.2.0
+info:
+  title: Pynt Scan API
+  version: 0.1.0
+  description: 'Operations tagged scan across 2 of this provider''s published API definitions: pynt-openapi.json, pynt-openapi.json. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.pynt.io
+  description: Pynt production API
+tags:
+- name: scan
+paths:
+  /v1/scan/{scan_id}/false-positive-analysis:
+    get:
+      tags:
+      - scan
+      summary: Get False Positive Analysis
+      operationId: get_false_positive_analysis_v1_scan__scan_id__false_positive_analysis_get
+      security:
+      - API Key: []
+      - Bearer Token: []
+      - System API Key: []
+      - Organization ID: []
+      - Operator Organization Context: []
+      parameters:
+      - name: scan_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Scan Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScanReportFalsePositiveAnalysis'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/scan/{scan_id}/false-positive-analysis/{finding_id}/approved:
+    put:
+      tags:
+      - scan
+      summary: Update Finding Approval
+      operationId: update_finding_approval_v1_scan__scan_id__false_positive_analysis__finding_id__approved_put
+      security:
+      - Bearer Token: []
+      - Operator Organization Context: []
+      - API Key: []
+      - Bearer Token: []
+      - System API Key: []
+      - Organization ID: []
+      parameters:
+      - name: scan_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Scan Id
+      - name: finding_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Finding Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApprovalUpdateRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/scan/{scan_id}/business-impact-analysis:
+    get:
+      tags:
+      - scan
+      summary: Get Business Impact Analysis
+      operationId: get_business_impact_analysis_v1_scan__scan_id__business_impact_analysis_get
+      security:
+      - API Key: []
+      - Bearer Token: []
+      - System API Key: []
+      - Organization ID: []
+      - Operator Organization Context: []
+      parameters:
+      - name: scan_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Scan Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScanReportBusinessImpactAnalysis'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/scan/{scan_id}/business-impact-analysis/{finding_id}/approved:
+    put:
+      tags:
+      - scan
+      summary: Update Finding Approval
+      operationId: update_finding_approval_v1_scan__scan_id__business_impact_analysis__finding_id__approved_put
+      security:
+      - Bearer Token: []
+      - Operator Organization Context: []
+      - API Key: []
+      - Bearer Token: []
+      - System API Key: []
+      - Organization ID: []
+      parameters:
+      - name: scan_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Scan Id
+      - name: finding_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Finding Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApprovalUpdateRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/scan/{scan_id}/summary:
+    get:
+      tags:
+      - scan
+      summary: Get Scan By Id
+      operationId: get_scan_by_id_v1_scan__scan_id__summary_get
+      security:
+      - API Key: []
+      - Bearer Token: []
+      - System API Key: []
+      - Organization ID: []
+      - Operator Organization Context: []
+      parameters:
+      - name: scan_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Scan Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScanSummaryOut'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/scan/summary:
+    get:
+      tags:
+      - scan
+      summary: List Scans Summaries
+      operationId: list_scans_summaries_v1_scan_summary_get
+      security:
+      - API Key: []
+      - Bearer Token: []
+      - System API Key: []
+      - Organization ID: []
+      - Operator Organization Context: []
+      parameters:
+      - name: filter
+        in: query
+        required: false
+        schema:
+          type: string
+          title: Filter
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ScanSummaryOut'
+                title: Response List Scans Summaries V1 Scan Summary Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/scan/summary/count:
+    get:
+      tags:
+      - scan
+      summary: Count Scans Summaries
+      operationId: count_scans_summaries_v1_scan_summary_count_get
+      security:
+      - API Key: []
+      - Bearer Token: []
+      - System API Key: []
+      - Organization ID: []
+      - Operator Organization Context: []
+      parameters:
+      - name: where
+        in: query
+        required: false
+        schema:
+          type: string
+          title: Where
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CountOut'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/scan/config:
+    get:
+      tags:
+      - scan
+      summary: Get Scan Config
+      operationId: get_scan_config_v1_scan_config_get
+      security:
+      - API Key: []
+      - Bearer Token: []
+      - System API Key: []
+      - Organization ID: []
+      - Operator Organization Context: []
+      parameters:
+      - name: application_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
+          - type: 'null'
+          title: Application Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScanConfigOut'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/scan:
+    put:
+      tags:
+      - scan
+      summary: Create Scan
+      operationId: create_scan_v1_scan_put
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateScanRequestBody'
+        required: true
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScanCreateOut'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - API Key: []
+      - Bearer Token: []
+      - System API Key: []
+      - Organization ID: []
+      - Operator Organization Context: []
+  /v1/scan/{scan_id}/tags:
+    put:
+      tags:
+      - scan
+      summary: Update Scan Tags
+      operationId: update_scan_tags_v1_scan__scan_id__tags_put
+      security:
+      - API Key: []
+      - Bearer Token: []
+      - System API Key: []
+      - Organization ID: []
+      - Operator Organization Context: []
+      - Bearer Token: []
+      parameters:
+      - name: scan_id
+        in: path
+        required: true
+        schema:
+          type: string
+          pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
+          title: Scan Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: string
+              title: Tags
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/scan/{scan_id}/requests-log:
+    get:
+      tags:
+      - scan
+      summary: Get Scan Requests Log
+      operationId: get_scan_requests_log_v1_scan__scan_id__requests_log_get
+      security:
+      - API Key: []
+      - Bearer Token: []
+      - System API Key: []
+      - Organization ID: []
+      - Operator Organization Context: []
+      parameters:
+      - name: scan_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Scan Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+                title: Response Get Scan Requests Log V1 Scan  Scan Id  Requests Log Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/scan/run-remote-har-scan:
+    post:
+      tags:
+      - scan
+      summary: Run Har Scan
+      operationId: run_har_scan_v1_scan_run_remote_har_scan_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RunRemoteHarScanRequestBody'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - API Key: []
+      - Bearer Token: []
+      - System API Key: []
+      - Organization ID: []
+      - Operator Organization Context: []
+  /v1/scan/run-remote-scan:
+    post:
+      tags:
+      - scan
+      summary: Run Scan
+      operationId: run_scan_v1_scan_run_remote_scan_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RunRemoteScanRequestBody'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - API Key: []
+      - Bearer Token: []
+      - System API Key: []
+      - Organization ID: []
+      - Operator Organization Context: []
+  /v1/scan/{scan_id}/progress:
+    post:
+      tags:
+      - scan
+      summary: Post Scan Progress
+      operationId: post_scan_progress_v1_scan__scan_id__progress_post
+      security:
+      - API Key: []
+      - Bearer Token: []
+      - System API Key: []
+      - Organization ID: []
+      - Operator Organization Context: []
+      parameters:
+      - name: scan_id
+        in: path
+        required: true
+        schema:
+          type: string
+          pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
+          title: Scan Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ScanExecutionProgressUpdateRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/scan/{scan_id}/abort:
+    post:
+      tags:
+      - scan
+      summary: Abort Scan
+      operationId: abort_scan_v1_scan__scan_id__abort_post
+      security:
+      - API Key: []
+      - Bearer Token: []
+      - System API Key: []
+      - Organization ID: []
+      - Operator Organization Context: []
+      parameters:
+      - name: scan_id
+        in: path
+        required: true
+        schema:
+          type: string
+          pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
+          title: Scan Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/scan/current_scans:
+    get:
+      tags:
+      - scan
+      summary: Get All Current Scans
+      operationId: get_all_current_scans_v1_scan_current_scans_get
+      security:
+      - API Key: []
+      - Bearer Token: []
+      - System API Key: []
+      - Organization ID: []
+      - Operator Organization Context: []
+      parameters:
+      - name: filter
+        in: query
+        required: false
+        schema:
+          type: string
+          title: Filter
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedScanCurrentOut'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/scan/{application_id}/current_scans:
+    get:
+      tags:
+      - scan
+      summary: Get App Current Scans
+      operationId: get_app_current_scans_v1_scan__application_id__current_scans_get
+      security:
+      - API Key: []
+      - Bearer Token: []
+      - System API Key: []
+      - Organization ID: []
+      - Operator Organization Context: []
+      parameters:
+      - name: application_id
+        in: path
+        required: true
+        schema:
+          type: string
+          pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
+          title: Application Id
+      - name: filter
+        in: query
+        required: false
+        schema:
+          type: string
+          title: Filter
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedScanCurrentOut'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/scan/running:
+    get:
+      tags:
+      - scan
+      summary: Get All Running Scans
+      operationId: get_all_running_scans_v1_scan_running_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ScanSummaryProgressOut'
+                type: array
+                title: Response Get All Running Scans V1 Scan Running Get
+      security:
+      - API Key: []
+      - Bearer Token: []
+      - System API Key: []
+      - Organization ID: []
+      - Operator Organization Context: []
+  /v1/scan/{scan_id}/report:
+    post:
+      tags:
+      - scan
+      summary: Create Report
+      operationId: create_report_v1_scan__scan_id__report_post
+      deprecated: true
+      security:
+      - API Key: []
+      - Bearer Token: []
+      - System API Key: []
+      - Organization ID: []
+      - Operator Organization Context: []
+      parameters:
+      - name: scan_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Scan Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UploadReportRequest'
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    get:
+      tags:
+      - scan
+      summary: Get Report
+      operationId: get_report_v1_scan__scan_id__report_get
+      security:
+      - Bearer Token: []
+      - Operator Organization Context: []
+      - API Key: []
+      - Bearer Token: []
+      - System API Key: []
+      - Organization ID: []
+      parameters:
+      - name: scan_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Scan Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            text/html:
+              schema:
+                type: string
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/scan/{scan_id}/metadata:
+    get:
+      tags:
+      - scan
+      summary: Get Scan Metadata
+      operationId: get_scan_metadata_v1_scan__scan_id__metadata_get
+      security:
+      - API Key: []
+      - Bearer Token: []
+      - System API Key: []
+      - Organization ID: []
+      - Operator Organization Context: []
+      parameters:
+      - name: scan_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Scan Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScanDetailsMetadata'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/scan/{scan_id}/owasp_coverage:
+    get:
+      tags:
+      - scan
+      summary: Get Scan Owasp
+      operationId: get_scan_owasp_v1_scan__scan_id__owasp_coverage_get
+      security:
+      - API Key: []
+      - Bearer Token: []
+      - System API Key: []
+      - Organization ID: []
+      - Operator Organization Context: []
+      parameters:
+      - name: scan_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Scan Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ScanDetailsOwaspCoverage'
+                title: Response Get Scan Owasp V1 Scan  Scan Id  Owasp Coverage Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/scan/{scan_id}/findings_details:
+    get:
+      tags:
+      - scan
+      summary: Get Scan Findings
+      operationId: get_scan_findings_v1_scan__scan_id__findings_details_get
+      security:
+      - API Key: []
+      - Bearer Token: []
+      - System API Key: []
+      - Organization ID: []
+      - Operator Organization Context: []
+      parameters:
+      - name: scan_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Scan Id
+      - name: filter
+        in: query
+        required: false
+        schema:
+          type: string
+          title: Filter
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedFindingsResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/scan/{scan_id}/endpoints_details:
+    get:
+      tags:
+      - scan
+      summary: Get Scan Endpoints
+      operationId: get_scan_endpoints_v1_scan__scan_id__endpoints_details_get
+      security:
+      - API Key: []
+      - Bearer Token: []
+      - System API Key: []
+      - Organization ID: []
+      - Operator Organization Context: []
+      parameters:
+      - name: scan_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Scan Id
+      - name: filter
+        in: query
+        required: false
+        schema:
+          type: string
+          title: Filter
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedEndpointsResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/scan/{scan_id}/traffic_data:
+    get:
+      tags:
+      - scan
+      summary: Get Scan Details Traffic Data
+      operationId: get_scan_details_traffic_data_v1_scan__scan_id__traffic_data_get
+      security:
+      - API Key: []
+      - Bearer Token: []
+      - System API Key: []
+      - Organization ID: []
+      - Operator Organization Context: []
+      parameters:
+      - name: scan_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Scan Id
+      - name: filter_fail
+        in: query
+        required: true
+        schema:
+          type: boolean
+          title: Filter Fail
+      - name: filter
+        in: query
+        required: false
+        schema:
+          type: string
+          title: Filter
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedTrafficResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/scan/{scan_id}/pii_details:
+    get:
+      tags:
+      - scan
+      summary: Get Scan Pii Details
+      operationId: get_scan_pii_details_v1_scan__scan_id__pii_details_get
+      security:
+      - API Key: []
+      - Bearer Token: []
+      - System API Key: []
+      - Organization ID: []
+      - Operator Organization Context: []
+      parameters:
+      - name: scan_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Scan Id
+      - name: filter
+        in: query
+        required: false
+        schema:
+          type: string
+          title: Filter
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedPiiResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/scan/{scan_id}/feedback_details:
+    get:
+      tags:
+      - scan
+      summary: Get Scan Feedbacks
+      operationId: get_scan_feedbacks_v1_scan__scan_id__feedback_details_get
+      security:
+      - API Key: []
+      - Bearer Token: []
+      - System API Key: []
+      - Organization ID: []
+      - Operator Organization Context: []
+      parameters:
+      - name: scan_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Scan Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ScanDetailsFeedback'
+                title: Response Get Scan Feedbacks V1 Scan  Scan Id  Feedback Details Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    ScanDetailsOwaspCoverage:
+      properties:
+        full_name:
+          type: string
+          title: Full Name
+        status:
+          type: string
+          title: Status
+        link:
+          type: string
+          title: Link
+      type: object
+      required:
+      - full_name
+      - status
+      - link
+      title: ScanDetailsOwaspCoverage
+    PaginatedPiiResponse:
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/PiiDetailsItem'
+          type: array
+          title: Data
+        total:
+          type: integer
+          title: Total
+      type: object
+      required:
+      - data
+      - total
+      title: PaginatedPiiResponse
+    Feedback:
+      properties:
+        message:
+          type: string
+          title: Message
+        severity:
+          $ref: '#/components/schemas/FeedbackSeverity'
+        arguments:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Arguments
+      type: object
+      required:
+      - message
+      - severity
+      title: Feedback
+    CountOut:
+      properties:
+        count:
+          type: integer
+          title: Count
+      type: object
+      required:
+      - count
+      title: CountOut
+    ScanDetailsEndpoint:
+      properties:
+        path:
+          type: string
+          title: Path
+        method:
+          type: string
+          title: Method
+        host:
+          type: string
+          title: Host
+      type: object
+      required:
+      - path
+      - method
+      - host
+      title: ScanDetailsEndpoint
+    FalsePositiveLLMResult:
+      properties:
+        is_false_positive:
+          $ref: '#/components/schemas/Conclusion'
+          description: Is the finding a false positive? YES, NO, or INCONCLUSIVE.
+        reason:
+          type: string
+          title: Reason
+          description: Reason for the false positive determination.
+        confidence:
+          type: number
+          maximum: 1.0
+          minimum: 0.0
+          title: Confidence
+          description: Confidence of the false positive between 0 and 1.
+      type: object
+      required:
+      - is_false_positive
+      - reason
+      - confidence
+      title: FalsePositiveLLMResult
+      description: The direct, typed result from an LLM for a false positive query.
+    VulnerabilityInstanceRelevance:
+      type: string
+      enum:
+      - relevant
+      - irrelevant_waived
+      - irrelevant_fixed
+      title: VulnerabilityInstanceRelevance
+    Severity:
+      type: integer
+      enum:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+      title: Severity
+    FindingDetails:
+      properties:
+        finding_id:
+          type: string
+          title: Finding Id
+        relevance:
+          $ref: '#/components/schemas/VulnerabilityInstanceRelevance'
+      additionalProperties: true
+      type: object
+      required:
+      - finding_id
+      - relevance
+      title: FindingDetails
+    ScanDuration:
+      properties:
+        numberLong:
+          anyOf:
+          - type: string
+          - type: integer
+          - type: 'null'
+          title: Numberlong
+      type: object
+      title: ScanDuration
+    ScanDetailsMetadata:
+      properties:
+        scan_id:
+          type: string
+          title: Scan Id
+        application_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Application Id
+        scan_timestamp:
+          type: string
+          format: date-time
+          title: Scan Timestamp
+        functional_test_name:
+          type: string
+          title: Functional Test Name
+        source:
+          type: string
+          title: Source
+        severity_map_count:
+          additionalProperties:
+            type: integer
+          type: object
+          title: Severity Map Count
+      type: object
+      required:
+      - scan_id
+      - application_id
+      - scan_timestamp
+      - functional_test_name
+      - source
+      - severity_map_count
+      title: ScanDetailsMetadata
+    PiiDetailsItem:
+      properties:
+        key:
+          type: string
+          title: Key
+        category:
+          type: string
+          title: Category
+        subcategory:
+          type: string
+          title: Subcategory
+        endpoint:
+          $ref: '#/components/schemas/ScanDetailsEndpoint'
+        value:
+          type: string
+          title: Value
+      type: object
+      required:
+      - key
+      - category
+      - subcategory
+      - endpoint
+      - value
+      title: PiiDetailsItem
+    PaginatedScanCurrentOut:
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/ScanCurrentOut'
+          type: array
+          title: Data
+        total:
+          type: integer
+          title: Total
+      type: object
+      required:
+      - data
+      - total
+      title: PaginatedScanCurrentOut
+    PaginatedFindingsResponse:
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/ScanDetailsFinding'
+          type: array
+          title: Data
+        total:
+          type: integer
+          title: Total
+      type: object
+      required:
+      - data
+      - total
+      title: PaginatedFindingsResponse
+    OwaspCoverage:
+      properties:
+        Name:
+          type: string
+          title: Name
+        Status:
+          $ref: '#/components/schemas/OwaspStatus'
+        Link:
+          type: string
+          title: Link
+      type: object
+      required:
+      - Name
+      - Status
+      - Link
+      title: OwaspCoverage
+    ScanWarning:
+      properties:
+        category:
+          type: string
+          title: Category
+        subcategory:
+          type: string
+          title: Subcategory
+        endpoint:
+          $ref: '#/components/schemas/Endpoint'
+        mode:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Mode
+          default: ''
+        header:
+          type: string
+          title: Header
+        id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Id
+        header_key:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Header Key
+        host:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Host
+      additionalProperties: true
+      type: object
+      required:
+      - category
+      - subcategory
+      - endpoint
+      - header
+      title: ScanWarning
+    ScanDetailsFeedback:
+      properties:
+        message:
+          type: string
+          title: Message
+        severity:
+          $ref: '#/components/schemas/FeedbackSeverity'
+        arguments:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Arguments
+      type: object
+      required:
+      - message
+      - severity
+      title: ScanDetailsFeedback
+    BusinessImpactAnalysis-Output:
+      properties:
+        finding_id:
+          type: string
+          format: uuid
+          title: Finding Id
+        category:
+          type: string
+          title: Category
+        subcategory:
+          type: string
+          title: Subcategory
+        prompt:
+          type: string
+          title: Prompt
+        approved:
+          $ref: '#/components/schemas/Conclusion'
+          default: Inconclusive
+        business_impact_result:
+          $ref: '#/components/schemas/BusinessImpactLLMResult-Output'
+      type: object
+      required:
+      - finding_id
+      - category
+      - subcategory
+      - prompt
+      - business_impact_result
+      title: BusinessImpactAnalysis
+      description: Represents a claim that a finding is a false positive.
+    ScanDetailsFinding:
+      properties:
+        finding_vulnerability:
+          $ref: '#/components/schemas/VulnerabilityDefinition'
+        severity:
+          $ref: '#/components/schemas/Severity'
+        endpoints:
+          items:
+            $ref: '#/components/schemas/ScanDetailsEndpoint'
+          type: array
+          title: Endpoints
+      type: object
+      required:
+      - finding_vulnerability
+      - severity
+      - endpoints
+      title: ScanDetailsFinding
+    RunRemoteScanRequestBody:
+      properties:
+        api_key:
+          type: string
+          title: Api Key
+        collection_to_test:
+          type: string
+          title: Collection To Test
+        environment_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Environment Name
+        application_id:
+          type: string
+          pattern: ^([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})?$
+          title: Application Id
+      additionalProperties: true
+      type: object
+      required:
+      - api_key
+      - collection_to_test
+      - application_id
+      title: RunRemoteScanRequestBody
+    ScanDetailsEndpointTrafficItem:
+      properties:
+        path:
+          type: string
+          title: Path
+        method:
+          type: string
+          title: Method
+        host:
+          type: string
+          title: Host
+        original_status_codes:
+          items:
+            type: integer
+          type: array
+          title: Original Status Codes
+        authenticated:
+          type: boolean
+          title: Authenticated
+        number_of_users:
+          type: integer
+          title: Number Of Users
+        max_time_ms:
+          type: integer
+          title: Max Time Ms
+        number_of_requests:
+          type: integer
+          title: Number Of Requests
+        is_timeout:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Is Timeout
+      type: object
+      required:
+      - path
+      - method
+      - host
+      - original_status_codes
+      - authenticated
+      - number_of_users
+      - max_time_ms
+      - number_of_requests
+      - is_timeout
+      title: ScanDetailsEndpointTrafficItem
+    ScanSummaryProgressOut:
+      properties:
+        errors:
+          type: integer
+          title: Errors
+        functional_test_name:
+          type: string
+          title: Functional Test Name
+        endpoints:
+          items:
+            $ref: '#/components/schemas/Endpoint'
+          type: array
+          title: Endpoints
+        scan_timestamp:
+          type: string
+          format: date-time
+          title: Scan Timestamp
+        scan_status:
+          type: string
+          title: Scan Status
+        number_of_requests:
+          type: integer
+          title: Number Of Requests
+        unique_endpoints:
+          type: integer
+          title: Unique Endpoints
+        warnings:
+          type: integer
+          title: Warnings
+        source:
+          $ref: '#/components/schemas/Source'
+        scan_id:
+          type: string
+          title: Scan Id
+        number_of_tests:
+          type: integer
+          title: Number Of Tests
+        passed_tests:
+          type: integer
+          title: Passed Tests
+        scan_duration:
+          anyOf:
+          - type: integer
+          - $ref: '#/components/schemas/ScanDuration'
+          title: Scan Duration
+        severity_map_count:
+          anyOf:
+          - additionalProperties:
+              type: integer
+            type: object
+          - type: 'null'
+          title: Severity Map Count
+        first_name:
+          anyOf:
+          - type: string
+          - items:
+              anyOf:
+              - type: string
+              - type: 'null'
+            type: array
+          - type: 'null'
+          title: First Name
+        last_name:
+          anyOf:
+          - type: string
+          - items:
+              anyOf:
+              - type: string
+              - type: 'null'
+            type: array
+          - type: 'null'
+          title: Last Name
+        application_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Application Id
+        application:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Application
+        tags:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Tags
+        pynt_collection_uploaded:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Pynt Collection Uploaded
+          default: false
+        progress_type:
+          $ref: '#/components/schemas/ScanSummaryProgressType'
+        scan_progress:
+          type: integer
+          title: Scan Progress
+      additionalProperties: true
+      type: object
+      required:
+      - errors
+      - functional_test_name
+      - endpoints
+      - scan_timestamp
+      - scan_status
+      - number_of_requests
+      - unique_endpoints
+      - warnings
+      - source
+      - scan_id
+      - number_of_tests
+      - passed_tests
+      - scan_duration
+      - first_name
+      - last_name
+      - application_id
+      - application
+      - progress_type
+      - scan_progress
+      title: ScanSummaryProgressOut
+    RunRemoteHarScanRequestBody:
+      properties:
+        application_id:
+          type: string
+          pattern: ^([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})?$
+          title: Application Id
+        har_path:
+          type: string
+          title: Har Path
+        capture_domains:
+          type: string
+          title: Capture Domains
+      additionalProperties: true
+      type: object
+      required:
+      - application_id
+      - har_path
+      - capture_domains
+      title: RunRemoteHarScanRequestBody
+    BusinessImpactLLMResult-Output:
+      properties:
+        entities_relationship:
+          $ref: '#/components/schemas/EntitiesRelationships'
+          description: Relationships between the entities
+        business_implication:
+          type: string
+          title: Business Implication
+          description: Business implications of the attack
+      type: object
+      required:
+      - entities_relationship
+      - business_implication
+      title: BusinessImpactLLMResult
+      description: The direct, typed result from an LLM for a business impact query.
+    PiiSeenItem:
+      properties:
+        key:
+          type: string
+          title: Key
+        category:
+          type: string
+          title: Category
+        subcategory:
+          type: string
+          title: Subcategory
+        endpoint:
+          $ref: '#/components/schemas/Endpoint'
+        value:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Value
+      additionalProperties: true
+      type: object
+      required:
+      - key
+      - category
+      - subcategory
+      - endpoint
+      title: PiiSeenItem
+    ApprovalUpdateRequest:
+      properties:
+        value:
+          $ref: '#/components/schemas/Conclusion'
+      type: object
+      required:
+      - value
+      title: ApprovalUpdateRequest
+    PaginatedTrafficResponse:
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/ScanDetailsEndpointTrafficItem'
+          type: array
+          title: Data
+        total:
+          type: integer
+          title: Total
+      type: object
+      required:
+      - data
+      - total
+      title: PaginatedTrafficResponse
+    Conclusion:
+      type: string
+      enum:
+      - 'Yes'
+      - 'No'
+      - Inconclusive
+      title: Conclusion
+      description: 'Enum for the conclusion of a false positive analysis:
+
+        YES, NO, or INCONCLUSIVE.'
+    CreateScanRequestBody:
+      properties:
+        scan_id:
+          type: string
+          pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
+          title: Scan Id
+        application_id:
+          anyOf:
+          - type: string
+            pattern: ^([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})?$
+          - type: 'null'
+          title: Application Id
+        report:
+          $ref: '#/components/schemas/ScanData'
+      additionalProperties: true
+      type: object
+      required:
+      - scan_id
+      - report
+      title: CreateScanRequestBody
+    ScanConfigOut:
+      properties:
+        api_limit:
+          type: integer
+          title: Api Limit
+        tests:
+          additionalProperties:
+            additionalProperties:
+              $ref: '#/components/schemas/ScanAttackConfig'
+            type: object
+          type: object
+          title: Tests
+        scan_profile_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Scan Profile Id
+        application_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Application Id
+        local_only_mode:
+          type: boolean
+          title: Local Only Mode
+        use_endpoint_llm_analysis:
+          type: boolean
+          title: Use Endpoint Llm Analysis
+          default: false
+      type: object
+      required:
+      - api_limit
+      - tests
+      - scan_profile_id
+      - application_id
+      - local_only_mode
+      title: ScanConfigOut
+    ScanSummaryProgressType:
+      type: string
+      enum:
+      - scan
+      title: ScanSummaryProgressType
+    ScanSummaryOut:
+      properties:
+        errors:
+          type: integer
+          title: Errors
+        functional_test_name:
+          type: string
+          title: Functional Test Name
+        endpoints:
+          items:
+            $ref: '#/components/schemas/Endpoint'
+          type: array
+          title: Endpoints
+        scan_timestamp:
+          type: string
+          format: date-time
+          title: Scan Timestamp
+        scan_status:
+          type: string
+          title: Scan Status
+        number_of_requests:
+          type: integer
+          title: Number Of Requests
+        unique_endpoints:
+          type: integer
+          title: Unique Endpoints
+        warnings:
+          type: integer
+          title: Warnings
+        source:
+          $ref: '#/components/schemas/Source'
+        scan_id:
+          type: string
+          title: Scan Id
+        number_of_tests:
+          type: integer
+          title: Number Of Tests
+        passed_tests:
+          type: integer
+          title: Passed Tests
+        scan_duration:
+          anyOf:
+          - type: integer
+          - $ref: '#/components/schemas/ScanDuration'
+          title: Scan Duration
+        severity_map_count:
+          anyOf:
+          - additionalProperties:
+              type: integer
+            type: object
+          - type: 'null'
+          title: Severity Map Count
+        first_name:
+          anyOf:
+          - type: string
+          - items:
+              anyOf:
+              - type: string
+              - type: 'null'
+            type: array
+          - type: 'null'
+          title: First Name
+        last_name:
+          anyOf:
+          - type: string
+          - items:
+              anyOf:
+              - type: string
+              - type: 'null'
+            type: array
+          - type: 'null'
+          title: Last Name
+        application_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Application Id
+        application:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Application
+        tags:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Tags
+        pynt_collection_uploaded:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Pynt Collection Uploaded
+          default: false
+      additionalProperties: true
+      type: object
+      required:
+      - errors
+      - functional_test_name
+      - endpoints
+      - scan_timestamp
+      - scan_status
+      - number_of_requests
+      - unique_endpoints
+      - warnings
+      - source
+      - scan_id
+      - number_of_tests
+      - passed_tests
+      - scan_duration
+      - first_name
+      - last_name
+      - application_id
+      - application
+      title: ScanSummaryOut
+    ScanData:
+      properties:
+        scan_findings:
+          items:
+            $ref: '#/components/schemas/ScanFinding'
+          type: array
+          title: Scan Findings
+        analysis_endpoints:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/AnalysisEndpoint'
+            type: array
+          - type: 'null'
+          title: Analysis Endpoints
+        collection_name:
+          type: string
+          title: Collection Name
+        collection_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Collection Id
+        summary:
+          anyOf:
+          - $ref: '#/components/schemas/ScanSummary'
+          - type: 'null'
+        scan_warnings:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/ScanWarning'
+            type: array
+          - type: 'null'
+          title: Scan Warnings
+        attack_candidates:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/AttackCandidate'
+            type: array
+          - type: 'null'
+          title: Attack Candidates
+        scan_id:
+          type: string
+          title: Scan Id
+        user_identifier:
+          type: string
+          title: User Identifier
+        integration_type:
+          type: string
+          title: Integration Type
+        scan_timestamp:
+          type: string
+          format: date-time
+          title: Scan Timestamp
+        scan_duration:
+          anyOf:
+          - type: integer
+          - $ref: '#/components/schemas/ScanDuration'
+          title: Scan Duration
+        os_type:
+          type: string
+          title: Os Type
+        pii_seen:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/PiiSeenItem'
+            type: array
+          - type: 'null'
+          title: Pii Seen
+        goa_version:
+          type: string
+          title: Goa Version
+        graphql_seen:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/GraphqlSeenItem'
+            type: array
+          - type: 'null'
+          title: Graphql Seen
+        tags:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Tags
+        pynt_collection_uploaded:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Pynt Collection Uploaded
+          default: false
+        security_run:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Security Run
+        owasp_coverage:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/OwaspCoverage'
+            type: array
+          - type: 'null'
+          title: Owasp Coverage
+        feedback:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/Feedback'
+            type: array
+          - type: 'null'
+          title: Feedback
+      additionalProperties: true
+      type: object
+      required:
+      - scan_findings
+      - analysis_endpoints
+      - collection_name
+      - scan_warnings
+      - attack_candidates
+      - scan_id
+      - user_identifier
+      - integration_type
+      - scan_timestamp
+      - scan_duration
+      - os_type
+      - pii_seen
+      - goa_version
+      title: ScanData
+    ScanAttackConfig:
+      properties:
+        should_attack:
+          type: boolean
+          title: Should Attack
+      type: object
+      required:
+      - should_attack
+      title: ScanAttackConfig
+    ScanExecutionProgressUpdateRequest:
+      properties:
+        status:
+          type: string
+          title: Status
+        start_time:
+          type: string
+          format: date-time
+          title: Start Time
+        scan_duration:
+          type: integer
+          title: Scan Duration
+        scan_progress:
+          type: integer
+          title: Scan Progress
+        test_name:
+          type: string
+          title: Test Name
+        integration:
+          type: string
+          title: Integration
+        application_id:
+          type: string
+          title: Application Id
+      type: object
+      required:
+      - status
+      - start_time
+      - scan_duration
+      - scan_progress
+      - test_name
+      - integration
+      - application_id
+      title: ScanExecutionProgressUpdateRequest
+    ScanReportFalsePositiveAnalysis:
+      properties:
+        scan_id:
+          type: string
+          format: uuid
+          title: Scan Id
+        claims:
+          items:
+            $ref: '#/components/schemas/FalsePositiveClaim-Output'
+          type: array
+          minItems: 1
+          title: Claims
+      type: object
+      required:
+      - scan_id
+      - claims
+      title: ScanReportFalsePositiveAnalysis
+      description: Represents a collection of false positive claims for a specific scan.
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    AnalysisEndpoint:
+      properties:
+        status_codes:
+          items:
+            type: integer
+          type: array
+          title: Status Codes
+        authenticated:
+          type: boolean
+          title: Authenticated
+        number_of_requests:
+          type: integer
+          title: Number Of Requests
+        max_time:
+          type: integer
+          title: Max Time
+        endpoint:
+          $ref: '#/components/schemas/Endpoint'
+        number_of_users:
+          type: integer
+          title: Number Of Users
+        is_timeout:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Is Timeout
+      additionalProperties: true
+      type: object
+      required:
+      - status_codes
+      - authenticated
+      - number_of_requests
+      - max_time
+      - endpoint
+      - number_of_users
+      title: AnalysisEndpoint
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    UploadReportRequest:
+      properties:
+        scan_id:
+          anyOf:
+          - type: string
+            pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
+          - type: 'null'
+          title: Scan Id
+          deprecated: true
+        report:
+          type: string
+          title: Report
+      type: object
+      required:
+      - report
+      title: UploadReportRequest
+    Endpoint:
+      properties:
+        path:
+          type: string
+          title: Path
+        method:
+          type: string
+          title: Method
+      additionalProperties: true
+      type: object
+      required:
+      - path
+      - method
+      title: Endpoint
+    Source:
+      properties:
+        integration:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Integration
+        user:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User
+        integraion:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Integraion
+      additionalProperties: true
+      type: object
+      required:
+      - integration
+      - integraion
+      title: Source
+    EntitiesRelationships:
+      properties:
+        relationships:
+          items:
+            $ref: '#/components/schemas/EntityRelationship'
+          type: array
+          title: Relationships
+          description: List of entity relationships
+      type: object
+      required:
+      - relationships
+      title: EntitiesRelationships
+      description: Represents a collection of entity relationships.
+      example:
+        relationships:
+        - entity1: user
+          entity2: invoice
+          relationship_type: owns
+    ScanDetailsEndpointItem:
+      properties:
+        path:
+          type: string
+          title: Path
+        method:
+          type: string
+          title: Method
+        host:
+          type: string
+          title: Host
+        findings_details:
+          items:
+            $ref: '#/components/schemas/VulnerabilityDefinition'
+          type: array
+          title: Findings Details
+        risk_score:
+          $ref: '#/components/schemas/Severity'
+      type: object
+      required:
+      - path
+      - method
+      - host
+      - findings_details
+      - risk_score
+      title: ScanDetailsEndpointItem
+    FeedbackSeverity:
+      type: string
+      enum:
+      - info
+      - low
+      - medium
+      - high
+      title: FeedbackSeverity
+    EntityRelationship:
+      properties:
+        entity1:
+          type: string
+          title: Entity1
+          description: First entity in the relationship
+        entity2:
+          type: string
+          title: Entity2
+          description: Second entity in the relationship
+        relationship_type:
+          type: string
+          title: Relationship Type
+          description: Relationship type
+      type: object
+      required:
+      - entity1
+      - entity2
+      - relationship_type
+      title: EntityRelationship
+    VulnerabilitiesDetails-Output:
+      properties:
+        findings_details:
+          items:
+            $ref: '#/components/schemas/FindingDetails'
+          type: array
+          title: Findings Details
+      additionalProperties: true
+      type: object
+      required:
+      - findings_details
+      title: VulnerabilitiesDetails
+    ScanSummary:
+      properties:
+        errors:
+          type: integer
+          title: Errors
+        functional_test_name:
+          type: string
+          title: Functional Test Name
+        endpoints:
+          items:
+            $ref: '#/components/schemas/Endpoint'
+          type: array
+          title: Endpoints
+        scan_timestamp:
+          type: string
+          format: date-time
+          title: Scan Timestamp
+        scan_status:
+          type: string
+          title: Scan Status
+        number_of_requests:
+          type: integer
+          title: Number Of Requests
+        unique_endpoints:
+          type: integer
+          title: Unique Endpoints
+        warnings:
+          type: integer
+          title: Warnings
+        source:
+          $ref: '#/components/schemas/Source'
+        scan_id:
+          type: string
+          title: Scan Id
+        number_of_tests:
+          type: integer
+          title: Number Of Tests
+        passed_tests:
+          type: integer
+          title: Passed Tests
+        scan_duration:
+          anyOf:
+          - type: integer
+          - $ref: '#/components/schemas/ScanDuration'
+          title: Scan Duration
+        severity_map_count:
+          anyOf:
+          - additionalProperties:
+              type: integer
+            type: object
+          - type: 'null'
+          title: Severity Map Count
+      additionalProperties: true
+      type: object
+      required:
+      - errors
+      - functional_test_name
+      - endpoints
+      - scan_timestamp
+      - scan_status
+      - number_of_requests
+      - unique_endpoints
+      - warnings
+      - source
+      - scan_id
+      - number_of_tests
+      - passed_tests
+      - scan_duration
+      title: ScanSummary
+    ScanFinding:
+      properties:
+        id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Id
+        category:
+          type: string
+          title: Category
+        subcategory:
+          type: string
+          title: Subcategory
+        request_numbers:
+          anyOf:
+          - items:
+              type: integer
+            type: array
+          - type: 'null'
+          title: Request Numbers
+        endpoint:
+          $ref: '#/components/schemas/Endpoint'
+        host:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Host
+        parameter:
+          type: string
+          title: Parameter
+        original_value:
+          type: string
+          title: Original Value
+        parameter_type:
+          type: string
+          title: Parameter Type
+        replaced_value:
+          type: string
+          title: Replaced Value
+        finding_parameter_uid:
+          type: string
+          title: Finding Parameter Uid
+        finding_parameter_rid:
+          type: string
+          title: Finding Parameter Rid
+        finding_replaced_value_uid:
+          type: string
+          title: Finding Replaced Value Uid
+        finding_replaced_value_rid:
+          type: string
+          title: Finding Replaced Value Rid
+        payload:
+          type: string
+          title: Payload
+        verified_by:
+          type: string
+          title: Verified By
+        curl_cmd:
+          type: string
+          title: Curl Cmd
+      additionalProperties: true
+      type: object
+      required:
+      - category
+      - subcategory
+      - endpoint
+      - parameter
+      - original_value
+      - parameter_type
+      - replaced_value
+      - finding_parameter_uid
+      - finding_parameter_rid
+      - finding_replaced_value_uid
+      - finding_replaced_value_rid
+      - payload
+      - verified_by
+      - curl_cmd
+      title: ScanFinding
+    ScanCurrentOut:
+      properties:
+        scan_name:
+          type: string
+          title: Scan Name
+        updated_at:
+          type: string
+          format: date-time
+          title: Updated At
+        start_time:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Start Time
+        scan_id:
+          type: string
+          title: Scan Id
+        organization_id:
+          type: string
+          title: Organization Id
+        status:
+          type: string
+          title: Status
+        scan_duration:
+          type: integer
+          title: Scan Duration
+        scan_progress:
+          type: integer
+          title: Scan Progress
+        test_name:
+          type: string
+          title: Test Name
+        integration:
+          type: string
+          title: Integration
+        application_id:
+          type: string
+          title: Application Id
+        application_name:
+          type: string
+          title: Application Name
+        severity_map_count:
+          additionalProperties:
+            type: integer
+          type: object
+          title: Severity Map Count
+        endpoint_count:
+          type: integer
+          title: Endpoint Count
+        tags:
+          items:
+            type: string
+          type: array
+          title: Tags
+      type: object
+      required:
+      - scan_name
+      - updated_at
+      - scan_id
+      - organization_id
+      - status
+      - scan_duration
+      - scan_progress
+      - test_name
+      - integration
+      - application_id
+      - application_name
+      - severity_map_count
+      - endpoint_count
+      - tags
+      title: ScanCurrentOut
+    AttackCandidate:
+      properties:
+        Category:
+          type: string
+          title: Category
+        SubCategory:
+          type: string
+          title: Subcategory
+        Endpoint:
+          $ref: '#/components/schemas/Endpoint'
+      additionalProperties: true
+      type: object
+      required:
+      - Category
+      - SubCategory
+      - Endpoint
+      title: AttackCandidate
+    VulnerabilityDefinition:
+      properties:
+        category:
+          type: string
+          title: Category
+        sub_category:
+          type: string
+          title: Sub Category
+      type: object
+      required:
+      - category
+      - sub_category
+      title: VulnerabilityDefinition
+    GraphqlSeenItem:
+      properties:
+        path:
+          type: string
+          title: Path
+        method:
+          type: string
+          title: Method
+      additionalProperties: true
+      type: object
+      required:
+      - path
+      - method
+      title: GraphqlSeenItem
+    FalsePositiveClaim-Output:
+      properties:
+        finding_id:
+          type: string
+          format: uuid
+          title: Finding Id
+        category:
+          type: string
+          title: Category
+        subcategory:
+          type: string
+          title: Subcategory
+        prompt:
+          type: string
+          title: Prompt
+        approved:
+          $ref: '#/components/schemas/Conclusion'
+          default: Inconclusive
+        false_positive_result:
+          $ref: '#/components/schemas/FalsePositiveLLMResult'
+      type: object
+      required:
+      - finding_id
+      - category
+      - subcategory
+      - prompt
+      - false_positive_result
+      title: FalsePositiveClaim
+      description: Represents a claim that a finding is a false positive.
+    ScanReportBusinessImpactAnalysis:
+      properties:
+        scan_id:
+          type: string
+          format: uuid
+          title: Scan Id
+        impact_analysis:
+          items:
+            $ref: '#/components/schemas/BusinessImpactAnalysis-Output'
+          type: array
+          minItems: 1
+          title: Impact Analysis
+      type: object
+      required:
+      - scan_id
+      - impact_analysis
+      title: ScanReportBusinessImpactAnalysis
+      description: Represents a collection of business impact analysis for a specific scan.
+    OwaspStatus:
+      type: string
+      enum:
+      - Passed
+      - Failed
+      - Not Tested
+      title: OwaspStatus
+    ScanCreateOut:
+      properties:
+        vulnerabilities_details:
+          anyOf:
+          - $ref: '#/components/schemas/VulnerabilitiesDetails-Output'
+          - type: 'null'
+      additionalProperties: true
+      type: object
+      required:
+      - vulnerabilities_details
+      title: ScanCreateOut
+    PaginatedEndpointsResponse:
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/ScanDetailsEndpointItem'
+          type: array
+          title: Data
+        total:
+          type: integer
+          title: Total
+      type: object
+      required:
+      - data
+      - total
+      title: PaginatedEndpointsResponse
+  securitySchemes:
+    API_Key:
+      type: apiKey
+      in: header
+      name: X-API-Key
+    Bearer_Token:
+      type: apiKey
+      in: header
+      name: Authorization
+    System_API_Key:
+      type: apiKey
+      in: header
+      name: X-System-API-Key
+    Organization_ID:
+      type: apiKey
+      in: header
+      name: X-Organization-ID
+    Operator_Organization_Context:
+      type: apiKey
+      in: header
+      name: context
+x-refined-from:
+- pynt-openapi.json
+- pynt-openapi.json

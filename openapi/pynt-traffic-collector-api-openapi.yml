@@ -1,0 +1,373 @@
+openapi: 3.2.0
+info:
+  title: Pynt Traffic Collector API
+  version: 0.1.0
+  description: 'Operations tagged traffic-collector across 2 of this provider''s published API definitions: pynt-openapi.json, pynt-openapi.json. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.pynt.io
+  description: Pynt production API
+tags:
+- name: traffic-collector
+paths:
+  /v1/traffic/collector:
+    get:
+      tags:
+      - traffic-collector
+      summary: List Collectors
+      operationId: list_collectors_v1_traffic_collector_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/TrafficCollectorOut-Output'
+                type: array
+                title: Response List Collectors V1 Traffic Collector Get
+      security:
+      - API Key: []
+      - Bearer Token: []
+      - System API Key: []
+      - Organization ID: []
+      - Operator Organization Context: []
+    post:
+      tags:
+      - traffic-collector
+      summary: Create Collector
+      operationId: create_collector_v1_traffic_collector_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TrafficCollectorCreate'
+        required: true
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - Bearer Token: []
+      - Operator Organization Context: []
+      - API Key: []
+      - Bearer Token: []
+      - System API Key: []
+      - Organization ID: []
+  /v1/traffic/collector/{collector_id}:
+    put:
+      tags:
+      - traffic-collector
+      summary: Update Collector
+      operationId: update_collector_v1_traffic_collector__collector_id__put
+      security:
+      - Bearer Token: []
+      - Operator Organization Context: []
+      - API Key: []
+      - Bearer Token: []
+      - System API Key: []
+      - Organization ID: []
+      parameters:
+      - name: collector_id
+        in: path
+        required: true
+        schema:
+          type: string
+          pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
+          title: Collector Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TrafficCollectorCreate'
+      responses:
+        '204':
+          description: Successful Response
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    delete:
+      tags:
+      - traffic-collector
+      summary: Delete Collector
+      operationId: delete_collector_v1_traffic_collector__collector_id__delete
+      security:
+      - Bearer Token: []
+      - Operator Organization Context: []
+      - API Key: []
+      - Bearer Token: []
+      - System API Key: []
+      - Organization ID: []
+      parameters:
+      - name: collector_id
+        in: path
+        required: true
+        schema:
+          type: string
+          pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
+          title: Collector Id
+      responses:
+        '204':
+          description: Successful Response
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    TrafficCollectorOut-Output:
+      properties:
+        collector_id:
+          type: string
+          title: Collector Id
+        organization_id:
+          type: string
+          title: Organization Id
+        name:
+          type: string
+          title: Name
+        cluster_name:
+          type: string
+          title: Cluster Name
+        application_routing_entries:
+          items:
+            $ref: '#/components/schemas/ApplicationTrafficRoutingEntry-Output'
+          type: array
+          title: Application Routing Entries
+      type: object
+      required:
+      - collector_id
+      - organization_id
+      - name
+      - cluster_name
+      - application_routing_entries
+      title: TrafficCollectorOut
+    ApplicationTrafficRoutingEntry-Input:
+      properties:
+        application_id:
+          type: string
+          title: Application Id
+        routing_data:
+          oneOf:
+          - $ref: '#/components/schemas/ApplicationTrafficRoutingAny'
+          - $ref: '#/components/schemas/ApplicationTrafficRoutingCol'
+          - $ref: '#/components/schemas/ApplicationTrafficRoutingCondition-Input'
+          title: Routing Data
+          discriminator:
+            propertyName: op
+            mapping:
+              and: '#/components/schemas/ApplicationTrafficRoutingCondition-Input'
+              any: '#/components/schemas/ApplicationTrafficRoutingAny'
+              eq: '#/components/schemas/ApplicationTrafficRoutingCol'
+              ne: '#/components/schemas/ApplicationTrafficRoutingCol'
+              or: '#/components/schemas/ApplicationTrafficRoutingCondition-Input'
+      type: object
+      required:
+      - application_id
+      - routing_data
+      title: ApplicationTrafficRoutingEntry
+    ApplicationTrafficRoutingAny:
+      properties:
+        op:
+          type: string
+          const: any
+          title: Op
+          default: any
+      additionalProperties: false
+      type: object
+      title: ApplicationTrafficRoutingAny
+    TrafficCollectorCreate:
+      properties:
+        name:
+          type: string
+          maxLength: 100
+          minLength: 1
+          title: Name
+        cluster_name:
+          type: string
+          maxLength: 100
+          minLength: 1
+          title: Cluster Name
+        application_routing_entries:
+          items:
+            $ref: '#/components/schemas/ApplicationTrafficRoutingEntry-Input'
+          type: array
+          title: Application Routing Entries
+      type: object
+      required:
+      - name
+      - cluster_name
+      - application_routing_entries
+      title: TrafficCollectorCreate
+    ApplicationTrafficRoutingCondition-Input:
+      properties:
+        op:
+          type: string
+          enum:
+          - and
+          - or
+          title: Op
+        filters:
+          items:
+            oneOf:
+            - $ref: '#/components/schemas/ApplicationTrafficRoutingAny'
+            - $ref: '#/components/schemas/ApplicationTrafficRoutingCol'
+            - $ref: '#/components/schemas/ApplicationTrafficRoutingCondition-Input'
+            discriminator:
+              propertyName: op
+              mapping:
+                and: '#/components/schemas/ApplicationTrafficRoutingCondition-Input'
+                any: '#/components/schemas/ApplicationTrafficRoutingAny'
+                eq: '#/components/schemas/ApplicationTrafficRoutingCol'
+                ne: '#/components/schemas/ApplicationTrafficRoutingCol'
+                or: '#/components/schemas/ApplicationTrafficRoutingCondition-Input'
+          type: array
+          title: Filters
+      additionalProperties: false
+      type: object
+      required:
+      - op
+      - filters
+      title: ApplicationTrafficRoutingCondition
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ApplicationTrafficRoutingEntry-Output:
+      properties:
+        application_id:
+          type: string
+          title: Application Id
+        routing_data:
+          oneOf:
+          - $ref: '#/components/schemas/ApplicationTrafficRoutingAny'
+          - $ref: '#/components/schemas/ApplicationTrafficRoutingCol'
+          - $ref: '#/components/schemas/ApplicationTrafficRoutingCondition-Output'
+          title: Routing Data
+          discriminator:
+            propertyName: op
+            mapping:
+              and: '#/components/schemas/ApplicationTrafficRoutingCondition-Output'
+              any: '#/components/schemas/ApplicationTrafficRoutingAny'
+              eq: '#/components/schemas/ApplicationTrafficRoutingCol'
+              ne: '#/components/schemas/ApplicationTrafficRoutingCol'
+              or: '#/components/schemas/ApplicationTrafficRoutingCondition-Output'
+      type: object
+      required:
+      - application_id
+      - routing_data
+      title: ApplicationTrafficRoutingEntry
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    ApplicationTrafficRoutingCondition-Output:
+      properties:
+        op:
+          type: string
+          enum:
+          - and
+          - or
+          title: Op
+        filters:
+          items:
+            oneOf:
+            - $ref: '#/components/schemas/ApplicationTrafficRoutingAny'
+            - $ref: '#/components/schemas/ApplicationTrafficRoutingCol'
+            - $ref: '#/components/schemas/ApplicationTrafficRoutingCondition-Output'
+            discriminator:
+              propertyName: op
+              mapping:
+                and: '#/components/schemas/ApplicationTrafficRoutingCondition-Output'
+                any: '#/components/schemas/ApplicationTrafficRoutingAny'
+                eq: '#/components/schemas/ApplicationTrafficRoutingCol'
+                ne: '#/components/schemas/ApplicationTrafficRoutingCol'
+                or: '#/components/schemas/ApplicationTrafficRoutingCondition-Output'
+          type: array
+          title: Filters
+      additionalProperties: false
+      type: object
+      required:
+      - op
+      - filters
+      title: ApplicationTrafficRoutingCondition
+    ApplicationTrafficRoutingCol:
+      properties:
+        op:
+          type: string
+          enum:
+          - eq
+          - ne
+          title: Op
+        col:
+          type: string
+          title: Col
+        value:
+          type: string
+          title: Value
+      additionalProperties: false
+      type: object
+      required:
+      - op
+      - col
+      - value
+      title: ApplicationTrafficRoutingCol
+  securitySchemes:
+    API_Key:
+      type: apiKey
+      in: header
+      name: X-API-Key
+    Bearer_Token:
+      type: apiKey
+      in: header
+      name: Authorization
+    System_API_Key:
+      type: apiKey
+      in: header
+      name: X-System-API-Key
+    Organization_ID:
+      type: apiKey
+      in: header
+      name: X-Organization-ID
+    Operator_Organization_Context:
+      type: apiKey
+      in: header
+      name: context
+x-refined-from:
+- pynt-openapi.json
+- pynt-openapi.json

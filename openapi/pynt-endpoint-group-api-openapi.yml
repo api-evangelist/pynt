@@ -1,0 +1,342 @@
+openapi: 3.2.0
+info:
+  title: Pynt Endpoint Group API
+  version: 0.1.0
+  description: 'Operations tagged endpoint-group across 2 of this provider''s published API definitions: pynt-openapi.json, pynt-openapi.json. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.pynt.io
+  description: Pynt production API
+tags:
+- name: endpoint-group
+paths:
+  /v1/endpoint-group:
+    get:
+      tags:
+      - endpoint-group
+      summary: List Endpoint Groups
+      operationId: list_endpoint_groups_v1_endpoint_group_get
+      security:
+      - API Key: []
+      - Bearer Token: []
+      - System API Key: []
+      - Organization ID: []
+      - Operator Organization Context: []
+      parameters:
+      - name: filter
+        in: query
+        required: false
+        schema:
+          type: string
+          title: Filter
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedEndpointGroupsOut'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/endpoint-group/risks:
+    get:
+      tags:
+      - endpoint-group
+      summary: Aggregate Risks
+      operationId: aggregate_risks_v1_endpoint_group_risks_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EndpointGroupsRisk'
+      security:
+      - API Key: []
+      - Bearer Token: []
+      - System API Key: []
+      - Organization ID: []
+      - Operator Organization Context: []
+  /v1/endpoint-group/export:
+    post:
+      tags:
+      - endpoint-group
+      summary: Generate Export
+      operationId: generate_export_v1_endpoint_group_export_post
+      security:
+      - API Key: []
+      - Bearer Token: []
+      - System API Key: []
+      - Organization ID: []
+      - Operator Organization Context: []
+      parameters:
+      - name: format
+        in: query
+        required: true
+        schema:
+          $ref: '#/components/schemas/ExportFormat'
+      - name: filter
+        in: query
+        required: false
+        schema:
+          type: string
+          title: Filter
+      responses:
+        '202':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExportResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/endpoint-group/export/{export_id}.{format}:
+    get:
+      tags:
+      - endpoint-group
+      summary: Generate Export Download Url
+      operationId: generate_export_download_url_v1_endpoint_group_export__export_id___format__get
+      security:
+      - API Key: []
+      - Bearer Token: []
+      - System API Key: []
+      - Organization ID: []
+      - Operator Organization Context: []
+      parameters:
+      - name: export_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Export Id
+      - name: format
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/ExportFormat'
+      - name: date
+        in: query
+        required: true
+        schema:
+          type: string
+          format: date-time
+          title: Date
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: string
+                title: Response Generate Export Download Url V1 Endpoint Group Export  Export Id   Format  Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    PaginatedEndpointGroupsOut:
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/EndpointGroupOut'
+          type: array
+          title: Data
+        total:
+          type: integer
+          title: Total
+      type: object
+      required:
+      - data
+      - total
+      title: PaginatedEndpointGroupsOut
+    ExportFormat:
+      type: string
+      enum:
+      - csv
+      title: ExportFormat
+    EndpointGroupsRisk:
+      properties:
+        unscanned:
+          type: integer
+          title: Unscanned
+          default: 0
+        none:
+          type: integer
+          title: None
+          default: 0
+        low:
+          type: integer
+          title: Low
+          default: 0
+        medium:
+          type: integer
+          title: Medium
+          default: 0
+        high:
+          type: integer
+          title: High
+          default: 0
+        critical:
+          type: integer
+          title: Critical
+          default: 0
+      type: object
+      title: EndpointGroupsRisk
+    ExportResponse:
+      properties:
+        export_id:
+          type: string
+          format: uuid
+          title: Export Id
+        date:
+          type: string
+          format: date-time
+          title: Date
+        format:
+          $ref: '#/components/schemas/ExportFormat'
+      type: object
+      required:
+      - export_id
+      - date
+      - format
+      title: ExportResponse
+    EndpointGroupOut:
+      properties:
+        endpoint_group_id:
+          type: string
+          title: Endpoint Group Id
+        application_id:
+          type: string
+          title: Application Id
+        hosts:
+          items:
+            type: string
+          type: array
+          title: Hosts
+        risk:
+          type: integer
+          title: Risk
+        method:
+          type: string
+          title: Method
+        path:
+          type: string
+          title: Path
+        authenticated:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Authenticated
+        technology:
+          type: string
+          title: Technology
+        sources:
+          items:
+            type: string
+          type: array
+          title: Sources
+        vulnerability_instances_ids:
+          items:
+            type: string
+          type: array
+          title: Vulnerability Instances Ids
+        vulnerability_instances_count:
+          type: integer
+          title: Vulnerability Instances Count
+        last_scan:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Last Scan
+        last_scan_time:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Last Scan Time
+        last_seen:
+          type: string
+          format: date-time
+          title: Last Seen
+      type: object
+      required:
+      - endpoint_group_id
+      - application_id
+      - hosts
+      - risk
+      - method
+      - path
+      - authenticated
+      - technology
+      - sources
+      - vulnerability_instances_ids
+      - vulnerability_instances_count
+      - last_scan
+      - last_scan_time
+      - last_seen
+      title: EndpointGroupOut
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+  securitySchemes:
+    API_Key:
+      type: apiKey
+      in: header
+      name: X-API-Key
+    Bearer_Token:
+      type: apiKey
+      in: header
+      name: Authorization
+    System_API_Key:
+      type: apiKey
+      in: header
+      name: X-System-API-Key
+    Organization_ID:
+      type: apiKey
+      in: header
+      name: X-Organization-ID
+    Operator_Organization_Context:
+      type: apiKey
+      in: header
+      name: context
+x-refined-from:
+- pynt-openapi.json
+- pynt-openapi.json

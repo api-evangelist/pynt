@@ -1,0 +1,69 @@
+openapi: 3.2.0
+info:
+  title: Pynt Tag API
+  version: 0.1.0
+  description: 'Operations tagged tag across 2 of this provider''s published API definitions: pynt-openapi.json, pynt-openapi.json. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.pynt.io
+  description: Pynt production API
+tags:
+- name: tag
+paths:
+  /v1/tag:
+    get:
+      tags:
+      - tag
+      summary: List Tags
+      operationId: list_tags_v1_tag_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/TagOut'
+                type: array
+                title: Response List Tags V1 Tag Get
+      security:
+      - Bearer Token: []
+      - Operator Organization Context: []
+components:
+  schemas:
+    TagOut:
+      properties:
+        tag_id:
+          type: string
+          pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
+          title: Tag Id
+        name:
+          type: string
+          title: Name
+      type: object
+      required:
+      - name
+      title: TagOut
+  securitySchemes:
+    API_Key:
+      type: apiKey
+      in: header
+      name: X-API-Key
+    Bearer_Token:
+      type: apiKey
+      in: header
+      name: Authorization
+    System_API_Key:
+      type: apiKey
+      in: header
+      name: X-System-API-Key
+    Organization_ID:
+      type: apiKey
+      in: header
+      name: X-Organization-ID
+    Operator_Organization_Context:
+      type: apiKey
+      in: header
+      name: context
+x-refined-from:
+- pynt-openapi.json
+- pynt-openapi.json

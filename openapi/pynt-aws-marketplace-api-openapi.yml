@@ -1,0 +1,188 @@
+openapi: 3.2.0
+info:
+  title: Pynt Aws Marketplace API
+  version: 0.1.0
+  description: 'Operations tagged aws-marketplace across 2 of this provider''s published API definitions: pynt-openapi.json, pynt-openapi.json. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.pynt.io
+  description: Pynt production API
+tags:
+- name: aws-marketplace
+paths:
+  /v1/marketplace/aws/register:
+    post:
+      tags:
+      - aws-marketplace
+      summary: Aws Marketplace Register
+      operationId: aws_marketplace_register_v1_marketplace_aws_register_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: string
+              title: Body
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/marketplace/aws/signup:
+    post:
+      tags:
+      - aws-marketplace
+      summary: Aws Marketplace Signup
+      operationId: aws_marketplace_signup_v1_marketplace_aws_signup_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Body_aws_marketplace_signup_v1_marketplace_aws_signup_post'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserOut'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - Bearer Token: []
+components:
+  schemas:
+    UserOut:
+      properties:
+        uid:
+          type: string
+          title: Uid
+        first_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: First Name
+        last_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Last Name
+        role:
+          $ref: '#/components/schemas/UserRole'
+        email:
+          type: string
+          title: Email
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+        organization_id:
+          type: string
+          title: Organization Id
+        user_id:
+          type: string
+          title: User Id
+        name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Name
+        lastname:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Lastname
+      type: object
+      required:
+      - uid
+      - first_name
+      - last_name
+      - role
+      - email
+      - created_at
+      - organization_id
+      - user_id
+      - name
+      - lastname
+      title: UserOut
+    UserRole:
+      type: string
+      enum:
+      - Admin
+      - User
+      - SystemAdmin
+      title: UserRole
+    Body_aws_marketplace_signup_v1_marketplace_aws_signup_post:
+      properties:
+        aws_marketplace_id:
+          type: string
+          title: Aws Marketplace Id
+      type: object
+      required:
+      - aws_marketplace_id
+      title: Body_aws_marketplace_signup_v1_marketplace_aws_signup_post
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+  securitySchemes:
+    API_Key:
+      type: apiKey
+      in: header
+      name: X-API-Key
+    Bearer_Token:
+      type: apiKey
+      in: header
+      name: Authorization
+    System_API_Key:
+      type: apiKey
+      in: header
+      name: X-System-API-Key
+    Organization_ID:
+      type: apiKey
+      in: header
+      name: X-Organization-ID
+    Operator_Organization_Context:
+      type: apiKey
+      in: header
+      name: context
+x-refined-from:
+- pynt-openapi.json
+- pynt-openapi.json
