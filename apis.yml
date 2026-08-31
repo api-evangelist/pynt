@@ -147,6 +147,8 @@ apis:
   humanURL: https://docs.pynt.io/documentation
   baseURL: https://api.pynt.io
   tags:
+  - APIKeys
+  tags_raw:
   - api-key
   properties:
   - type: OpenAPI
@@ -163,6 +165,8 @@ apis:
   humanURL: https://docs.pynt.io/documentation
   baseURL: https://api.pynt.io
   tags:
+  - Application
+  tags_raw:
   - application
   properties:
   - type: OpenAPI
@@ -179,6 +183,8 @@ apis:
   humanURL: https://docs.pynt.io/documentation
   baseURL: https://api.pynt.io
   tags:
+  - Artifacts
+  tags_raw:
   - artifacts
   properties:
   - type: OpenAPI
@@ -195,6 +201,8 @@ apis:
   humanURL: https://docs.pynt.io/documentation
   baseURL: https://api.pynt.io
   tags:
+  - Authentication
+  tags_raw:
   - auth
   properties:
   - type: OpenAPI
@@ -211,6 +219,8 @@ apis:
   humanURL: https://docs.pynt.io/documentation
   baseURL: https://api.pynt.io
   tags:
+  - AWS Marketplace
+  tags_raw:
   - aws-marketplace
   properties:
   - type: OpenAPI
@@ -227,6 +237,8 @@ apis:
   humanURL: https://docs.pynt.io/documentation
   baseURL: https://api.pynt.io
   tags:
+  - Config
+  tags_raw:
   - config
   properties:
   - type: OpenAPI
@@ -243,6 +255,8 @@ apis:
   humanURL: https://docs.pynt.io/documentation
   baseURL: https://api.pynt.io
   tags:
+  - Endpoint Group
+  tags_raw:
   - endpoint-group
   properties:
   - type: OpenAPI
@@ -275,6 +289,8 @@ apis:
   humanURL: https://docs.pynt.io/documentation
   baseURL: https://api.pynt.io
   tags:
+  - Event Logs
+  tags_raw:
   - event-logs
   properties:
   - type: OpenAPI
@@ -291,6 +307,8 @@ apis:
   humanURL: https://docs.pynt.io/documentation
   baseURL: https://api.pynt.io
   tags:
+  - Evidence
+  tags_raw:
   - evidence
   properties:
   - type: OpenAPI
@@ -307,6 +325,8 @@ apis:
   humanURL: https://docs.pynt.io/documentation
   baseURL: https://api.pynt.io
   tags:
+  - Integration
+  tags_raw:
   - integrations
   properties:
   - type: OpenAPI
@@ -339,6 +359,8 @@ apis:
   humanURL: https://docs.pynt.io/documentation
   baseURL: https://api.pynt.io
   tags:
+  - Job
+  tags_raw:
   - jobs
   properties:
   - type: OpenAPI
@@ -355,6 +377,8 @@ apis:
   humanURL: https://docs.pynt.io/documentation
   baseURL: https://api.pynt.io
   tags:
+  - Legacy
+  tags_raw:
   - legacy
   properties:
   - type: OpenAPI
@@ -387,6 +411,8 @@ apis:
   humanURL: https://docs.pynt.io/documentation
   baseURL: https://api.pynt.io
   tags:
+  - NATS
+  tags_raw:
   - nats
   properties:
   - type: OpenAPI
@@ -403,6 +429,8 @@ apis:
   humanURL: https://docs.pynt.io/documentation
   baseURL: https://api.pynt.io
   tags:
+  - Notification Rules
+  tags_raw:
   - notification-rules
   properties:
   - type: OpenAPI
@@ -419,6 +447,8 @@ apis:
   humanURL: https://docs.pynt.io/documentation
   baseURL: https://api.pynt.io
   tags:
+  - Organization
+  tags_raw:
   - organization
   properties:
   - type: OpenAPI
@@ -435,6 +465,8 @@ apis:
   humanURL: https://docs.pynt.io/documentation
   baseURL: https://api.pynt.io
   tags:
+  - Postman
+  tags_raw:
   - postman
   properties:
   - type: OpenAPI
@@ -467,6 +499,8 @@ apis:
   humanURL: https://docs.pynt.io/documentation
   baseURL: https://api.pynt.io
   tags:
+  - Scans
+  tags_raw:
   - scan
   properties:
   - type: OpenAPI
@@ -549,6 +583,8 @@ apis:
   humanURL: https://docs.pynt.io/documentation
   baseURL: https://api.pynt.io
   tags:
+  - Tag
+  tags_raw:
   - tag
   properties:
   - type: OpenAPI
@@ -565,6 +601,8 @@ apis:
   humanURL: https://docs.pynt.io/documentation
   baseURL: https://api.pynt.io
   tags:
+  - Ticketing
+  tags_raw:
   - ticketing
   properties:
   - type: OpenAPI
@@ -597,6 +635,8 @@ apis:
   humanURL: https://docs.pynt.io/documentation
   baseURL: https://api.pynt.io
   tags:
+  - TrafficFilter
+  tags_raw:
   - traffic-filter
   properties:
   - type: OpenAPI
@@ -613,6 +653,8 @@ apis:
   humanURL: https://docs.pynt.io/documentation
   baseURL: https://api.pynt.io
   tags:
+  - User
+  tags_raw:
   - user
   properties:
   - type: OpenAPI
