@@ -58,6 +58,9 @@ created: '2025-01-08'
 modified: '2026-08-27'
 specificationVersion: '0.23'
 common:
+  - type: CapabilityMap
+    url: capabilities/pynt-capability-edges.yml
+    name: Pynt Business Capability Map
   - type: Overlay
     url: overlays/pynt-openapi-overlay.yaml
   - type: Website
