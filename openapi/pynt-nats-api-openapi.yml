@@ -2,10 +2,6 @@ openapi: 3.2.0
 info:
   title: Pynt Nats API
   version: 0.1.0
-  description: 'Operations tagged nats across 2 of this provider''s published API definitions: pynt-openapi.json, pynt-openapi.json. Each path carries the servers of the definition it was published in.'
-servers:
-- url: https://api.pynt.io
-  description: Pynt production API
 tags:
 - name: nats
 paths:
@@ -106,50 +102,6 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    CreatePOIDRequest:
-      properties:
-        organization_id:
-          type: string
-          pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
-          title: Organization Id
-        poid:
-          type: string
-          pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
-          title: Poid
-      type: object
-      required:
-      - organization_id
-      - poid
-      title: CreatePOIDRequest
-    POIDMapEntryOut:
-      properties:
-        application_id:
-          type: string
-          pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
-          title: Application Id
-        organization_id:
-          type: string
-          pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
-          title: Organization Id
-        poid:
-          type: string
-          pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
-          title: Poid
-      type: object
-      required:
-      - application_id
-      - organization_id
-      - poid
-      title: POIDMapEntryOut
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
     ValidationError:
       properties:
         loc:
@@ -171,6 +123,50 @@ components:
       - msg
       - type
       title: ValidationError
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    POIDMapEntryOut:
+      properties:
+        application_id:
+          type: string
+          pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
+          title: Application Id
+        organization_id:
+          type: string
+          pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
+          title: Organization Id
+        poid:
+          type: string
+          pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
+          title: Poid
+      type: object
+      required:
+      - application_id
+      - organization_id
+      - poid
+      title: POIDMapEntryOut
+    CreatePOIDRequest:
+      properties:
+        organization_id:
+          type: string
+          pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
+          title: Organization Id
+        poid:
+          type: string
+          pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
+          title: Poid
+      type: object
+      required:
+      - organization_id
+      - poid
+      title: CreatePOIDRequest
   securitySchemes:
     API_Key:
       type: apiKey
@@ -192,6 +188,3 @@ components:
       type: apiKey
       in: header
       name: context
-x-refined-from:
-- pynt-openapi.json
-- pynt-openapi.json

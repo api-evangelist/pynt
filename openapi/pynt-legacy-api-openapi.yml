@@ -2,17 +2,13 @@ openapi: 3.2.0
 info:
   title: Pynt Legacy API
   version: 0.1.0
-  description: 'Operations tagged legacy across 2 of this provider''s published API definitions: pynt-openapi.json, pynt-openapi.json. Each path carries the servers of the definition it was published in.'
-servers:
-- url: https://api.pynt.io
-  description: Pynt production API
 tags:
-- name: legacy
+- name: Legacy
 paths:
   /v1/applicationsMetadata:
     get:
       tags:
-      - legacy
+      - Legacy
       summary: List Applications Metadata
       description: Use /v1/application/metadata instead
       operationId: list_applications_metadata_v1_applicationsMetadata_get
@@ -57,7 +53,7 @@ paths:
   /v1/community/user:
     get:
       tags:
-      - legacy
+      - Legacy
       summary: Community User
       operationId: community_user_v1_community_user_get
       responses:
@@ -73,7 +69,7 @@ paths:
   /v1/report:
     put:
       tags:
-      - legacy
+      - Legacy
       summary: Upload Report
       description: Use /v1/scan/{scan_id}/report instead
       operationId: upload_report_v1_report_put
@@ -104,6 +100,15 @@ paths:
       - Operator Organization Context: []
 components:
   schemas:
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     ValidationError:
       properties:
         loc:
@@ -125,15 +130,6 @@ components:
       - msg
       - type
       title: ValidationError
-    CommunityUserResponse:
-      properties:
-        user-id:
-          type: string
-          title: User-Id
-      type: object
-      required:
-      - user-id
-      title: CommunityUserResponse
     ScanExecutionStatus:
       type: string
       enum:
@@ -145,6 +141,40 @@ components:
       - Cancelled
       - Scheduled
       title: ScanExecutionStatus
+    CommunityUserResponse:
+      properties:
+        user-id:
+          type: string
+          title: User-Id
+      type: object
+      required:
+      - user-id
+      title: CommunityUserResponse
+    ApplicationDataSourceOut:
+      properties:
+        status:
+          type: string
+          title: Status
+      type: object
+      required:
+      - status
+      title: ApplicationDataSourceOut
+    UploadReportRequest:
+      properties:
+        scan_id:
+          anyOf:
+          - type: string
+            pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
+          - type: 'null'
+          title: Scan Id
+          deprecated: true
+        report:
+          type: string
+          title: Report
+      type: object
+      required:
+      - report
+      title: UploadReportRequest
     ApplicationMetadataOut:
       properties:
         name:
@@ -219,40 +249,6 @@ components:
       - risk
       - data_sources
       title: ApplicationMetadataOut
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    ApplicationDataSourceOut:
-      properties:
-        status:
-          type: string
-          title: Status
-      type: object
-      required:
-      - status
-      title: ApplicationDataSourceOut
-    UploadReportRequest:
-      properties:
-        scan_id:
-          anyOf:
-          - type: string
-            pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
-          - type: 'null'
-          title: Scan Id
-          deprecated: true
-        report:
-          type: string
-          title: Report
-      type: object
-      required:
-      - report
-      title: UploadReportRequest
   securitySchemes:
     API_Key:
       type: apiKey
@@ -274,6 +270,3 @@ components:
       type: apiKey
       in: header
       name: context
-x-refined-from:
-- pynt-openapi.json
-- pynt-openapi.json

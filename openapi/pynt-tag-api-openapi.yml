@@ -2,17 +2,13 @@ openapi: 3.2.0
 info:
   title: Pynt Tag API
   version: 0.1.0
-  description: 'Operations tagged tag across 2 of this provider''s published API definitions: pynt-openapi.json, pynt-openapi.json. Each path carries the servers of the definition it was published in.'
-servers:
-- url: https://api.pynt.io
-  description: Pynt production API
 tags:
-- name: tag
+- name: Tag
 paths:
   /v1/tag:
     get:
       tags:
-      - tag
+      - Tag
       summary: List Tags
       operationId: list_tags_v1_tag_get
       responses:
@@ -64,6 +60,3 @@ components:
       type: apiKey
       in: header
       name: context
-x-refined-from:
-- pynt-openapi.json
-- pynt-openapi.json

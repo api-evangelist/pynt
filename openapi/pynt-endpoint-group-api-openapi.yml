@@ -2,17 +2,13 @@ openapi: 3.2.0
 info:
   title: Pynt Endpoint Group API
   version: 0.1.0
-  description: 'Operations tagged endpoint-group across 2 of this provider''s published API definitions: pynt-openapi.json, pynt-openapi.json. Each path carries the servers of the definition it was published in.'
-servers:
-- url: https://api.pynt.io
-  description: Pynt production API
 tags:
-- name: endpoint-group
+- name: Endpoint Group
 paths:
   /v1/endpoint-group:
     get:
       tags:
-      - endpoint-group
+      - Endpoint Group
       summary: List Endpoint Groups
       operationId: list_endpoint_groups_v1_endpoint_group_get
       security:
@@ -44,7 +40,7 @@ paths:
   /v1/endpoint-group/risks:
     get:
       tags:
-      - endpoint-group
+      - Endpoint Group
       summary: Aggregate Risks
       operationId: aggregate_risks_v1_endpoint_group_risks_get
       responses:
@@ -63,7 +59,7 @@ paths:
   /v1/endpoint-group/export:
     post:
       tags:
-      - endpoint-group
+      - Endpoint Group
       summary: Generate Export
       operationId: generate_export_v1_endpoint_group_export_post
       security:
@@ -100,7 +96,7 @@ paths:
   /v1/endpoint-group/export/{export_id}.{format}:
     get:
       tags:
-      - endpoint-group
+      - Endpoint Group
       summary: Generate Export Download Url
       operationId: generate_export_download_url_v1_endpoint_group_export__export_id___format__get
       security:
@@ -145,54 +141,15 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    PaginatedEndpointGroupsOut:
+    HTTPValidationError:
       properties:
-        data:
+        detail:
           items:
-            $ref: '#/components/schemas/EndpointGroupOut'
+            $ref: '#/components/schemas/ValidationError'
           type: array
-          title: Data
-        total:
-          type: integer
-          title: Total
+          title: Detail
       type: object
-      required:
-      - data
-      - total
-      title: PaginatedEndpointGroupsOut
-    ExportFormat:
-      type: string
-      enum:
-      - csv
-      title: ExportFormat
-    EndpointGroupsRisk:
-      properties:
-        unscanned:
-          type: integer
-          title: Unscanned
-          default: 0
-        none:
-          type: integer
-          title: None
-          default: 0
-        low:
-          type: integer
-          title: Low
-          default: 0
-        medium:
-          type: integer
-          title: Medium
-          default: 0
-        high:
-          type: integer
-          title: High
-          default: 0
-        critical:
-          type: integer
-          title: Critical
-          default: 0
-      type: object
-      title: EndpointGroupsRisk
+      title: HTTPValidationError
     ExportResponse:
       properties:
         export_id:
@@ -211,6 +168,42 @@ components:
       - date
       - format
       title: ExportResponse
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    PaginatedEndpointGroupsOut:
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/EndpointGroupOut'
+          type: array
+          title: Data
+        total:
+          type: integer
+          title: Total
+      type: object
+      required:
+      - data
+      - total
+      title: PaginatedEndpointGroupsOut
     EndpointGroupOut:
       properties:
         endpoint_group_id:
@@ -286,36 +279,39 @@ components:
       - last_scan_time
       - last_seen
       title: EndpointGroupOut
-    HTTPValidationError:
+    ExportFormat:
+      type: string
+      enum:
+      - csv
+      title: ExportFormat
+    EndpointGroupsRisk:
       properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
+        unscanned:
+          type: integer
+          title: Unscanned
+          default: 0
+        none:
+          type: integer
+          title: None
+          default: 0
+        low:
+          type: integer
+          title: Low
+          default: 0
+        medium:
+          type: integer
+          title: Medium
+          default: 0
+        high:
+          type: integer
+          title: High
+          default: 0
+        critical:
+          type: integer
+          title: Critical
+          default: 0
       type: object
-      title: HTTPValidationError
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
+      title: EndpointGroupsRisk
   securitySchemes:
     API_Key:
       type: apiKey
@@ -337,6 +333,3 @@ components:
       type: apiKey
       in: header
       name: context
-x-refined-from:
-- pynt-openapi.json
-- pynt-openapi.json

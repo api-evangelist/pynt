@@ -2,17 +2,13 @@ openapi: 3.2.0
 info:
   title: Pynt Config API
   version: 0.1.0
-  description: 'Operations tagged config across 2 of this provider''s published API definitions: pynt-openapi.json, pynt-openapi.json. Each path carries the servers of the definition it was published in.'
-servers:
-- url: https://api.pynt.io
-  description: Pynt production API
 tags:
-- name: config
+- name: Config
 paths:
   /v1/config:
     get:
       tags:
-      - config
+      - Config
       summary: Get Config
       description: Replaced with /scan/config api
       operationId: get_config_v1_config_get
@@ -53,6 +49,3 @@ components:
       type: apiKey
       in: header
       name: context
-x-refined-from:
-- pynt-openapi.json
-- pynt-openapi.json

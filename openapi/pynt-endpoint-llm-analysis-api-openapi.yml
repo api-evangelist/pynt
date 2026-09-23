@@ -2,10 +2,6 @@ openapi: 3.2.0
 info:
   title: Pynt Endpoint Llm Analysis API
   version: 0.1.0
-  description: 'Operations tagged endpoint-llm-analysis across 2 of this provider''s published API definitions: pynt-openapi.json, pynt-openapi.json. Each path carries the servers of the definition it was published in.'
-servers:
-- url: https://api.pynt.io
-  description: Pynt production API
 tags:
 - name: endpoint-llm-analysis
 paths:
@@ -59,20 +55,6 @@ components:
       - field_name
       - value
       title: PiiItem
-    YesNoQuestion:
-      properties:
-        verdict:
-          type: boolean
-          title: Verdict
-        reason:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Reason
-      type: object
-      required:
-      - verdict
-      title: YesNoQuestion
     HTTPValidationError:
       properties:
         detail:
@@ -82,54 +64,6 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
-    AuthenticationInfo:
-      properties:
-        method:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Method
-        name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Name
-      type: object
-      title: AuthenticationInfo
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    PathParameter:
-      properties:
-        param_value:
-          type: string
-          title: Param Value
-        suggested_name:
-          type: string
-          title: Suggested Name
-      type: object
-      required:
-      - param_value
-      - suggested_name
-      title: PathParameter
     EndpointLLMAnalysis:
       properties:
         endpoint:
@@ -276,6 +210,68 @@ components:
       - endpoint_id
       title: EndpointLLMAnalysis
       description: Business model — extends the LLM schema with application-level fields.
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    PathParameter:
+      properties:
+        param_value:
+          type: string
+          title: Param Value
+        suggested_name:
+          type: string
+          title: Suggested Name
+      type: object
+      required:
+      - param_value
+      - suggested_name
+      title: PathParameter
+    YesNoQuestion:
+      properties:
+        verdict:
+          type: boolean
+          title: Verdict
+        reason:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Reason
+      type: object
+      required:
+      - verdict
+      title: YesNoQuestion
+    AuthenticationInfo:
+      properties:
+        method:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Method
+        name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Name
+      type: object
+      title: AuthenticationInfo
   securitySchemes:
     API_Key:
       type: apiKey
@@ -297,6 +293,3 @@ components:
       type: apiKey
       in: header
       name: context
-x-refined-from:
-- pynt-openapi.json
-- pynt-openapi.json

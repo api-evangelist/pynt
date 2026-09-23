@@ -2,17 +2,13 @@ openapi: 3.2.0
 info:
   title: Pynt Ticketing API
   version: 0.1.0
-  description: 'Operations tagged ticketing across 2 of this provider''s published API definitions: pynt-openapi.json, pynt-openapi.json. Each path carries the servers of the definition it was published in.'
-servers:
-- url: https://api.pynt.io
-  description: Pynt production API
 tags:
-- name: ticketing
+- name: Ticketing
 paths:
   /v1/ticketing/jira/projects:
     get:
       tags:
-      - ticketing
+      - Ticketing
       summary: Get Jira Projects
       operationId: get_jira_projects_v1_ticketing_jira_projects_get
       responses:
@@ -35,7 +31,7 @@ paths:
   /v1/ticketing/jira/projects/{project_id}/issuetypes/{issue_type_id}/metadata:
     get:
       tags:
-      - ticketing
+      - Ticketing
       summary: Get Issue Type Metadata
       operationId: get_issue_type_metadata_v1_ticketing_jira_projects__project_id__issuetypes__issue_type_id__metadata_get
       security:
@@ -77,7 +73,7 @@ paths:
   /v1/ticketing/jira:
     put:
       tags:
-      - ticketing
+      - Ticketing
       summary: Connect Jira
       operationId: connect_jira_v1_ticketing_jira_put
       requestBody:
@@ -111,7 +107,7 @@ paths:
       - Bearer Token: []
     delete:
       tags:
-      - ticketing
+      - Ticketing
       summary: Delete Integration
       operationId: delete_integration_v1_ticketing_jira_delete
       responses:
@@ -126,7 +122,7 @@ paths:
       - Organization ID: []
     patch:
       tags:
-      - ticketing
+      - Ticketing
       summary: Set Properties
       operationId: set_properties_v1_ticketing_jira_patch
       requestBody:
@@ -156,32 +152,6 @@ paths:
       - Bearer Token: []
 components:
   schemas:
-    JiraSiteResponse:
-      properties:
-        id:
-          type: string
-          title: Id
-        name:
-          type: string
-          title: Name
-        url:
-          type: string
-          title: Url
-      type: object
-      required:
-      - id
-      - name
-      - url
-      title: JiraSiteResponse
-    Body_connect_jira_v1_ticketing_jira_put:
-      properties:
-        code:
-          type: string
-          title: Code
-      type: object
-      required:
-      - code
-      title: Body_connect_jira_v1_ticketing_jira_put
     JiraField:
       properties:
         field_id:
@@ -216,6 +186,15 @@ components:
       - name
       - required
       title: JiraField
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     IssueType:
       properties:
         id:
@@ -234,6 +213,27 @@ components:
       - id
       - name
       title: IssueType
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
     JiraProject:
       properties:
         id:
@@ -261,15 +261,32 @@ components:
       - avatar_url
       - issue_types
       title: JiraProject
-    HTTPValidationError:
+    Body_connect_jira_v1_ticketing_jira_put:
       properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
+        code:
+          type: string
+          title: Code
       type: object
-      title: HTTPValidationError
+      required:
+      - code
+      title: Body_connect_jira_v1_ticketing_jira_put
+    JiraSiteResponse:
+      properties:
+        id:
+          type: string
+          title: Id
+        name:
+          type: string
+          title: Name
+        url:
+          type: string
+          title: Url
+      type: object
+      required:
+      - id
+      - name
+      - url
+      title: JiraSiteResponse
     JiraPropertiesRequest:
       properties:
         site:
@@ -283,27 +300,6 @@ components:
           title: Default Project
       type: object
       title: JiraPropertiesRequest
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
     JiraAllowedValue:
       properties:
         id:
@@ -357,6 +353,3 @@ components:
       type: apiKey
       in: header
       name: context
-x-refined-from:
-- pynt-openapi.json
-- pynt-openapi.json

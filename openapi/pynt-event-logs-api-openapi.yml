@@ -2,17 +2,13 @@ openapi: 3.2.0
 info:
   title: Pynt Event Logs API
   version: 0.1.0
-  description: 'Operations tagged event-logs across 2 of this provider''s published API definitions: pynt-openapi.json, pynt-openapi.json. Each path carries the servers of the definition it was published in.'
-servers:
-- url: https://api.pynt.io
-  description: Pynt production API
 tags:
-- name: event-logs
+- name: Event Logs
 paths:
   /v1/event-logs:
     get:
       tags:
-      - event-logs
+      - Event Logs
       summary: Get Filtered Event Log
       operationId: get_filtered_event_log_v1_event_logs_get
       security:
@@ -43,59 +39,6 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    EventLogType:
-      type: string
-      enum:
-      - authentication
-      - application_management
-      - user_management
-      - organization_management
-      - integration
-      - label_management
-      - source_management
-      - reporting
-      - scan_management
-      - api_management
-      - vulnerability_management
-      - ticket_management
-      - unknown
-      title: EventLogType
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    PaginatedEventLogOut:
-      properties:
-        events:
-          items:
-            $ref: '#/components/schemas/EventLogOut'
-          type: array
-          title: Events
-        total:
-          type: integer
-          title: Total
-      type: object
-      required:
-      - events
-      - total
-      title: PaginatedEventLogOut
     HTTPValidationError:
       properties:
         detail:
@@ -156,6 +99,59 @@ components:
       - event_type
       - event_title
       title: EventLogOut
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    PaginatedEventLogOut:
+      properties:
+        events:
+          items:
+            $ref: '#/components/schemas/EventLogOut'
+          type: array
+          title: Events
+        total:
+          type: integer
+          title: Total
+      type: object
+      required:
+      - events
+      - total
+      title: PaginatedEventLogOut
+    EventLogType:
+      type: string
+      enum:
+      - authentication
+      - application_management
+      - user_management
+      - organization_management
+      - integration
+      - label_management
+      - source_management
+      - reporting
+      - scan_management
+      - api_management
+      - vulnerability_management
+      - ticket_management
+      - unknown
+      title: EventLogType
   securitySchemes:
     API_Key:
       type: apiKey
@@ -177,6 +173,3 @@ components:
       type: apiKey
       in: header
       name: context
-x-refined-from:
-- pynt-openapi.json
-- pynt-openapi.json

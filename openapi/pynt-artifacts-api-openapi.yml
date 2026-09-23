@@ -2,17 +2,13 @@ openapi: 3.2.0
 info:
   title: Pynt Artifacts API
   version: 0.1.0
-  description: 'Operations tagged artifacts across 2 of this provider''s published API definitions: pynt-openapi.json, pynt-openapi.json. Each path carries the servers of the definition it was published in.'
-servers:
-- url: https://api.pynt.io
-  description: Pynt production API
 tags:
-- name: artifacts
+- name: Artifacts
 paths:
   /v1/artifacts/upload-url:
     post:
       tags:
-      - artifacts
+      - Artifacts
       summary: Get Upload Url
       operationId: get_upload_url_v1_artifacts_upload_url_post
       requestBody:
@@ -43,7 +39,7 @@ paths:
   /v1/artifacts/download-url:
     post:
       tags:
-      - artifacts
+      - Artifacts
       summary: Get Download Url
       operationId: get_download_url_v1_artifacts_download_url_post
       requestBody:
@@ -74,49 +70,6 @@ paths:
       - Operator Organization Context: []
 components:
   schemas:
-    DownloadUrlRequest:
-      properties:
-        folder:
-          $ref: '#/components/schemas/ArtifactsAllowedFolders'
-          description: The folder to download the file from
-        file_name:
-          type: string
-          title: File Name
-          description: The prefix of the file to download
-      type: object
-      required:
-      - folder
-      - file_name
-      title: DownloadUrlRequest
-    UploadUrlRequest:
-      properties:
-        folder:
-          $ref: '#/components/schemas/ArtifactsAllowedFolders'
-          description: The folder to upload the file to
-        file_name:
-          type: string
-          title: File Name
-          description: The prefix of the file to upload
-      type: object
-      required:
-      - folder
-      - file_name
-      title: UploadUrlRequest
-    UploadUrlResponse:
-      properties:
-        upload_url:
-          type: string
-          title: Upload Url
-          description: The presigned URL to upload the file
-        path:
-          type: string
-          title: Path
-          description: The path to the file in the bucket
-      type: object
-      required:
-      - upload_url
-      - path
-      title: UploadUrlResponse
     HTTPValidationError:
       properties:
         detail:
@@ -147,6 +100,35 @@ components:
       - msg
       - type
       title: ValidationError
+    DownloadUrlRequest:
+      properties:
+        folder:
+          $ref: '#/components/schemas/ArtifactsAllowedFolders'
+          description: The folder to download the file from
+        file_name:
+          type: string
+          title: File Name
+          description: The prefix of the file to download
+      type: object
+      required:
+      - folder
+      - file_name
+      title: DownloadUrlRequest
+    UploadUrlResponse:
+      properties:
+        upload_url:
+          type: string
+          title: Upload Url
+          description: The presigned URL to upload the file
+        path:
+          type: string
+          title: Path
+          description: The path to the file in the bucket
+      type: object
+      required:
+      - upload_url
+      - path
+      title: UploadUrlResponse
     ArtifactsAllowedFolders:
       type: string
       enum:
@@ -154,6 +136,20 @@ components:
       - har-files
       - collections
       title: ArtifactsAllowedFolders
+    UploadUrlRequest:
+      properties:
+        folder:
+          $ref: '#/components/schemas/ArtifactsAllowedFolders'
+          description: The folder to upload the file to
+        file_name:
+          type: string
+          title: File Name
+          description: The prefix of the file to upload
+      type: object
+      required:
+      - folder
+      - file_name
+      title: UploadUrlRequest
   securitySchemes:
     API_Key:
       type: apiKey
@@ -175,6 +171,3 @@ components:
       type: apiKey
       in: header
       name: context
-x-refined-from:
-- pynt-openapi.json
-- pynt-openapi.json

@@ -2,10 +2,6 @@ openapi: 3.2.0
 info:
   title: Pynt Scan Business Impact Analysis API
   version: 0.1.0
-  description: 'Operations tagged scan-business-impact-analysis across 2 of this provider''s published API definitions: pynt-openapi.json, pynt-openapi.json. Each path carries the servers of the definition it was published in.'
-servers:
-- url: https://api.pynt.io
-  description: Pynt production API
 tags:
 - name: scan-business-impact-analysis
 paths:
@@ -90,6 +86,30 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    BusinessImpactLLMResult-Output:
+      properties:
+        entities_relationship:
+          $ref: '#/components/schemas/EntitiesRelationships'
+          description: Relationships between the entities
+        business_implication:
+          type: string
+          title: Business Implication
+          description: Business implications of the attack
+      type: object
+      required:
+      - entities_relationship
+      - business_implication
+      title: BusinessImpactLLMResult
+      description: The direct, typed result from an LLM for a business impact query.
     BusinessImpactAnalysis-Output:
       properties:
         finding_id:
@@ -140,21 +160,6 @@ components:
       - msg
       - type
       title: ValidationError
-    BusinessImpactLLMResult-Output:
-      properties:
-        entities_relationship:
-          $ref: '#/components/schemas/EntitiesRelationships'
-          description: Relationships between the entities
-        business_implication:
-          type: string
-          title: Business Implication
-          description: Business implications of the attack
-      type: object
-      required:
-      - entities_relationship
-      - business_implication
-      title: BusinessImpactLLMResult
-      description: The direct, typed result from an LLM for a business impact query.
     ApprovalUpdateRequest:
       properties:
         value:
@@ -163,15 +168,24 @@ components:
       required:
       - value
       title: ApprovalUpdateRequest
-    HTTPValidationError:
+    EntitiesRelationships:
       properties:
-        detail:
+        relationships:
           items:
-            $ref: '#/components/schemas/ValidationError'
+            $ref: '#/components/schemas/EntityRelationship'
           type: array
-          title: Detail
+          title: Relationships
+          description: List of entity relationships
       type: object
-      title: HTTPValidationError
+      required:
+      - relationships
+      title: EntitiesRelationships
+      description: Represents a collection of entity relationships.
+      example:
+        relationships:
+        - entity1: user
+          entity2: invoice
+          relationship_type: owns
     ScanReportBusinessImpactAnalysis:
       properties:
         scan_id:
@@ -200,24 +214,6 @@ components:
       description: 'Enum for the conclusion of a false positive analysis:
 
         YES, NO, or INCONCLUSIVE.'
-    EntitiesRelationships:
-      properties:
-        relationships:
-          items:
-            $ref: '#/components/schemas/EntityRelationship'
-          type: array
-          title: Relationships
-          description: List of entity relationships
-      type: object
-      required:
-      - relationships
-      title: EntitiesRelationships
-      description: Represents a collection of entity relationships.
-      example:
-        relationships:
-        - entity1: user
-          entity2: invoice
-          relationship_type: owns
     EntityRelationship:
       properties:
         entity1:
@@ -259,6 +255,3 @@ components:
       type: apiKey
       in: header
       name: context
-x-refined-from:
-- pynt-openapi.json
-- pynt-openapi.json

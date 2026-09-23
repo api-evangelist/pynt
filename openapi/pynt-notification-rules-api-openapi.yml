@@ -2,17 +2,13 @@ openapi: 3.2.0
 info:
   title: Pynt Notification Rules API
   version: 0.1.0
-  description: 'Operations tagged notification-rules across 2 of this provider''s published API definitions: pynt-openapi.json, pynt-openapi.json. Each path carries the servers of the definition it was published in.'
-servers:
-- url: https://api.pynt.io
-  description: Pynt production API
 tags:
-- name: notification-rules
+- name: Notification Rules
 paths:
   /v1/notification-rules:
     post:
       tags:
-      - notification-rules
+      - Notification Rules
       summary: Create Notification Rule
       operationId: create_notification_rule_v1_notification_rules_post
       requestBody:
@@ -43,7 +39,7 @@ paths:
   /v1/notification-rules/{rule_id}:
     put:
       tags:
-      - notification-rules
+      - Notification Rules
       summary: Update Notification Rule
       operationId: update_notification_rule_v1_notification_rules__rule_id__put
       security:
@@ -81,7 +77,7 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
     delete:
       tags:
-      - notification-rules
+      - Notification Rules
       summary: Delete Notification Rule
       operationId: delete_notification_rule_v1_notification_rules__rule_id__delete
       security:
@@ -109,6 +105,36 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
     NotificationRuleCreate:
       properties:
         type:
@@ -146,6 +172,17 @@ components:
       required:
       - scan_status_triggers
       title: NotificationRuleCreate
+    NotificationServiceType:
+      type: string
+      enum:
+      - CAPI_SECURITY_TESTING
+      title: NotificationServiceType
+    ScanStatusTriggerCondition:
+      type: string
+      enum:
+      - FAILED
+      - SUCCESS
+      title: ScanStatusTriggerCondition
     NotificationRuleOut:
       properties:
         rule_id:
@@ -156,47 +193,6 @@ components:
       - rule_id
       title: NotificationRuleOut
       description: Only the stable rule id — the portal owns and stores the rest, keyed by it.
-    ScanStatusTriggerCondition:
-      type: string
-      enum:
-      - FAILED
-      - SUCCESS
-      title: ScanStatusTriggerCondition
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    NotificationServiceType:
-      type: string
-      enum:
-      - CAPI_SECURITY_TESTING
-      title: NotificationServiceType
   securitySchemes:
     API_Key:
       type: apiKey
@@ -218,6 +214,3 @@ components:
       type: apiKey
       in: header
       name: context
-x-refined-from:
-- pynt-openapi.json
-- pynt-openapi.json

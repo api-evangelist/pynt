@@ -2,10 +2,6 @@ openapi: 3.2.0
 info:
   title: Pynt Postman API
   version: 0.1.0
-  description: 'Operations tagged postman across 2 of this provider''s published API definitions: pynt-openapi.json, pynt-openapi.json. Each path carries the servers of the definition it was published in.'
-servers:
-- url: https://api.pynt.io
-  description: Pynt production API
 tags:
 - name: postman
 paths:
@@ -108,61 +104,6 @@ paths:
       - Operator Organization Context: []
 components:
   schemas:
-    PostmanWebhookRunScanPayload:
-      properties:
-        collectionId:
-          type: string
-          pattern: ^[a-f0-9\-]+$
-          title: Collectionid
-        environmentId:
-          anyOf:
-          - type: string
-            pattern: ^[a-f0-9\-]+$
-          - type: 'null'
-          title: Environmentid
-      type: object
-      required:
-      - collectionId
-      title: PostmanWebhookRunScanPayload
-    PostmanSetCredentialsRequest:
-      properties:
-        client_id:
-          type: string
-          title: Client Id
-        client_secret:
-          type: string
-          title: Client Secret
-      type: object
-      required:
-      - client_id
-      - client_secret
-      title: PostmanSetCredentialsRequest
-    PostmanConnectResponse:
-      properties:
-        api_key:
-          type: string
-          title: Api Key
-      type: object
-      required:
-      - api_key
-      title: PostmanConnectResponse
-    PostmanWebhookRunScanEvent:
-      properties:
-        eventId:
-          type: string
-          title: Eventid
-        eventKey:
-          type: string
-          const: RUN_SCAN
-          title: Eventkey
-        payload:
-          $ref: '#/components/schemas/PostmanWebhookRunScanPayload'
-      type: object
-      required:
-      - eventId
-      - eventKey
-      - payload
-      title: PostmanWebhookRunScanEvent
     HTTPValidationError:
       properties:
         detail:
@@ -193,6 +134,61 @@ components:
       - msg
       - type
       title: ValidationError
+    PostmanSetCredentialsRequest:
+      properties:
+        client_id:
+          type: string
+          title: Client Id
+        client_secret:
+          type: string
+          title: Client Secret
+      type: object
+      required:
+      - client_id
+      - client_secret
+      title: PostmanSetCredentialsRequest
+    PostmanWebhookRunScanPayload:
+      properties:
+        collectionId:
+          type: string
+          pattern: ^[a-f0-9\-]+$
+          title: Collectionid
+        environmentId:
+          anyOf:
+          - type: string
+            pattern: ^[a-f0-9\-]+$
+          - type: 'null'
+          title: Environmentid
+      type: object
+      required:
+      - collectionId
+      title: PostmanWebhookRunScanPayload
+    PostmanConnectResponse:
+      properties:
+        api_key:
+          type: string
+          title: Api Key
+      type: object
+      required:
+      - api_key
+      title: PostmanConnectResponse
+    PostmanWebhookRunScanEvent:
+      properties:
+        eventId:
+          type: string
+          title: Eventid
+        eventKey:
+          type: string
+          const: RUN_SCAN
+          title: Eventkey
+        payload:
+          $ref: '#/components/schemas/PostmanWebhookRunScanPayload'
+      type: object
+      required:
+      - eventId
+      - eventKey
+      - payload
+      title: PostmanWebhookRunScanEvent
   securitySchemes:
     API_Key:
       type: apiKey
@@ -214,6 +210,3 @@ components:
       type: apiKey
       in: header
       name: context
-x-refined-from:
-- pynt-openapi.json
-- pynt-openapi.json

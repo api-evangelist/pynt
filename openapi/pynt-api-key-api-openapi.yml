@@ -2,17 +2,13 @@ openapi: 3.2.0
 info:
   title: Pynt API Key API
   version: 0.1.0
-  description: 'Operations tagged api-key across 2 of this provider''s published API definitions: pynt-openapi.json, pynt-openapi.json. Each path carries the servers of the definition it was published in.'
-servers:
-- url: https://api.pynt.io
-  description: Pynt production API
 tags:
-- name: api-key
+- name: API Key
 paths:
   /v1/api-key/:
     post:
       tags:
-      - api-key
+      - API Key
       summary: Create Api Key
       operationId: create_api_key_v1_api_key__post
       security:
@@ -43,7 +39,7 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
     get:
       tags:
-      - api-key
+      - API Key
       summary: List Api Keys
       operationId: list_api_keys_v1_api_key__get
       security:
@@ -79,7 +75,7 @@ paths:
   /v1/api-key/revoke:
     post:
       tags:
-      - api-key
+      - API Key
       summary: Revoke Api Key
       operationId: revoke_api_key_v1_api_key_revoke_post
       requestBody:
@@ -106,16 +102,15 @@ paths:
       - Organization ID: []
 components:
   schemas:
-    RevokeApiKeyRequest:
+    HTTPValidationError:
       properties:
-        api_key_id:
-          type: string
-          title: Api Key Id
-          description: The API key id to revoke
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
       type: object
-      required:
-      - api_key_id
-      title: RevokeApiKeyRequest
+      title: HTTPValidationError
     ApiKeyResponse:
       properties:
         entity_id:
@@ -177,15 +172,6 @@ components:
       required:
       - api_key_name
       title: CreateApiKeyRequest
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
     ValidationError:
       properties:
         loc:
@@ -207,6 +193,16 @@ components:
       - msg
       - type
       title: ValidationError
+    RevokeApiKeyRequest:
+      properties:
+        api_key_id:
+          type: string
+          title: Api Key Id
+          description: The API key id to revoke
+      type: object
+      required:
+      - api_key_id
+      title: RevokeApiKeyRequest
     CreateApiKeyResponse:
       properties:
         api_key:
@@ -238,6 +234,3 @@ components:
       type: apiKey
       in: header
       name: context
-x-refined-from:
-- pynt-openapi.json
-- pynt-openapi.json

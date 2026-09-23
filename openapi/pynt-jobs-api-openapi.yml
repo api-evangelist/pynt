@@ -2,17 +2,13 @@ openapi: 3.2.0
 info:
   title: Pynt Jobs API
   version: 0.1.0
-  description: 'Operations tagged jobs across 2 of this provider''s published API definitions: pynt-openapi.json, pynt-openapi.json. Each path carries the servers of the definition it was published in.'
-servers:
-- url: https://api.pynt.io
-  description: Pynt production API
 tags:
-- name: jobs
+- name: Jobs
 paths:
   /v1/scan-jobs/dequeue:
     post:
       tags:
-      - jobs
+      - Jobs
       summary: Dequeue Job
       operationId: dequeue_job_v1_scan_jobs_dequeue_post
       requestBody:
@@ -42,43 +38,6 @@ paths:
       - Operator Organization Context: []
 components:
   schemas:
-    K8sScanJobTarget:
-      properties:
-        type:
-          type: string
-          const: K8S
-          title: Type
-        cluster_name:
-          type: string
-          title: Cluster Name
-      type: object
-      required:
-      - type
-      - cluster_name
-      title: K8sScanJobTarget
-    DequeueJobRequest:
-      properties:
-        target:
-          oneOf:
-          - $ref: '#/components/schemas/K8sScanJobTarget'
-          title: Target
-          discriminator:
-            propertyName: type
-            mapping:
-              K8S: '#/components/schemas/K8sScanJobTarget'
-      type: object
-      required:
-      - target
-      title: DequeueJobRequest
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
     DequeueJobResponse:
       properties:
         job_id:
@@ -96,6 +55,29 @@ components:
       - harl_url
       - application_id
       title: DequeueJobResponse
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    DequeueJobRequest:
+      properties:
+        target:
+          oneOf:
+          - $ref: '#/components/schemas/K8sScanJobTarget'
+          title: Target
+          discriminator:
+            propertyName: type
+            mapping:
+              K8S: '#/components/schemas/K8sScanJobTarget'
+      type: object
+      required:
+      - target
+      title: DequeueJobRequest
     ValidationError:
       properties:
         loc:
@@ -117,6 +99,20 @@ components:
       - msg
       - type
       title: ValidationError
+    K8sScanJobTarget:
+      properties:
+        type:
+          type: string
+          const: K8S
+          title: Type
+        cluster_name:
+          type: string
+          title: Cluster Name
+      type: object
+      required:
+      - type
+      - cluster_name
+      title: K8sScanJobTarget
   securitySchemes:
     API_Key:
       type: apiKey
@@ -138,6 +134,3 @@ components:
       type: apiKey
       in: header
       name: context
-x-refined-from:
-- pynt-openapi.json
-- pynt-openapi.json

@@ -2,10 +2,6 @@ openapi: 3.2.0
 info:
   title: Pynt Alive API
   version: 0.1.0
-  description: 'Operations tagged Alive across 2 of this provider''s published API definitions: pynt-openapi.json, pynt-openapi.json. Each path carries the servers of the definition it was published in.'
-servers:
-- url: https://api.pynt.io
-  description: Pynt production API
 tags:
 - name: Alive
 paths:
@@ -47,6 +43,3 @@ components:
       type: apiKey
       in: header
       name: context
-x-refined-from:
-- pynt-openapi.json
-- pynt-openapi.json

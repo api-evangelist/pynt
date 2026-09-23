@@ -2,17 +2,13 @@ openapi: 3.2.0
 info:
   title: Pynt Organization API
   version: 0.1.0
-  description: 'Operations tagged organization across 2 of this provider''s published API definitions: pynt-openapi.json, pynt-openapi.json. Each path carries the servers of the definition it was published in.'
-servers:
-- url: https://api.pynt.io
-  description: Pynt production API
 tags:
-- name: organization
+- name: Organization
 paths:
   /v1/organization:
     post:
       tags:
-      - organization
+      - Organization
       summary: Create Organization
       description: Create a new organization. SystemAdmin only. No tenant_id required.
       operationId: create_organization_v1_organization_post
@@ -40,7 +36,7 @@ paths:
   /v1/organization/sso:
     get:
       tags:
-      - organization
+      - Organization
       summary: Get Sso
       operationId: get_sso_v1_organization_sso_get
       responses:
@@ -56,7 +52,7 @@ paths:
   /v1/organization/{organization_id}:
     get:
       tags:
-      - organization
+      - Organization
       summary: Find Organization By Id
       operationId: find_organization_by_id_v1_organization__organization_id__get
       security:
@@ -88,7 +84,7 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
     patch:
       tags:
-      - organization
+      - Organization
       summary: Update Organization
       operationId: update_organization_v1_organization__organization_id__patch
       security:
@@ -125,7 +121,7 @@ paths:
   /v1/organization/{organization_id}/config:
     patch:
       tags:
-      - organization
+      - Organization
       summary: Update Organization Config
       operationId: update_organization_config_v1_organization__organization_id__config_patch
       security:
@@ -163,17 +159,50 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    OrganizationUpdateModel:
+    HTTPValidationError:
       properties:
-        name:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    OrganizationConfigUpdateModel:
+      properties:
+        allow_collect_data:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Allow Collect Data
+        local_only_mode:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Local Only Mode
+      type: object
+      title: OrganizationConfigUpdateModel
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
           type: string
-          maxLength: 30
-          pattern: ^[a-zA-Z0-9_\-\s]*$
-          title: Name
+          title: Message
+        type:
+          type: string
+          title: Error Type
       type: object
       required:
-      - name
-      title: OrganizationUpdateModel
+      - loc
+      - msg
+      - type
+      title: ValidationError
     OrganizationConfigResponse:
       properties:
         allow_collect_data:
@@ -194,6 +223,26 @@ components:
       - allow_collect_data_since
       - local_only_mode
       title: OrganizationConfigResponse
+    OrganizationUpdateModel:
+      properties:
+        name:
+          type: string
+          maxLength: 30
+          pattern: ^[a-zA-Z0-9_\-\s]*$
+          title: Name
+      type: object
+      required:
+      - name
+      title: OrganizationUpdateModel
+    OrganizationCreateRequest:
+      properties:
+        name:
+          type: string
+          title: Name
+      type: object
+      required:
+      - name
+      title: OrganizationCreateRequest
     OrganizationResponse:
       properties:
         organization_id:
@@ -216,54 +265,6 @@ components:
       - name
       - config
       title: OrganizationResponse
-    OrganizationCreateResponse:
-      properties:
-        organization_id:
-          type: string
-          title: Organization Id
-      type: object
-      required:
-      - organization_id
-      title: OrganizationCreateResponse
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    OrganizationCreateRequest:
-      properties:
-        name:
-          type: string
-          title: Name
-      type: object
-      required:
-      - name
-      title: OrganizationCreateRequest
     SSOResponse:
       properties:
         identity_provider:
@@ -273,20 +274,15 @@ components:
       required:
       - identity_provider
       title: SSOResponse
-    OrganizationConfigUpdateModel:
+    OrganizationCreateResponse:
       properties:
-        allow_collect_data:
-          anyOf:
-          - type: boolean
-          - type: 'null'
-          title: Allow Collect Data
-        local_only_mode:
-          anyOf:
-          - type: boolean
-          - type: 'null'
-          title: Local Only Mode
+        organization_id:
+          type: string
+          title: Organization Id
       type: object
-      title: OrganizationConfigUpdateModel
+      required:
+      - organization_id
+      title: OrganizationCreateResponse
   securitySchemes:
     API_Key:
       type: apiKey
@@ -308,6 +304,3 @@ components:
       type: apiKey
       in: header
       name: context
-x-refined-from:
-- pynt-openapi.json
-- pynt-openapi.json

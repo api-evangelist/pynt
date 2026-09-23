@@ -2,10 +2,6 @@ openapi: 3.2.0
 info:
   title: Pynt Traffic Collector API
   version: 0.1.0
-  description: 'Operations tagged traffic-collector across 2 of this provider''s published API definitions: pynt-openapi.json, pynt-openapi.json. Each path carries the servers of the definition it was published in.'
-servers:
-- url: https://api.pynt.io
-  description: Pynt production API
 tags:
 - name: traffic-collector
 paths:
@@ -128,67 +124,6 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    TrafficCollectorOut-Output:
-      properties:
-        collector_id:
-          type: string
-          title: Collector Id
-        organization_id:
-          type: string
-          title: Organization Id
-        name:
-          type: string
-          title: Name
-        cluster_name:
-          type: string
-          title: Cluster Name
-        application_routing_entries:
-          items:
-            $ref: '#/components/schemas/ApplicationTrafficRoutingEntry-Output'
-          type: array
-          title: Application Routing Entries
-      type: object
-      required:
-      - collector_id
-      - organization_id
-      - name
-      - cluster_name
-      - application_routing_entries
-      title: TrafficCollectorOut
-    ApplicationTrafficRoutingEntry-Input:
-      properties:
-        application_id:
-          type: string
-          title: Application Id
-        routing_data:
-          oneOf:
-          - $ref: '#/components/schemas/ApplicationTrafficRoutingAny'
-          - $ref: '#/components/schemas/ApplicationTrafficRoutingCol'
-          - $ref: '#/components/schemas/ApplicationTrafficRoutingCondition-Input'
-          title: Routing Data
-          discriminator:
-            propertyName: op
-            mapping:
-              and: '#/components/schemas/ApplicationTrafficRoutingCondition-Input'
-              any: '#/components/schemas/ApplicationTrafficRoutingAny'
-              eq: '#/components/schemas/ApplicationTrafficRoutingCol'
-              ne: '#/components/schemas/ApplicationTrafficRoutingCol'
-              or: '#/components/schemas/ApplicationTrafficRoutingCondition-Input'
-      type: object
-      required:
-      - application_id
-      - routing_data
-      title: ApplicationTrafficRoutingEntry
-    ApplicationTrafficRoutingAny:
-      properties:
-        op:
-          type: string
-          const: any
-          title: Op
-          default: any
-      additionalProperties: false
-      type: object
-      title: ApplicationTrafficRoutingAny
     TrafficCollectorCreate:
       properties:
         name:
@@ -212,36 +147,6 @@ components:
       - cluster_name
       - application_routing_entries
       title: TrafficCollectorCreate
-    ApplicationTrafficRoutingCondition-Input:
-      properties:
-        op:
-          type: string
-          enum:
-          - and
-          - or
-          title: Op
-        filters:
-          items:
-            oneOf:
-            - $ref: '#/components/schemas/ApplicationTrafficRoutingAny'
-            - $ref: '#/components/schemas/ApplicationTrafficRoutingCol'
-            - $ref: '#/components/schemas/ApplicationTrafficRoutingCondition-Input'
-            discriminator:
-              propertyName: op
-              mapping:
-                and: '#/components/schemas/ApplicationTrafficRoutingCondition-Input'
-                any: '#/components/schemas/ApplicationTrafficRoutingAny'
-                eq: '#/components/schemas/ApplicationTrafficRoutingCol'
-                ne: '#/components/schemas/ApplicationTrafficRoutingCol'
-                or: '#/components/schemas/ApplicationTrafficRoutingCondition-Input'
-          type: array
-          title: Filters
-      additionalProperties: false
-      type: object
-      required:
-      - op
-      - filters
-      title: ApplicationTrafficRoutingCondition
     HTTPValidationError:
       properties:
         detail:
@@ -296,6 +201,60 @@ components:
       - msg
       - type
       title: ValidationError
+    ApplicationTrafficRoutingCondition-Input:
+      properties:
+        op:
+          type: string
+          enum:
+          - and
+          - or
+          title: Op
+        filters:
+          items:
+            oneOf:
+            - $ref: '#/components/schemas/ApplicationTrafficRoutingAny'
+            - $ref: '#/components/schemas/ApplicationTrafficRoutingCol'
+            - $ref: '#/components/schemas/ApplicationTrafficRoutingCondition-Input'
+            discriminator:
+              propertyName: op
+              mapping:
+                and: '#/components/schemas/ApplicationTrafficRoutingCondition-Input'
+                any: '#/components/schemas/ApplicationTrafficRoutingAny'
+                eq: '#/components/schemas/ApplicationTrafficRoutingCol'
+                ne: '#/components/schemas/ApplicationTrafficRoutingCol'
+                or: '#/components/schemas/ApplicationTrafficRoutingCondition-Input'
+          type: array
+          title: Filters
+      additionalProperties: false
+      type: object
+      required:
+      - op
+      - filters
+      title: ApplicationTrafficRoutingCondition
+    ApplicationTrafficRoutingEntry-Input:
+      properties:
+        application_id:
+          type: string
+          title: Application Id
+        routing_data:
+          oneOf:
+          - $ref: '#/components/schemas/ApplicationTrafficRoutingAny'
+          - $ref: '#/components/schemas/ApplicationTrafficRoutingCol'
+          - $ref: '#/components/schemas/ApplicationTrafficRoutingCondition-Input'
+          title: Routing Data
+          discriminator:
+            propertyName: op
+            mapping:
+              and: '#/components/schemas/ApplicationTrafficRoutingCondition-Input'
+              any: '#/components/schemas/ApplicationTrafficRoutingAny'
+              eq: '#/components/schemas/ApplicationTrafficRoutingCol'
+              ne: '#/components/schemas/ApplicationTrafficRoutingCol'
+              or: '#/components/schemas/ApplicationTrafficRoutingCondition-Input'
+      type: object
+      required:
+      - application_id
+      - routing_data
+      title: ApplicationTrafficRoutingEntry
     ApplicationTrafficRoutingCondition-Output:
       properties:
         op:
@@ -326,6 +285,33 @@ components:
       - op
       - filters
       title: ApplicationTrafficRoutingCondition
+    TrafficCollectorOut-Output:
+      properties:
+        collector_id:
+          type: string
+          title: Collector Id
+        organization_id:
+          type: string
+          title: Organization Id
+        name:
+          type: string
+          title: Name
+        cluster_name:
+          type: string
+          title: Cluster Name
+        application_routing_entries:
+          items:
+            $ref: '#/components/schemas/ApplicationTrafficRoutingEntry-Output'
+          type: array
+          title: Application Routing Entries
+      type: object
+      required:
+      - collector_id
+      - organization_id
+      - name
+      - cluster_name
+      - application_routing_entries
+      title: TrafficCollectorOut
     ApplicationTrafficRoutingCol:
       properties:
         op:
@@ -347,6 +333,16 @@ components:
       - col
       - value
       title: ApplicationTrafficRoutingCol
+    ApplicationTrafficRoutingAny:
+      properties:
+        op:
+          type: string
+          const: any
+          title: Op
+          default: any
+      additionalProperties: false
+      type: object
+      title: ApplicationTrafficRoutingAny
   securitySchemes:
     API_Key:
       type: apiKey
@@ -368,6 +364,3 @@ components:
       type: apiKey
       in: header
       name: context
-x-refined-from:
-- pynt-openapi.json
-- pynt-openapi.json

@@ -2,17 +2,13 @@ openapi: 3.2.0
 info:
   title: Pynt User API
   version: 0.1.0
-  description: 'Operations tagged user across 2 of this provider''s published API definitions: pynt-openapi.json, pynt-openapi.json. Each path carries the servers of the definition it was published in.'
-servers:
-- url: https://api.pynt.io
-  description: Pynt production API
 tags:
-- name: user
+- name: User
 paths:
   /v1/user/me:
     get:
       tags:
-      - user
+      - User
       summary: Get User Me
       operationId: get_user_me_v1_user_me_get
       responses:
@@ -27,7 +23,7 @@ paths:
   /v1/user:
     get:
       tags:
-      - user
+      - User
       summary: List Users
       operationId: list_users_v1_user_get
       security:
@@ -58,7 +54,7 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
     put:
       tags:
-      - user
+      - User
       summary: Create User
       operationId: create_user_v1_user_put
       security:
@@ -73,7 +69,7 @@ paths:
   /v1/user/{user_id}:
     patch:
       tags:
-      - user
+      - User
       summary: Update User By Id
       operationId: update_user_by_id_v1_user__user_id__patch
       security:
@@ -112,7 +108,7 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
     delete:
       tags:
-      - user
+      - User
       summary: Delete User By Id
       operationId: delete_user_by_id_v1_user__user_id__delete
       security:
@@ -147,6 +143,45 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    CreateUserResponse:
+      properties:
+        new_organization_created:
+          type: boolean
+          title: New Organization Created
+      type: object
+      required:
+      - new_organization_created
+      title: CreateUserResponse
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
     UserOut:
       properties:
         uid:
@@ -200,52 +235,6 @@ components:
       - name
       - lastname
       title: UserOut
-    UserRole:
-      type: string
-      enum:
-      - Admin
-      - User
-      - SystemAdmin
-      title: UserRole
-    CreateUserResponse:
-      properties:
-        new_organization_created:
-          type: boolean
-          title: New Organization Created
-      type: object
-      required:
-      - new_organization_created
-      title: CreateUserResponse
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
     UserUpdateModel:
       properties:
         role:
@@ -254,6 +243,13 @@ components:
       required:
       - role
       title: UserUpdateModel
+    UserRole:
+      type: string
+      enum:
+      - Admin
+      - User
+      - SystemAdmin
+      title: UserRole
   securitySchemes:
     API_Key:
       type: apiKey
@@ -275,6 +271,3 @@ components:
       type: apiKey
       in: header
       name: context
-x-refined-from:
-- pynt-openapi.json
-- pynt-openapi.json

@@ -1,0 +1,84 @@
+slug: pynt
+provider: Pynt
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Software & Technology
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 7
+edges:
+- tag: vulnerability-instance
+  spec_file: pynt-vulnerability-instance-api-openapi.yml
+  capability_id: BC-620.40
+  capability_id_l1: BC-620
+  capability_name: Vulnerability Management
+  confidence: 0.95
+  evidence: '''List Vulnerability Instances'', ''Update Vulnerability Instance Relevance'', ''Create Ticket
+    Jira'' with schemas ''VulnerabilityDefinition'', ''VulnerabilityInstanceStatus'', ''EndpointAttackInfo'''
+  reason: Operations enumerate, triage and route vulnerability findings to remediation tickets — plainly
+    vulnerability scanning and remediation management.
+- tag: scan
+  spec_file: pynt-scan-api-openapi.yml
+  capability_id: BC-620.40
+  capability_id_l1: BC-620
+  capability_name: Vulnerability Management
+  confidence: 0.9
+  evidence: '''Create Scan'', ''Get Scan By Id'', ''Run Har Scan'' with schemas ''ScanDetailsOwaspCoverage'',
+    ''FindingDetails'', ''Severity'', ''OwaspCoverage'''
+  reason: Operations create and report on security scans producing severity-rated findings with OWASP
+    coverage — security vulnerability scanning and remediation tracking, i.e. Vulnerability Management.
+- tag: scan-business-impact-analysis
+  spec_file: pynt-scan-business-impact-analysis-api-openapi.yml
+  capability_id: BC-620.40
+  capability_id_l1: BC-620
+  capability_name: Vulnerability Management
+  confidence: 0.8
+  evidence: '''Get Business Impact Analysis'', ''Update Finding Approval'' with schemas ''BusinessImpactLLMResult-Output'',
+    ''ScanReportBusinessImpactAnalysis'''
+  reason: Assessment and approval of security scan findings' impact is triage within the vulnerability
+    management lifecycle; 'business impact' here refers to security findings, not enterprise risk registers.
+- tag: scan-false-positive-analysis
+  spec_file: pynt-scan-false-positive-analysis-api-openapi.yml
+  capability_id: BC-620.40
+  capability_id_l1: BC-620
+  capability_name: Vulnerability Management
+  confidence: 0.8
+  evidence: '''Get False Positive Analysis'', ''Update Finding Approval'' with schema ''FalsePositiveClaim-Output'',
+    ''ScanReportFalsePositiveAnalysis'''
+  reason: False-positive adjudication of scan findings is finding triage inside vulnerability scanning
+    and remediation.
+- tag: application
+  spec_file: pynt-application-api-openapi.yml
+  capability_id: BC-620.40
+  capability_id_l1: BC-620
+  capability_name: Vulnerability Management
+  confidence: 0.78
+  evidence: POST /v1/application/{application_id}/scan-schedule  Create Scan Schedule; schemas SeveritySummary,
+    LastScansStatusSummary, PiiItem
+  reason: Applications here are scan targets for Pynt's automated API security testing; scheduling scans
+    and surfacing severity/risk summaries is vulnerability scanning and remediation management. Some chance
+    the better fit is threat detection, hence not 0.9.
+- tag: scan-profile
+  spec_file: pynt-scan-profile-api-openapi.yml
+  capability_id: BC-620.40
+  capability_id_l1: BC-620
+  capability_name: Vulnerability Management
+  confidence: 0.75
+  evidence: '''Upsert Scan Profile'' with schemas ''ScanAttackConfig'', ''ScanProfileBase'''
+  reason: Configures the attack profile used by security scans; supports vulnerability scanning, though
+    it is configuration of the scanning engine rather than the scan itself.
+- tag: scan-schedule
+  spec_file: pynt-scan-schedule-api-openapi.yml
+  capability_id: BC-620.40
+  capability_id_l1: BC-620
+  capability_name: Vulnerability Management
+  confidence: 0.75
+  evidence: '''Create Scan Schedule'', ''List All Scan Schedules'', schemas ''AppScanTargetOut'', ''ScheduleState'''
+  reason: Scheduling of recurring security scans against application targets is part of running a vulnerability
+    scanning programme; the scheduling aspect is operational but its object is security scanning.
