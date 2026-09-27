@@ -59,24 +59,13 @@ paths:
       - Bearer Token: []
 components:
   schemas:
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    Body_aws_marketplace_signup_v1_marketplace_aws_signup_post:
-      properties:
-        aws_marketplace_id:
-          type: string
-          title: Aws Marketplace Id
-      type: object
-      required:
-      - aws_marketplace_id
-      title: Body_aws_marketplace_signup_v1_marketplace_aws_signup_post
+    UserRole:
+      type: string
+      enum:
+      - Admin
+      - User
+      - SystemAdmin
+      title: UserRole
     ValidationError:
       properties:
         loc:
@@ -151,13 +140,24 @@ components:
       - name
       - lastname
       title: UserOut
-    UserRole:
-      type: string
-      enum:
-      - Admin
-      - User
-      - SystemAdmin
-      title: UserRole
+    Body_aws_marketplace_signup_v1_marketplace_aws_signup_post:
+      properties:
+        aws_marketplace_id:
+          type: string
+          title: Aws Marketplace Id
+      type: object
+      required:
+      - aws_marketplace_id
+      title: Body_aws_marketplace_signup_v1_marketplace_aws_signup_post
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
   securitySchemes:
     API_Key:
       type: apiKey

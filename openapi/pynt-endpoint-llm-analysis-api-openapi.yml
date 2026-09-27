@@ -42,28 +42,41 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    PiiItem:
+    YesNoQuestion:
       properties:
-        field_name:
-          type: string
-          title: Field Name
-        value:
-          type: string
-          title: Value
+        verdict:
+          type: boolean
+          title: Verdict
+        reason:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Reason
       type: object
       required:
-      - field_name
-      - value
-      title: PiiItem
-    HTTPValidationError:
+      - verdict
+      title: YesNoQuestion
+    ValidationError:
       properties:
-        detail:
+        loc:
           items:
-            $ref: '#/components/schemas/ValidationError'
+            anyOf:
+            - type: string
+            - type: integer
           type: array
-          title: Detail
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
       type: object
-      title: HTTPValidationError
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
     EndpointLLMAnalysis:
       properties:
         endpoint:
@@ -210,27 +223,6 @@ components:
       - endpoint_id
       title: EndpointLLMAnalysis
       description: Business model — extends the LLM schema with application-level fields.
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
     PathParameter:
       properties:
         param_value:
@@ -244,20 +236,28 @@ components:
       - param_value
       - suggested_name
       title: PathParameter
-    YesNoQuestion:
+    HTTPValidationError:
       properties:
-        verdict:
-          type: boolean
-          title: Verdict
-        reason:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Reason
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    PiiItem:
+      properties:
+        field_name:
+          type: string
+          title: Field Name
+        value:
+          type: string
+          title: Value
       type: object
       required:
-      - verdict
-      title: YesNoQuestion
+      - field_name
+      - value
+      title: PiiItem
     AuthenticationInfo:
       properties:
         method:

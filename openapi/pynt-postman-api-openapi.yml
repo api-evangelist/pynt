@@ -104,15 +104,6 @@ paths:
       - Operator Organization Context: []
 components:
   schemas:
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
     ValidationError:
       properties:
         loc:
@@ -134,19 +125,6 @@ components:
       - msg
       - type
       title: ValidationError
-    PostmanSetCredentialsRequest:
-      properties:
-        client_id:
-          type: string
-          title: Client Id
-        client_secret:
-          type: string
-          title: Client Secret
-      type: object
-      required:
-      - client_id
-      - client_secret
-      title: PostmanSetCredentialsRequest
     PostmanWebhookRunScanPayload:
       properties:
         collectionId:
@@ -189,6 +167,28 @@ components:
       - eventKey
       - payload
       title: PostmanWebhookRunScanEvent
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    PostmanSetCredentialsRequest:
+      properties:
+        client_id:
+          type: string
+          title: Client Id
+        client_secret:
+          type: string
+          title: Client Secret
+      type: object
+      required:
+      - client_id
+      - client_secret
+      title: PostmanSetCredentialsRequest
   securitySchemes:
     API_Key:
       type: apiKey

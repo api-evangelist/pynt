@@ -38,46 +38,6 @@ paths:
       - Operator Organization Context: []
 components:
   schemas:
-    DequeueJobResponse:
-      properties:
-        job_id:
-          type: string
-          title: Job Id
-        harl_url:
-          type: string
-          title: Harl Url
-        application_id:
-          type: string
-          title: Application Id
-      type: object
-      required:
-      - job_id
-      - harl_url
-      - application_id
-      title: DequeueJobResponse
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    DequeueJobRequest:
-      properties:
-        target:
-          oneOf:
-          - $ref: '#/components/schemas/K8sScanJobTarget'
-          title: Target
-          discriminator:
-            propertyName: type
-            mapping:
-              K8S: '#/components/schemas/K8sScanJobTarget'
-      type: object
-      required:
-      - target
-      title: DequeueJobRequest
     ValidationError:
       properties:
         loc:
@@ -99,6 +59,37 @@ components:
       - msg
       - type
       title: ValidationError
+    DequeueJobResponse:
+      properties:
+        job_id:
+          type: string
+          title: Job Id
+        harl_url:
+          type: string
+          title: Harl Url
+        application_id:
+          type: string
+          title: Application Id
+      type: object
+      required:
+      - job_id
+      - harl_url
+      - application_id
+      title: DequeueJobResponse
+    DequeueJobRequest:
+      properties:
+        target:
+          oneOf:
+          - $ref: '#/components/schemas/K8sScanJobTarget'
+          title: Target
+          discriminator:
+            propertyName: type
+            mapping:
+              K8S: '#/components/schemas/K8sScanJobTarget'
+      type: object
+      required:
+      - target
+      title: DequeueJobRequest
     K8sScanJobTarget:
       properties:
         type:
@@ -113,6 +104,15 @@ components:
       - type
       - cluster_name
       title: K8sScanJobTarget
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
   securitySchemes:
     API_Key:
       type: apiKey

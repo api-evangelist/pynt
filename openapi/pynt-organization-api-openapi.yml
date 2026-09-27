@@ -168,20 +168,6 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
-    OrganizationConfigUpdateModel:
-      properties:
-        allow_collect_data:
-          anyOf:
-          - type: boolean
-          - type: 'null'
-          title: Allow Collect Data
-        local_only_mode:
-          anyOf:
-          - type: boolean
-          - type: 'null'
-          title: Local Only Mode
-      type: object
-      title: OrganizationConfigUpdateModel
     ValidationError:
       properties:
         loc:
@@ -203,26 +189,15 @@ components:
       - msg
       - type
       title: ValidationError
-    OrganizationConfigResponse:
+    SSOResponse:
       properties:
-        allow_collect_data:
-          type: boolean
-          title: Allow Collect Data
-        allow_collect_data_since:
-          anyOf:
-          - type: string
-            format: date-time
-          - type: 'null'
-          title: Allow Collect Data Since
-        local_only_mode:
-          type: boolean
-          title: Local Only Mode
+        identity_provider:
+          type: string
+          title: Identity Provider
       type: object
       required:
-      - allow_collect_data
-      - allow_collect_data_since
-      - local_only_mode
-      title: OrganizationConfigResponse
+      - identity_provider
+      title: SSOResponse
     OrganizationUpdateModel:
       properties:
         name:
@@ -234,15 +209,29 @@ components:
       required:
       - name
       title: OrganizationUpdateModel
-    OrganizationCreateRequest:
+    OrganizationConfigUpdateModel:
       properties:
-        name:
+        allow_collect_data:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Allow Collect Data
+        local_only_mode:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Local Only Mode
+      type: object
+      title: OrganizationConfigUpdateModel
+    OrganizationCreateResponse:
+      properties:
+        organization_id:
           type: string
-          title: Name
+          title: Organization Id
       type: object
       required:
-      - name
-      title: OrganizationCreateRequest
+      - organization_id
+      title: OrganizationCreateResponse
     OrganizationResponse:
       properties:
         organization_id:
@@ -265,24 +254,35 @@ components:
       - name
       - config
       title: OrganizationResponse
-    SSOResponse:
+    OrganizationConfigResponse:
       properties:
-        identity_provider:
-          type: string
-          title: Identity Provider
+        allow_collect_data:
+          type: boolean
+          title: Allow Collect Data
+        allow_collect_data_since:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Allow Collect Data Since
+        local_only_mode:
+          type: boolean
+          title: Local Only Mode
       type: object
       required:
-      - identity_provider
-      title: SSOResponse
-    OrganizationCreateResponse:
+      - allow_collect_data
+      - allow_collect_data_since
+      - local_only_mode
+      title: OrganizationConfigResponse
+    OrganizationCreateRequest:
       properties:
-        organization_id:
+        name:
           type: string
-          title: Organization Id
+          title: Name
       type: object
       required:
-      - organization_id
-      title: OrganizationCreateResponse
+      - name
+      title: OrganizationCreateRequest
   securitySchemes:
     API_Key:
       type: apiKey

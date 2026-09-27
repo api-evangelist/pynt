@@ -100,15 +100,15 @@ paths:
       - Operator Organization Context: []
 components:
   schemas:
-    HTTPValidationError:
+    CommunityUserResponse:
       properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
+        user-id:
+          type: string
+          title: User-Id
       type: object
-      title: HTTPValidationError
+      required:
+      - user-id
+      title: CommunityUserResponse
     ValidationError:
       properties:
         loc:
@@ -130,35 +130,6 @@ components:
       - msg
       - type
       title: ValidationError
-    ScanExecutionStatus:
-      type: string
-      enum:
-      - Pending
-      - running
-      - Completed
-      - Did not run
-      - Aborted
-      - Cancelled
-      - Scheduled
-      title: ScanExecutionStatus
-    CommunityUserResponse:
-      properties:
-        user-id:
-          type: string
-          title: User-Id
-      type: object
-      required:
-      - user-id
-      title: CommunityUserResponse
-    ApplicationDataSourceOut:
-      properties:
-        status:
-          type: string
-          title: Status
-      type: object
-      required:
-      - status
-      title: ApplicationDataSourceOut
     UploadReportRequest:
       properties:
         scan_id:
@@ -175,6 +146,15 @@ components:
       required:
       - report
       title: UploadReportRequest
+    ApplicationDataSourceOut:
+      properties:
+        status:
+          type: string
+          title: Status
+      type: object
+      required:
+      - status
+      title: ApplicationDataSourceOut
     ApplicationMetadataOut:
       properties:
         name:
@@ -249,6 +229,26 @@ components:
       - risk
       - data_sources
       title: ApplicationMetadataOut
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ScanExecutionStatus:
+      type: string
+      enum:
+      - Pending
+      - running
+      - Completed
+      - Did not run
+      - Aborted
+      - Cancelled
+      - Scheduled
+      title: ScanExecutionStatus
   securitySchemes:
     API_Key:
       type: apiKey

@@ -141,33 +141,21 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    HTTPValidationError:
+    PaginatedEndpointGroupsOut:
       properties:
-        detail:
+        data:
           items:
-            $ref: '#/components/schemas/ValidationError'
+            $ref: '#/components/schemas/EndpointGroupOut'
           type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    ExportResponse:
-      properties:
-        export_id:
-          type: string
-          format: uuid
-          title: Export Id
-        date:
-          type: string
-          format: date-time
-          title: Date
-        format:
-          $ref: '#/components/schemas/ExportFormat'
+          title: Data
+        total:
+          type: integer
+          title: Total
       type: object
       required:
-      - export_id
-      - date
-      - format
-      title: ExportResponse
+      - data
+      - total
+      title: PaginatedEndpointGroupsOut
     ValidationError:
       properties:
         loc:
@@ -189,21 +177,66 @@ components:
       - msg
       - type
       title: ValidationError
-    PaginatedEndpointGroupsOut:
+    EndpointGroupsRisk:
       properties:
-        data:
-          items:
-            $ref: '#/components/schemas/EndpointGroupOut'
-          type: array
-          title: Data
-        total:
+        unscanned:
           type: integer
-          title: Total
+          title: Unscanned
+          default: 0
+        none:
+          type: integer
+          title: None
+          default: 0
+        low:
+          type: integer
+          title: Low
+          default: 0
+        medium:
+          type: integer
+          title: Medium
+          default: 0
+        high:
+          type: integer
+          title: High
+          default: 0
+        critical:
+          type: integer
+          title: Critical
+          default: 0
+      type: object
+      title: EndpointGroupsRisk
+    ExportFormat:
+      type: string
+      enum:
+      - csv
+      title: ExportFormat
+    ExportResponse:
+      properties:
+        export_id:
+          type: string
+          format: uuid
+          title: Export Id
+        date:
+          type: string
+          format: date-time
+          title: Date
+        format:
+          $ref: '#/components/schemas/ExportFormat'
       type: object
       required:
-      - data
-      - total
-      title: PaginatedEndpointGroupsOut
+      - export_id
+      - date
+      - format
+      title: ExportResponse
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     EndpointGroupOut:
       properties:
         endpoint_group_id:
@@ -279,39 +312,6 @@ components:
       - last_scan_time
       - last_seen
       title: EndpointGroupOut
-    ExportFormat:
-      type: string
-      enum:
-      - csv
-      title: ExportFormat
-    EndpointGroupsRisk:
-      properties:
-        unscanned:
-          type: integer
-          title: Unscanned
-          default: 0
-        none:
-          type: integer
-          title: None
-          default: 0
-        low:
-          type: integer
-          title: Low
-          default: 0
-        medium:
-          type: integer
-          title: Medium
-          default: 0
-        high:
-          type: integer
-          title: High
-          default: 0
-        critical:
-          type: integer
-          title: Critical
-          default: 0
-      type: object
-      title: EndpointGroupsRisk
   securitySchemes:
     API_Key:
       type: apiKey

@@ -139,6 +139,80 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
+    IdentityResponse:
+      properties:
+        organization_id:
+          type: string
+          title: Organization Id
+        user_id:
+          type: string
+          title: User Id
+      type: object
+      required:
+      - organization_id
+      - user_id
+      title: IdentityResponse
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    AuthorizationCodeExchangeRequest:
+      properties:
+        authorization_code:
+          type: string
+          title: Authorization Code
+        redirect_uri:
+          type: string
+          title: Redirect Uri
+      type: object
+      required:
+      - authorization_code
+      - redirect_uri
+      title: AuthorizationCodeExchangeRequest
+    RefreshTokenResponse:
+      properties:
+        token:
+          type: string
+          title: Token
+      type: object
+      required:
+      - token
+      title: RefreshTokenResponse
+    DeviceTokenResponse:
+      properties:
+        access_token:
+          type: string
+          title: Access Token
+        refresh_token:
+          type: string
+          title: Refresh Token
+        token_type:
+          type: string
+          const: Bearer
+          title: Token Type
+      type: object
+      required:
+      - access_token
+      - refresh_token
+      - token_type
+      title: DeviceTokenResponse
     Body_issue_access_token_from_refresh_token_v1_auth_refresh_post:
       properties:
         refresh_token:
@@ -175,80 +249,6 @@ components:
       - user_id
       - email
       title: LoginResponse
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    AuthorizationCodeExchangeRequest:
-      properties:
-        authorization_code:
-          type: string
-          title: Authorization Code
-        redirect_uri:
-          type: string
-          title: Redirect Uri
-      type: object
-      required:
-      - authorization_code
-      - redirect_uri
-      title: AuthorizationCodeExchangeRequest
-    DeviceTokenResponse:
-      properties:
-        access_token:
-          type: string
-          title: Access Token
-        refresh_token:
-          type: string
-          title: Refresh Token
-        token_type:
-          type: string
-          const: Bearer
-          title: Token Type
-      type: object
-      required:
-      - access_token
-      - refresh_token
-      - token_type
-      title: DeviceTokenResponse
-    IdentityResponse:
-      properties:
-        organization_id:
-          type: string
-          title: Organization Id
-        user_id:
-          type: string
-          title: User Id
-      type: object
-      required:
-      - organization_id
-      - user_id
-      title: IdentityResponse
-    RefreshTokenResponse:
-      properties:
-        token:
-          type: string
-          title: Token
-      type: object
-      required:
-      - token
-      title: RefreshTokenResponse
   securitySchemes:
     API_Key:
       type: apiKey

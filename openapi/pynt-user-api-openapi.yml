@@ -143,24 +143,13 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    CreateUserResponse:
-      properties:
-        new_organization_created:
-          type: boolean
-          title: New Organization Created
-      type: object
-      required:
-      - new_organization_created
-      title: CreateUserResponse
+    UserRole:
+      type: string
+      enum:
+      - Admin
+      - User
+      - SystemAdmin
+      title: UserRole
     ValidationError:
       properties:
         loc:
@@ -235,6 +224,15 @@ components:
       - name
       - lastname
       title: UserOut
+    CreateUserResponse:
+      properties:
+        new_organization_created:
+          type: boolean
+          title: New Organization Created
+      type: object
+      required:
+      - new_organization_created
+      title: CreateUserResponse
     UserUpdateModel:
       properties:
         role:
@@ -243,13 +241,15 @@ components:
       required:
       - role
       title: UserUpdateModel
-    UserRole:
-      type: string
-      enum:
-      - Admin
-      - User
-      - SystemAdmin
-      title: UserRole
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
   securitySchemes:
     API_Key:
       type: apiKey

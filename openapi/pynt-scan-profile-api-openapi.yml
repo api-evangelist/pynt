@@ -38,6 +38,32 @@ paths:
       - Organization ID: []
 components:
   schemas:
+    ScanProfileBase:
+      properties:
+        scan_profile_id:
+          type: string
+          pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
+          title: Scan Profile Id
+        application_id:
+          anyOf:
+          - type: string
+            pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
+          - type: 'null'
+          title: Application Id
+        tests:
+          anyOf:
+          - additionalProperties:
+              additionalProperties:
+                $ref: '#/components/schemas/ScanAttackConfig'
+              type: object
+            type: object
+          - type: 'null'
+          title: Tests
+      type: object
+      required:
+      - application_id
+      - tests
+      title: ScanProfileBase
     ValidationError:
       properties:
         loc:
@@ -77,32 +103,6 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
-    ScanProfileBase:
-      properties:
-        scan_profile_id:
-          type: string
-          pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
-          title: Scan Profile Id
-        application_id:
-          anyOf:
-          - type: string
-            pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
-          - type: 'null'
-          title: Application Id
-        tests:
-          anyOf:
-          - additionalProperties:
-              additionalProperties:
-                $ref: '#/components/schemas/ScanAttackConfig'
-              type: object
-            type: object
-          - type: 'null'
-          title: Tests
-      type: object
-      required:
-      - application_id
-      - tests
-      title: ScanProfileBase
   securitySchemes:
     API_Key:
       type: apiKey

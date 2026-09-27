@@ -86,15 +86,73 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    HTTPValidationError:
+    ValidationError:
       properties:
-        detail:
+        loc:
           items:
-            $ref: '#/components/schemas/ValidationError'
+            anyOf:
+            - type: string
+            - type: integer
           type: array
-          title: Detail
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
       type: object
-      title: HTTPValidationError
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    ScanReportBusinessImpactAnalysis:
+      properties:
+        scan_id:
+          type: string
+          format: uuid
+          title: Scan Id
+        impact_analysis:
+          items:
+            $ref: '#/components/schemas/BusinessImpactAnalysis-Output'
+          type: array
+          minItems: 1
+          title: Impact Analysis
+      type: object
+      required:
+      - scan_id
+      - impact_analysis
+      title: ScanReportBusinessImpactAnalysis
+      description: Represents a collection of business impact analysis for a specific scan.
+    EntityRelationship:
+      properties:
+        entity1:
+          type: string
+          title: Entity1
+          description: First entity in the relationship
+        entity2:
+          type: string
+          title: Entity2
+          description: Second entity in the relationship
+        relationship_type:
+          type: string
+          title: Relationship Type
+          description: Relationship type
+      type: object
+      required:
+      - entity1
+      - entity2
+      - relationship_type
+      title: EntityRelationship
+    ApprovalUpdateRequest:
+      properties:
+        value:
+          $ref: '#/components/schemas/Conclusion'
+      type: object
+      required:
+      - value
+      title: ApprovalUpdateRequest
     BusinessImpactLLMResult-Output:
       properties:
         entities_relationship:
@@ -110,6 +168,43 @@ components:
       - business_implication
       title: BusinessImpactLLMResult
       description: The direct, typed result from an LLM for a business impact query.
+    EntitiesRelationships:
+      properties:
+        relationships:
+          items:
+            $ref: '#/components/schemas/EntityRelationship'
+          type: array
+          title: Relationships
+          description: List of entity relationships
+      type: object
+      required:
+      - relationships
+      title: EntitiesRelationships
+      description: Represents a collection of entity relationships.
+      example:
+        relationships:
+        - entity1: user
+          entity2: invoice
+          relationship_type: owns
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    Conclusion:
+      type: string
+      enum:
+      - 'Yes'
+      - 'No'
+      - Inconclusive
+      title: Conclusion
+      description: 'Enum for the conclusion of a false positive analysis:
+
+        YES, NO, or INCONCLUSIVE.'
     BusinessImpactAnalysis-Output:
       properties:
         finding_id:
@@ -139,101 +234,6 @@ components:
       - business_impact_result
       title: BusinessImpactAnalysis
       description: Represents a claim that a finding is a false positive.
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    ApprovalUpdateRequest:
-      properties:
-        value:
-          $ref: '#/components/schemas/Conclusion'
-      type: object
-      required:
-      - value
-      title: ApprovalUpdateRequest
-    EntitiesRelationships:
-      properties:
-        relationships:
-          items:
-            $ref: '#/components/schemas/EntityRelationship'
-          type: array
-          title: Relationships
-          description: List of entity relationships
-      type: object
-      required:
-      - relationships
-      title: EntitiesRelationships
-      description: Represents a collection of entity relationships.
-      example:
-        relationships:
-        - entity1: user
-          entity2: invoice
-          relationship_type: owns
-    ScanReportBusinessImpactAnalysis:
-      properties:
-        scan_id:
-          type: string
-          format: uuid
-          title: Scan Id
-        impact_analysis:
-          items:
-            $ref: '#/components/schemas/BusinessImpactAnalysis-Output'
-          type: array
-          minItems: 1
-          title: Impact Analysis
-      type: object
-      required:
-      - scan_id
-      - impact_analysis
-      title: ScanReportBusinessImpactAnalysis
-      description: Represents a collection of business impact analysis for a specific scan.
-    Conclusion:
-      type: string
-      enum:
-      - 'Yes'
-      - 'No'
-      - Inconclusive
-      title: Conclusion
-      description: 'Enum for the conclusion of a false positive analysis:
-
-        YES, NO, or INCONCLUSIVE.'
-    EntityRelationship:
-      properties:
-        entity1:
-          type: string
-          title: Entity1
-          description: First entity in the relationship
-        entity2:
-          type: string
-          title: Entity2
-          description: Second entity in the relationship
-        relationship_type:
-          type: string
-          title: Relationship Type
-          description: Relationship type
-      type: object
-      required:
-      - entity1
-      - entity2
-      - relationship_type
-      title: EntityRelationship
   securitySchemes:
     API_Key:
       type: apiKey

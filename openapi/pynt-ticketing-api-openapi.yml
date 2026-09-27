@@ -152,67 +152,19 @@ paths:
       - Bearer Token: []
 components:
   schemas:
-    JiraField:
+    JiraPropertiesRequest:
       properties:
-        field_id:
-          type: string
-          title: Field Id
-        name:
-          type: string
-          title: Name
-        required:
-          type: boolean
-          title: Required
-        allowed_values:
+        site:
           anyOf:
-          - items:
-              $ref: '#/components/schemas/JiraAllowedValue'
-            type: array
+          - $ref: '#/components/schemas/JiraPropertiesSiteRequest'
           - type: 'null'
-          title: Allowed Values
-        schema_type:
+        default_project:
           anyOf:
           - type: string
           - type: 'null'
-          title: Schema Type
-        schema_custom:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Schema Custom
+          title: Default Project
       type: object
-      required:
-      - field_id
-      - name
-      - required
-      title: JiraField
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    IssueType:
-      properties:
-        id:
-          type: string
-          title: Id
-        name:
-          type: string
-          title: Name
-        icon_url:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Icon Url
-      type: object
-      required:
-      - id
-      - name
-      title: IssueType
+      title: JiraPropertiesRequest
     ValidationError:
       properties:
         loc:
@@ -261,45 +213,19 @@ components:
       - avatar_url
       - issue_types
       title: JiraProject
-    Body_connect_jira_v1_ticketing_jira_put:
-      properties:
-        code:
-          type: string
-          title: Code
-      type: object
-      required:
-      - code
-      title: Body_connect_jira_v1_ticketing_jira_put
-    JiraSiteResponse:
+    JiraPropertiesSiteRequest:
       properties:
         id:
           type: string
           title: Id
-        name:
-          type: string
-          title: Name
         url:
           type: string
           title: Url
       type: object
       required:
       - id
-      - name
       - url
-      title: JiraSiteResponse
-    JiraPropertiesRequest:
-      properties:
-        site:
-          anyOf:
-          - $ref: '#/components/schemas/JiraPropertiesSiteRequest'
-          - type: 'null'
-        default_project:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Default Project
-      type: object
-      title: JiraPropertiesRequest
+      title: JiraPropertiesSiteRequest
     JiraAllowedValue:
       properties:
         id:
@@ -319,19 +245,93 @@ components:
           title: Name
       type: object
       title: JiraAllowedValue
-    JiraPropertiesSiteRequest:
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    JiraField:
+      properties:
+        field_id:
+          type: string
+          title: Field Id
+        name:
+          type: string
+          title: Name
+        required:
+          type: boolean
+          title: Required
+        allowed_values:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/JiraAllowedValue'
+            type: array
+          - type: 'null'
+          title: Allowed Values
+        schema_type:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Schema Type
+        schema_custom:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Schema Custom
+      type: object
+      required:
+      - field_id
+      - name
+      - required
+      title: JiraField
+    IssueType:
       properties:
         id:
           type: string
           title: Id
+        name:
+          type: string
+          title: Name
+        icon_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Icon Url
+      type: object
+      required:
+      - id
+      - name
+      title: IssueType
+    JiraSiteResponse:
+      properties:
+        id:
+          type: string
+          title: Id
+        name:
+          type: string
+          title: Name
         url:
           type: string
           title: Url
       type: object
       required:
       - id
+      - name
       - url
-      title: JiraPropertiesSiteRequest
+      title: JiraSiteResponse
+    Body_connect_jira_v1_ticketing_jira_put:
+      properties:
+        code:
+          type: string
+          title: Code
+      type: object
+      required:
+      - code
+      title: Body_connect_jira_v1_ticketing_jira_put
   securitySchemes:
     API_Key:
       type: apiKey

@@ -105,15 +105,12 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
+    ScanStatusTriggerCondition:
+      type: string
+      enum:
+      - FAILED
+      - SUCCESS
+      title: ScanStatusTriggerCondition
     ValidationError:
       properties:
         loc:
@@ -172,17 +169,15 @@ components:
       required:
       - scan_status_triggers
       title: NotificationRuleCreate
-    NotificationServiceType:
-      type: string
-      enum:
-      - CAPI_SECURITY_TESTING
-      title: NotificationServiceType
-    ScanStatusTriggerCondition:
-      type: string
-      enum:
-      - FAILED
-      - SUCCESS
-      title: ScanStatusTriggerCondition
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     NotificationRuleOut:
       properties:
         rule_id:
@@ -193,6 +188,11 @@ components:
       - rule_id
       title: NotificationRuleOut
       description: Only the stable rule id — the portal owns and stores the rest, keyed by it.
+    NotificationServiceType:
+      type: string
+      enum:
+      - CAPI_SECURITY_TESTING
+      title: NotificationServiceType
   securitySchemes:
     API_Key:
       type: apiKey

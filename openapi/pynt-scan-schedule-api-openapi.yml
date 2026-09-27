@@ -232,6 +232,112 @@ paths:
       - Organization ID: []
 components:
   schemas:
+    CreateDayOfWeekSpec:
+      properties:
+        time_local:
+          type: string
+          format: time
+          title: Time Local
+        schedule_type:
+          type: string
+          const: day_of_week
+          title: Schedule Type
+          default: day_of_week
+        days:
+          items:
+            $ref: '#/components/schemas/DayOfWeek'
+          type: array
+          minItems: 1
+          title: Days
+      type: object
+      required:
+      - time_local
+      - days
+      title: CreateDayOfWeekSpec
+    DayOfWeekSpec-Output:
+      properties:
+        schedule_type:
+          type: string
+          const: day_of_week
+          title: Schedule Type
+          default: day_of_week
+        days:
+          items:
+            $ref: '#/components/schemas/DayOfWeek'
+          type: array
+          minItems: 1
+          title: Days
+        time_utc:
+          type: string
+          title: Time Utc
+      type: object
+      required:
+      - days
+      - time_utc
+      title: DayOfWeekSpec
+    AppScanTargetOut:
+      properties:
+        integration_type:
+          type: string
+          const: app
+          title: Integration Type
+          default: app
+      type: object
+      title: AppScanTargetOut
+      description: 'Scan target for a Pynt application''s built collection.
+
+
+        The client supplies only the integration type; the collection''s S3 location
+
+        is derived server-side from the application''s assigned poid.'
+    DayIntervalSpec-Output:
+      properties:
+        schedule_type:
+          type: string
+          const: day_interval
+          title: Schedule Type
+          default: day_interval
+        interval_days:
+          type: integer
+          minimum: 1.0
+          title: Interval Days
+        time_utc:
+          type: string
+          title: Time Utc
+      type: object
+      required:
+      - interval_days
+      - time_utc
+      title: DayIntervalSpec
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    DayIntervalSpec-Input:
+      properties:
+        schedule_type:
+          type: string
+          const: day_interval
+          title: Schedule Type
+          default: day_interval
+        interval_days:
+          type: integer
+          minimum: 1.0
+          title: Interval Days
+        time_utc:
+          type: string
+          format: time
+          title: Time Utc
+      type: object
+      required:
+      - interval_days
+      - time_utc
+      title: DayIntervalSpec
     CreateOnlyOnceSpec:
       properties:
         schedule_type:
@@ -247,52 +353,42 @@ components:
       required:
       - run_at
       title: CreateOnlyOnceSpec
-    OnlyOnceSpec:
+    NewmanScanTargetOut:
       properties:
-        schedule_type:
+        integration_type:
           type: string
-          const: only_once
-          title: Schedule Type
-          default: only_once
-        run_at:
+          const: newman
+          title: Integration Type
+          default: newman
+        collection_to_test:
           type: string
-          format: date-time
-          title: Run At
+          minLength: 1
+          title: Collection To Test
+        environment_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Environment Name
+        api_key:
+          type: string
+          minLength: 1
+          title: Api Key
       type: object
       required:
-      - run_at
-      title: OnlyOnceSpec
-    CreateScanScheduleRequest:
-      properties:
-        spec:
-          oneOf:
-          - $ref: '#/components/schemas/CreateDayOfWeekSpec'
-          - $ref: '#/components/schemas/CreateDayIntervalSpec'
-          - $ref: '#/components/schemas/CreateOnlyOnceSpec'
-          title: Spec
-          discriminator:
-            propertyName: schedule_type
-            mapping:
-              day_interval: '#/components/schemas/CreateDayIntervalSpec'
-              day_of_week: '#/components/schemas/CreateDayOfWeekSpec'
-              only_once: '#/components/schemas/CreateOnlyOnceSpec'
-        target:
-          oneOf:
-          - $ref: '#/components/schemas/HarScanTargetOut'
-          - $ref: '#/components/schemas/NewmanScanTargetOut'
-          - $ref: '#/components/schemas/AppScanTargetOut'
-          title: Target
-          discriminator:
-            propertyName: integration_type
-            mapping:
-              app: '#/components/schemas/AppScanTargetOut'
-              har: '#/components/schemas/HarScanTargetOut'
-              newman: '#/components/schemas/NewmanScanTargetOut'
-      type: object
-      required:
-      - spec
-      - target
-      title: CreateScanScheduleRequest
+      - collection_to_test
+      - api_key
+      title: NewmanScanTargetOut
+    DayOfWeek:
+      type: string
+      enum:
+      - sunday
+      - monday
+      - tuesday
+      - wednesday
+      - thursday
+      - friday
+      - saturday
+      title: DayOfWeek
     UpdateScanScheduleRequest:
       properties:
         spec:
@@ -325,65 +421,6 @@ components:
           title: Target
       type: object
       title: UpdateScanScheduleRequest
-    CreateDayIntervalSpec:
-      properties:
-        time_local:
-          type: string
-          format: time
-          title: Time Local
-        schedule_type:
-          type: string
-          const: day_interval
-          title: Schedule Type
-          default: day_interval
-        interval_days:
-          type: integer
-          minimum: 1.0
-          title: Interval Days
-      type: object
-      required:
-      - time_local
-      - interval_days
-      title: CreateDayIntervalSpec
-    SyncStatus:
-      type: string
-      enum:
-      - pending
-      - synced
-      - failed
-      title: SyncStatus
-    NewmanScanTargetOut:
-      properties:
-        integration_type:
-          type: string
-          const: newman
-          title: Integration Type
-          default: newman
-        collection_to_test:
-          type: string
-          minLength: 1
-          title: Collection To Test
-        environment_name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Environment Name
-        api_key:
-          type: string
-          minLength: 1
-          title: Api Key
-      type: object
-      required:
-      - collection_to_test
-      - api_key
-      title: NewmanScanTargetOut
-    ScheduleState:
-      type: string
-      enum:
-      - active
-      - paused
-      - completed
-      title: ScheduleState
     DayOfWeekSpec-Input:
       properties:
         schedule_type:
@@ -406,37 +443,6 @@ components:
       - days
       - time_utc
       title: DayOfWeekSpec
-    DayIntervalSpec-Input:
-      properties:
-        schedule_type:
-          type: string
-          const: day_interval
-          title: Schedule Type
-          default: day_interval
-        interval_days:
-          type: integer
-          minimum: 1.0
-          title: Interval Days
-        time_utc:
-          type: string
-          format: time
-          title: Time Utc
-      type: object
-      required:
-      - interval_days
-      - time_utc
-      title: DayIntervalSpec
-    DayOfWeek:
-      type: string
-      enum:
-      - sunday
-      - monday
-      - tuesday
-      - wednesday
-      - thursday
-      - friday
-      - saturday
-      title: DayOfWeek
     UpdateScanScheduleStateRequest:
       properties:
         state:
@@ -449,71 +455,57 @@ components:
       required:
       - state
       title: UpdateScanScheduleStateRequest
-    DayOfWeekSpec-Output:
+    CreateScanScheduleRequest:
       properties:
+        spec:
+          oneOf:
+          - $ref: '#/components/schemas/CreateDayOfWeekSpec'
+          - $ref: '#/components/schemas/CreateDayIntervalSpec'
+          - $ref: '#/components/schemas/CreateOnlyOnceSpec'
+          title: Spec
+          discriminator:
+            propertyName: schedule_type
+            mapping:
+              day_interval: '#/components/schemas/CreateDayIntervalSpec'
+              day_of_week: '#/components/schemas/CreateDayOfWeekSpec'
+              only_once: '#/components/schemas/CreateOnlyOnceSpec'
+        target:
+          oneOf:
+          - $ref: '#/components/schemas/HarScanTargetOut'
+          - $ref: '#/components/schemas/NewmanScanTargetOut'
+          - $ref: '#/components/schemas/AppScanTargetOut'
+          title: Target
+          discriminator:
+            propertyName: integration_type
+            mapping:
+              app: '#/components/schemas/AppScanTargetOut'
+              har: '#/components/schemas/HarScanTargetOut'
+              newman: '#/components/schemas/NewmanScanTargetOut'
+      type: object
+      required:
+      - spec
+      - target
+      title: CreateScanScheduleRequest
+    CreateDayIntervalSpec:
+      properties:
+        time_local:
+          type: string
+          format: time
+          title: Time Local
         schedule_type:
           type: string
-          const: day_of_week
+          const: day_interval
           title: Schedule Type
-          default: day_of_week
-        days:
-          items:
-            $ref: '#/components/schemas/DayOfWeek'
-          type: array
-          minItems: 1
-          title: Days
-        time_utc:
-          type: string
-          title: Time Utc
+          default: day_interval
+        interval_days:
+          type: integer
+          minimum: 1.0
+          title: Interval Days
       type: object
       required:
-      - days
-      - time_utc
-      title: DayOfWeekSpec
-    HarScanTargetOut:
-      properties:
-        integration_type:
-          type: string
-          const: har
-          title: Integration Type
-          default: har
-        har_path:
-          type: string
-          minLength: 1
-          title: Har Path
-        capture_domains:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Capture Domains
-      type: object
-      required:
-      - har_path
-      title: HarScanTargetOut
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    AppScanTargetOut:
-      properties:
-        integration_type:
-          type: string
-          const: app
-          title: Integration Type
-          default: app
-      type: object
-      title: AppScanTargetOut
-      description: 'Scan target for a Pynt application''s built collection.
-
-
-        The client supplies only the integration type; the collection''s S3 location
-
-        is derived server-side from the application''s assigned poid.'
+      - time_local
+      - interval_days
+      title: CreateDayIntervalSpec
     ValidationError:
       properties:
         loc:
@@ -535,6 +527,48 @@ components:
       - msg
       - type
       title: ValidationError
+    OnlyOnceSpec:
+      properties:
+        schedule_type:
+          type: string
+          const: only_once
+          title: Schedule Type
+          default: only_once
+        run_at:
+          type: string
+          format: date-time
+          title: Run At
+      type: object
+      required:
+      - run_at
+      title: OnlyOnceSpec
+    SyncStatus:
+      type: string
+      enum:
+      - pending
+      - synced
+      - failed
+      title: SyncStatus
+    HarScanTargetOut:
+      properties:
+        integration_type:
+          type: string
+          const: har
+          title: Integration Type
+          default: har
+        har_path:
+          type: string
+          minLength: 1
+          title: Har Path
+        capture_domains:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Capture Domains
+      type: object
+      required:
+      - har_path
+      title: HarScanTargetOut
     ScanScheduleOut:
       properties:
         scan_schedule_id:
@@ -585,47 +619,13 @@ components:
       - state
       - sync_status
       title: ScanScheduleOut
-    CreateDayOfWeekSpec:
-      properties:
-        time_local:
-          type: string
-          format: time
-          title: Time Local
-        schedule_type:
-          type: string
-          const: day_of_week
-          title: Schedule Type
-          default: day_of_week
-        days:
-          items:
-            $ref: '#/components/schemas/DayOfWeek'
-          type: array
-          minItems: 1
-          title: Days
-      type: object
-      required:
-      - time_local
-      - days
-      title: CreateDayOfWeekSpec
-    DayIntervalSpec-Output:
-      properties:
-        schedule_type:
-          type: string
-          const: day_interval
-          title: Schedule Type
-          default: day_interval
-        interval_days:
-          type: integer
-          minimum: 1.0
-          title: Interval Days
-        time_utc:
-          type: string
-          title: Time Utc
-      type: object
-      required:
-      - interval_days
-      - time_utc
-      title: DayIntervalSpec
+    ScheduleState:
+      type: string
+      enum:
+      - active
+      - paused
+      - completed
+      title: ScheduleState
   securitySchemes:
     API_Key:
       type: apiKey

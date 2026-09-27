@@ -102,6 +102,41 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
+    CreatePOIDRequest:
+      properties:
+        organization_id:
+          type: string
+          pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
+          title: Organization Id
+        poid:
+          type: string
+          pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
+          title: Poid
+      type: object
+      required:
+      - organization_id
+      - poid
+      title: CreatePOIDRequest
+    POIDMapEntryOut:
+      properties:
+        application_id:
+          type: string
+          pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
+          title: Application Id
+        organization_id:
+          type: string
+          pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
+          title: Organization Id
+        poid:
+          type: string
+          pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
+          title: Poid
+      type: object
+      required:
+      - application_id
+      - organization_id
+      - poid
+      title: POIDMapEntryOut
     ValidationError:
       properties:
         loc:
@@ -132,41 +167,6 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
-    POIDMapEntryOut:
-      properties:
-        application_id:
-          type: string
-          pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
-          title: Application Id
-        organization_id:
-          type: string
-          pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
-          title: Organization Id
-        poid:
-          type: string
-          pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
-          title: Poid
-      type: object
-      required:
-      - application_id
-      - organization_id
-      - poid
-      title: POIDMapEntryOut
-    CreatePOIDRequest:
-      properties:
-        organization_id:
-          type: string
-          pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
-          title: Organization Id
-        poid:
-          type: string
-          pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
-          title: Poid
-      type: object
-      required:
-      - organization_id
-      - poid
-      title: CreatePOIDRequest
   securitySchemes:
     API_Key:
       type: apiKey

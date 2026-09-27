@@ -70,15 +70,6 @@ paths:
       - Operator Organization Context: []
 components:
   schemas:
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
     ValidationError:
       properties:
         loc:
@@ -100,20 +91,20 @@ components:
       - msg
       - type
       title: ValidationError
-    DownloadUrlRequest:
+    UploadUrlRequest:
       properties:
         folder:
           $ref: '#/components/schemas/ArtifactsAllowedFolders'
-          description: The folder to download the file from
+          description: The folder to upload the file to
         file_name:
           type: string
           title: File Name
-          description: The prefix of the file to download
+          description: The prefix of the file to upload
       type: object
       required:
       - folder
       - file_name
-      title: DownloadUrlRequest
+      title: UploadUrlRequest
     UploadUrlResponse:
       properties:
         upload_url:
@@ -129,6 +120,15 @@ components:
       - upload_url
       - path
       title: UploadUrlResponse
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     ArtifactsAllowedFolders:
       type: string
       enum:
@@ -136,20 +136,20 @@ components:
       - har-files
       - collections
       title: ArtifactsAllowedFolders
-    UploadUrlRequest:
+    DownloadUrlRequest:
       properties:
         folder:
           $ref: '#/components/schemas/ArtifactsAllowedFolders'
-          description: The folder to upload the file to
+          description: The folder to download the file from
         file_name:
           type: string
           title: File Name
-          description: The prefix of the file to upload
+          description: The prefix of the file to download
       type: object
       required:
       - folder
       - file_name
-      title: UploadUrlRequest
+      title: DownloadUrlRequest
   securitySchemes:
     API_Key:
       type: apiKey

@@ -35,7 +35,7 @@ paths:
       tags:
       - postman-proxy
       summary: Postman Proxy
-      operationId: postman_proxy_v1_postman_proxy___path_name__post
+      operationId: patchV1PostmanProxyByPathName
       parameters:
       - name: _path_name
         in: path
@@ -56,11 +56,13 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
+      x-operation-id-source: normalized
+      x-operation-id-original: postman_proxy_v1_postman_proxy___path_name__post
     delete:
       tags:
       - postman-proxy
       summary: Postman Proxy
-      operationId: postman_proxy_v1_postman_proxy___path_name__post
+      operationId: deleteV1PostmanProxyByPathName
       parameters:
       - name: _path_name
         in: path
@@ -81,11 +83,13 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
+      x-operation-id-source: normalized
+      x-operation-id-original: postman_proxy_v1_postman_proxy___path_name__post
     options:
       tags:
       - postman-proxy
       summary: Postman Proxy
-      operationId: postman_proxy_v1_postman_proxy___path_name__post
+      operationId: optionsV1PostmanProxyByPathName
       parameters:
       - name: _path_name
         in: path
@@ -106,11 +110,13 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
+      x-operation-id-source: normalized
+      x-operation-id-original: postman_proxy_v1_postman_proxy___path_name__post
     put:
       tags:
       - postman-proxy
       summary: Postman Proxy
-      operationId: postman_proxy_v1_postman_proxy___path_name__post
+      operationId: putV1PostmanProxyByPathName
       parameters:
       - name: _path_name
         in: path
@@ -131,11 +137,13 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
+      x-operation-id-source: normalized
+      x-operation-id-original: postman_proxy_v1_postman_proxy___path_name__post
     get:
       tags:
       - postman-proxy
       summary: Postman Proxy
-      operationId: postman_proxy_v1_postman_proxy___path_name__post
+      operationId: getV1PostmanProxyByPathName
       parameters:
       - name: _path_name
         in: path
@@ -156,6 +164,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
+      x-operation-id-source: normalized
+      x-operation-id-original: postman_proxy_v1_postman_proxy___path_name__post
 components:
   schemas:
     ValidationError:
