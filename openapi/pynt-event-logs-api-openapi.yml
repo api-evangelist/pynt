@@ -39,53 +39,21 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    HTTPValidationError:
+    PaginatedEventLogOut:
       properties:
-        detail:
+        events:
           items:
-            $ref: '#/components/schemas/ValidationError'
+            $ref: '#/components/schemas/EventLogOut'
           type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
+          title: Events
+        total:
+          type: integer
+          title: Total
       type: object
       required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    EventLogType:
-      type: string
-      enum:
-      - authentication
-      - application_management
-      - user_management
-      - organization_management
-      - integration
-      - label_management
-      - source_management
-      - reporting
-      - scan_management
-      - api_management
-      - vulnerability_management
-      - ticket_management
-      - unknown
-      title: EventLogType
+      - events
+      - total
+      title: PaginatedEventLogOut
     EventLogOut:
       properties:
         event_id:
@@ -137,21 +105,53 @@ components:
       - event_type
       - event_title
       title: EventLogOut
-    PaginatedEventLogOut:
+    EventLogType:
+      type: string
+      enum:
+      - authentication
+      - application_management
+      - user_management
+      - organization_management
+      - integration
+      - label_management
+      - source_management
+      - reporting
+      - scan_management
+      - api_management
+      - vulnerability_management
+      - ticket_management
+      - unknown
+      title: EventLogType
+    ValidationError:
       properties:
-        events:
+        loc:
           items:
-            $ref: '#/components/schemas/EventLogOut'
+            anyOf:
+            - type: string
+            - type: integer
           type: array
-          title: Events
-        total:
-          type: integer
-          title: Total
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
       type: object
       required:
-      - events
-      - total
-      title: PaginatedEventLogOut
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
   securitySchemes:
     API_Key:
       type: apiKey

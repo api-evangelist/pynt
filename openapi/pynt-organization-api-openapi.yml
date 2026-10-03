@@ -159,56 +159,15 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    SSOResponse:
-      properties:
-        identity_provider:
-          type: string
-          title: Identity Provider
-      type: object
-      required:
-      - identity_provider
-      title: SSOResponse
-    OrganizationUpdateModel:
+    OrganizationCreateRequest:
       properties:
         name:
           type: string
-          maxLength: 30
-          pattern: ^[a-zA-Z0-9_\-\s]*$
           title: Name
       type: object
       required:
       - name
-      title: OrganizationUpdateModel
+      title: OrganizationCreateRequest
     OrganizationConfigUpdateModel:
       properties:
         allow_collect_data:
@@ -232,6 +191,38 @@ components:
       required:
       - organization_id
       title: OrganizationCreateResponse
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    OrganizationUpdateModel:
+      properties:
+        name:
+          type: string
+          maxLength: 30
+          pattern: ^[a-zA-Z0-9_\-\s]*$
+          title: Name
+      type: object
+      required:
+      - name
+      title: OrganizationUpdateModel
     OrganizationResponse:
       properties:
         organization_id:
@@ -274,15 +265,24 @@ components:
       - allow_collect_data_since
       - local_only_mode
       title: OrganizationConfigResponse
-    OrganizationCreateRequest:
+    HTTPValidationError:
       properties:
-        name:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    SSOResponse:
+      properties:
+        identity_provider:
           type: string
-          title: Name
+          title: Identity Provider
       type: object
       required:
-      - name
-      title: OrganizationCreateRequest
+      - identity_provider
+      title: SSOResponse
   securitySchemes:
     API_Key:
       type: apiKey

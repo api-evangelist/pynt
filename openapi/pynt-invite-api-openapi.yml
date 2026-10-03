@@ -182,34 +182,21 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    UserRole:
-      type: string
-      enum:
-      - Admin
-      - User
-      - SystemAdmin
-      title: UserRole
-    ValidationError:
+    Body_create_invite_v1_invite_post:
       properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
+        email:
           type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
+          pattern: \b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b
+          title: Email
+          examples:
+          - test@test.com
+        role:
+          $ref: '#/components/schemas/UserRole'
       type: object
       required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
+      - email
+      - role
+      title: Body_create_invite_v1_invite_post
     UserOut:
       properties:
         uid:
@@ -263,47 +250,34 @@ components:
       - name
       - lastname
       title: UserOut
-    CountOut:
-      properties:
-        count:
-          type: integer
-          title: Count
-      type: object
-      required:
-      - count
-      title: CountOut
-    Body_create_invite_v1_invite_post:
-      properties:
-        email:
-          type: string
-          pattern: \b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b
-          title: Email
-          examples:
-          - test@test.com
-        role:
-          $ref: '#/components/schemas/UserRole'
-      type: object
-      required:
-      - email
-      - role
-      title: Body_create_invite_v1_invite_post
-    InviteStatus:
+    UserRole:
       type: string
       enum:
-      - pending
-      - accepted
-      - rejected
-      - deleted
-      title: InviteStatus
-    HTTPValidationError:
+      - Admin
+      - User
+      - SystemAdmin
+      title: UserRole
+    ValidationError:
       properties:
-        detail:
+        loc:
           items:
-            $ref: '#/components/schemas/ValidationError'
+            anyOf:
+            - type: string
+            - type: integer
           type: array
-          title: Detail
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
       type: object
-      title: HTTPValidationError
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
     InviteInDB:
       properties:
         invite_id:
@@ -347,6 +321,32 @@ components:
       - inviter
       - org_id
       title: InviteInDB
+    CountOut:
+      properties:
+        count:
+          type: integer
+          title: Count
+      type: object
+      required:
+      - count
+      title: CountOut
+    InviteStatus:
+      type: string
+      enum:
+      - pending
+      - accepted
+      - rejected
+      - deleted
+      title: InviteStatus
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
   securitySchemes:
     API_Key:
       type: apiKey

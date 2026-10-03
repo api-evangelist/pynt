@@ -961,74 +961,6 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    GraphqlSeenItem:
-      properties:
-        path:
-          type: string
-          title: Path
-        method:
-          type: string
-          title: Method
-      additionalProperties: true
-      type: object
-      required:
-      - path
-      - method
-      title: GraphqlSeenItem
-    ScanDetailsEndpointItem:
-      properties:
-        path:
-          type: string
-          title: Path
-        method:
-          type: string
-          title: Method
-        host:
-          type: string
-          title: Host
-        findings_details:
-          items:
-            $ref: '#/components/schemas/VulnerabilityDefinition'
-          type: array
-          title: Findings Details
-        risk_score:
-          $ref: '#/components/schemas/Severity'
-      type: object
-      required:
-      - path
-      - method
-      - host
-      - findings_details
-      - risk_score
-      title: ScanDetailsEndpointItem
-    ScanAttackConfig:
-      properties:
-        should_attack:
-          type: boolean
-          title: Should Attack
-      type: object
-      required:
-      - should_attack
-      title: ScanAttackConfig
-    RunRemoteHarScanRequestBody:
-      properties:
-        application_id:
-          type: string
-          pattern: ^([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})?$
-          title: Application Id
-        har_path:
-          type: string
-          title: Har Path
-        capture_domains:
-          type: string
-          title: Capture Domains
-      additionalProperties: true
-      type: object
-      required:
-      - application_id
-      - har_path
-      - capture_domains
-      title: RunRemoteHarScanRequestBody
     UploadReportRequest:
       properties:
         scan_id:
@@ -1045,8 +977,518 @@ components:
       required:
       - report
       title: UploadReportRequest
-    ScanWarning:
+    FindingDetails:
       properties:
+        finding_id:
+          type: string
+          title: Finding Id
+        relevance:
+          $ref: '#/components/schemas/VulnerabilityInstanceRelevance'
+      additionalProperties: true
+      type: object
+      required:
+      - finding_id
+      - relevance
+      title: FindingDetails
+    OwaspStatus:
+      type: string
+      enum:
+      - Passed
+      - Failed
+      - Not Tested
+      title: OwaspStatus
+    ScanDetailsEndpointTrafficItem:
+      properties:
+        path:
+          type: string
+          title: Path
+        method:
+          type: string
+          title: Method
+        host:
+          type: string
+          title: Host
+        original_status_codes:
+          items:
+            type: integer
+          type: array
+          title: Original Status Codes
+        authenticated:
+          type: boolean
+          title: Authenticated
+        number_of_users:
+          type: integer
+          title: Number Of Users
+        max_time_ms:
+          type: integer
+          title: Max Time Ms
+        number_of_requests:
+          type: integer
+          title: Number Of Requests
+        is_timeout:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Is Timeout
+      type: object
+      required:
+      - path
+      - method
+      - host
+      - original_status_codes
+      - authenticated
+      - number_of_users
+      - max_time_ms
+      - number_of_requests
+      - is_timeout
+      title: ScanDetailsEndpointTrafficItem
+    ScanReportBusinessImpactAnalysis:
+      properties:
+        scan_id:
+          type: string
+          format: uuid
+          title: Scan Id
+        impact_analysis:
+          items:
+            $ref: '#/components/schemas/BusinessImpactAnalysis-Output'
+          type: array
+          minItems: 1
+          title: Impact Analysis
+      type: object
+      required:
+      - scan_id
+      - impact_analysis
+      title: ScanReportBusinessImpactAnalysis
+      description: Represents a collection of business impact analysis for a specific scan.
+    RunRemoteScanRequestBody:
+      properties:
+        api_key:
+          type: string
+          title: Api Key
+        collection_to_test:
+          type: string
+          title: Collection To Test
+        environment_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Environment Name
+        application_id:
+          type: string
+          pattern: ^([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})?$
+          title: Application Id
+      additionalProperties: true
+      type: object
+      required:
+      - api_key
+      - collection_to_test
+      - application_id
+      title: RunRemoteScanRequestBody
+    EntitiesRelationships:
+      properties:
+        relationships:
+          items:
+            $ref: '#/components/schemas/EntityRelationship'
+          type: array
+          title: Relationships
+          description: List of entity relationships
+      type: object
+      required:
+      - relationships
+      title: EntitiesRelationships
+      description: Represents a collection of entity relationships.
+      example:
+        relationships:
+        - entity1: user
+          entity2: invoice
+          relationship_type: owns
+    Conclusion:
+      type: string
+      enum:
+      - 'Yes'
+      - 'No'
+      - Inconclusive
+      title: Conclusion
+      description: 'Enum for the conclusion of a false positive analysis:
+
+        YES, NO, or INCONCLUSIVE.'
+    ScanSummary:
+      properties:
+        errors:
+          type: integer
+          title: Errors
+        functional_test_name:
+          type: string
+          title: Functional Test Name
+        endpoints:
+          items:
+            $ref: '#/components/schemas/Endpoint'
+          type: array
+          title: Endpoints
+        scan_timestamp:
+          type: string
+          format: date-time
+          title: Scan Timestamp
+        scan_status:
+          type: string
+          title: Scan Status
+        number_of_requests:
+          type: integer
+          title: Number Of Requests
+        unique_endpoints:
+          type: integer
+          title: Unique Endpoints
+        warnings:
+          type: integer
+          title: Warnings
+        source:
+          $ref: '#/components/schemas/Source'
+        scan_id:
+          type: string
+          title: Scan Id
+        number_of_tests:
+          type: integer
+          title: Number Of Tests
+        passed_tests:
+          type: integer
+          title: Passed Tests
+        scan_duration:
+          anyOf:
+          - type: integer
+          - $ref: '#/components/schemas/ScanDuration'
+          title: Scan Duration
+        severity_map_count:
+          anyOf:
+          - additionalProperties:
+              type: integer
+            type: object
+          - type: 'null'
+          title: Severity Map Count
+      additionalProperties: true
+      type: object
+      required:
+      - errors
+      - functional_test_name
+      - endpoints
+      - scan_timestamp
+      - scan_status
+      - number_of_requests
+      - unique_endpoints
+      - warnings
+      - source
+      - scan_id
+      - number_of_tests
+      - passed_tests
+      - scan_duration
+      title: ScanSummary
+    ScanDuration:
+      properties:
+        numberLong:
+          anyOf:
+          - type: string
+          - type: integer
+          - type: 'null'
+          title: Numberlong
+      type: object
+      title: ScanDuration
+    Source:
+      properties:
+        integration:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Integration
+        user:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User
+        integraion:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Integraion
+      additionalProperties: true
+      type: object
+      required:
+      - integration
+      - integraion
+      title: Source
+    ScanSummaryOut:
+      properties:
+        errors:
+          type: integer
+          title: Errors
+        functional_test_name:
+          type: string
+          title: Functional Test Name
+        endpoints:
+          items:
+            $ref: '#/components/schemas/Endpoint'
+          type: array
+          title: Endpoints
+        scan_timestamp:
+          type: string
+          format: date-time
+          title: Scan Timestamp
+        scan_status:
+          type: string
+          title: Scan Status
+        number_of_requests:
+          type: integer
+          title: Number Of Requests
+        unique_endpoints:
+          type: integer
+          title: Unique Endpoints
+        warnings:
+          type: integer
+          title: Warnings
+        source:
+          $ref: '#/components/schemas/Source'
+        scan_id:
+          type: string
+          title: Scan Id
+        number_of_tests:
+          type: integer
+          title: Number Of Tests
+        passed_tests:
+          type: integer
+          title: Passed Tests
+        scan_duration:
+          anyOf:
+          - type: integer
+          - $ref: '#/components/schemas/ScanDuration'
+          title: Scan Duration
+        severity_map_count:
+          anyOf:
+          - additionalProperties:
+              type: integer
+            type: object
+          - type: 'null'
+          title: Severity Map Count
+        first_name:
+          anyOf:
+          - type: string
+          - items:
+              anyOf:
+              - type: string
+              - type: 'null'
+            type: array
+          - type: 'null'
+          title: First Name
+        last_name:
+          anyOf:
+          - type: string
+          - items:
+              anyOf:
+              - type: string
+              - type: 'null'
+            type: array
+          - type: 'null'
+          title: Last Name
+        application_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Application Id
+        application:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Application
+        tags:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Tags
+        pynt_collection_uploaded:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Pynt Collection Uploaded
+          default: false
+      additionalProperties: true
+      type: object
+      required:
+      - errors
+      - functional_test_name
+      - endpoints
+      - scan_timestamp
+      - scan_status
+      - number_of_requests
+      - unique_endpoints
+      - warnings
+      - source
+      - scan_id
+      - number_of_tests
+      - passed_tests
+      - scan_duration
+      - first_name
+      - last_name
+      - application_id
+      - application
+      title: ScanSummaryOut
+    EntityRelationship:
+      properties:
+        entity1:
+          type: string
+          title: Entity1
+          description: First entity in the relationship
+        entity2:
+          type: string
+          title: Entity2
+          description: Second entity in the relationship
+        relationship_type:
+          type: string
+          title: Relationship Type
+          description: Relationship type
+      type: object
+      required:
+      - entity1
+      - entity2
+      - relationship_type
+      title: EntityRelationship
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    VulnerabilityInstanceRelevance:
+      type: string
+      enum:
+      - relevant
+      - irrelevant_waived
+      - irrelevant_fixed
+      title: VulnerabilityInstanceRelevance
+    ScanDetailsFeedback:
+      properties:
+        message:
+          type: string
+          title: Message
+        severity:
+          $ref: '#/components/schemas/FeedbackSeverity'
+        arguments:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Arguments
+      type: object
+      required:
+      - message
+      - severity
+      title: ScanDetailsFeedback
+    CreateScanRequestBody:
+      properties:
+        scan_id:
+          type: string
+          pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
+          title: Scan Id
+        application_id:
+          anyOf:
+          - type: string
+            pattern: ^([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})?$
+          - type: 'null'
+          title: Application Id
+        report:
+          $ref: '#/components/schemas/ScanData'
+      additionalProperties: true
+      type: object
+      required:
+      - scan_id
+      - report
+      title: CreateScanRequestBody
+    VulnerabilityDefinition:
+      properties:
+        category:
+          type: string
+          title: Category
+        sub_category:
+          type: string
+          title: Sub Category
+      type: object
+      required:
+      - category
+      - sub_category
+      title: VulnerabilityDefinition
+    AnalysisEndpoint:
+      properties:
+        status_codes:
+          items:
+            type: integer
+          type: array
+          title: Status Codes
+        authenticated:
+          type: boolean
+          title: Authenticated
+        number_of_requests:
+          type: integer
+          title: Number Of Requests
+        max_time:
+          type: integer
+          title: Max Time
+        endpoint:
+          $ref: '#/components/schemas/Endpoint'
+        number_of_users:
+          type: integer
+          title: Number Of Users
+        is_timeout:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Is Timeout
+      additionalProperties: true
+      type: object
+      required:
+      - status_codes
+      - authenticated
+      - number_of_requests
+      - max_time
+      - endpoint
+      - number_of_users
+      title: AnalysisEndpoint
+    PaginatedEndpointsResponse:
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/ScanDetailsEndpointItem'
+          type: array
+          title: Data
+        total:
+          type: integer
+          title: Total
+      type: object
+      required:
+      - data
+      - total
+      title: PaginatedEndpointsResponse
+    BusinessImpactLLMResult-Output:
+      properties:
+        entities_relationship:
+          $ref: '#/components/schemas/EntitiesRelationships'
+          description: Relationships between the entities
+        business_implication:
+          type: string
+          title: Business Implication
+          description: Business implications of the attack
+      type: object
+      required:
+      - entities_relationship
+      - business_implication
+      title: BusinessImpactLLMResult
+      description: The direct, typed result from an LLM for a business impact query.
+    PiiSeenItem:
+      properties:
+        key:
+          type: string
+          title: Key
         category:
           type: string
           title: Category
@@ -1055,38 +1497,78 @@ components:
           title: Subcategory
         endpoint:
           $ref: '#/components/schemas/Endpoint'
-        mode:
+        value:
           anyOf:
           - type: string
           - type: 'null'
-          title: Mode
-          default: ''
-        header:
-          type: string
-          title: Header
-        id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Id
-        header_key:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Header Key
-        host:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Host
+          title: Value
       additionalProperties: true
       type: object
       required:
+      - key
       - category
       - subcategory
       - endpoint
-      - header
-      title: ScanWarning
+      title: PiiSeenItem
+    FeedbackSeverity:
+      type: string
+      enum:
+      - info
+      - low
+      - medium
+      - high
+      title: FeedbackSeverity
+    ScanExecutionProgressUpdateRequest:
+      properties:
+        status:
+          type: string
+          title: Status
+        start_time:
+          type: string
+          format: date-time
+          title: Start Time
+        scan_duration:
+          type: integer
+          title: Scan Duration
+        scan_progress:
+          type: integer
+          title: Scan Progress
+        test_name:
+          type: string
+          title: Test Name
+        integration:
+          type: string
+          title: Integration
+        application_id:
+          type: string
+          title: Application Id
+      type: object
+      required:
+      - status
+      - start_time
+      - scan_duration
+      - scan_progress
+      - test_name
+      - integration
+      - application_id
+      title: ScanExecutionProgressUpdateRequest
+    ScanDetailsFinding:
+      properties:
+        finding_vulnerability:
+          $ref: '#/components/schemas/VulnerabilityDefinition'
+        severity:
+          $ref: '#/components/schemas/Severity'
+        endpoints:
+          items:
+            $ref: '#/components/schemas/ScanDetailsEndpoint'
+          type: array
+          title: Endpoints
+      type: object
+      required:
+      - finding_vulnerability
+      - severity
+      - endpoints
+      title: ScanDetailsFinding
     ScanCurrentOut:
       properties:
         scan_name:
@@ -1159,235 +1641,122 @@ components:
       - endpoint_count
       - tags
       title: ScanCurrentOut
-    CountOut:
+    ScanAttackConfig:
       properties:
-        count:
-          type: integer
-          title: Count
+        should_attack:
+          type: boolean
+          title: Should Attack
       type: object
       required:
-      - count
-      title: CountOut
-    Feedback:
-      properties:
-        message:
-          type: string
-          title: Message
-        severity:
-          $ref: '#/components/schemas/FeedbackSeverity'
-        arguments:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: Arguments
-      type: object
-      required:
-      - message
-      - severity
-      title: Feedback
-    BusinessImpactLLMResult-Output:
-      properties:
-        entities_relationship:
-          $ref: '#/components/schemas/EntitiesRelationships'
-          description: Relationships between the entities
-        business_implication:
-          type: string
-          title: Business Implication
-          description: Business implications of the attack
-      type: object
-      required:
-      - entities_relationship
-      - business_implication
-      title: BusinessImpactLLMResult
-      description: The direct, typed result from an LLM for a business impact query.
-    FindingDetails:
+      - should_attack
+      title: ScanAttackConfig
+    BusinessImpactAnalysis-Output:
       properties:
         finding_id:
           type: string
+          format: uuid
           title: Finding Id
-        relevance:
-          $ref: '#/components/schemas/VulnerabilityInstanceRelevance'
-      additionalProperties: true
+        category:
+          type: string
+          title: Category
+        subcategory:
+          type: string
+          title: Subcategory
+        prompt:
+          type: string
+          title: Prompt
+        approved:
+          $ref: '#/components/schemas/Conclusion'
+          default: Inconclusive
+        business_impact_result:
+          $ref: '#/components/schemas/BusinessImpactLLMResult-Output'
       type: object
       required:
       - finding_id
-      - relevance
-      title: FindingDetails
-    ScanDetailsFinding:
+      - category
+      - subcategory
+      - prompt
+      - business_impact_result
+      title: BusinessImpactAnalysis
+      description: Represents a claim that a finding is a false positive.
+    ScanFinding:
       properties:
-        finding_vulnerability:
-          $ref: '#/components/schemas/VulnerabilityDefinition'
-        severity:
-          $ref: '#/components/schemas/Severity'
-        endpoints:
-          items:
-            $ref: '#/components/schemas/ScanDetailsEndpoint'
-          type: array
-          title: Endpoints
-      type: object
-      required:
-      - finding_vulnerability
-      - severity
-      - endpoints
-      title: ScanDetailsFinding
-    Severity:
-      type: integer
-      enum:
-      - 0
-      - 1
-      - 2
-      - 3
-      - 4
-      title: Severity
-    EntitiesRelationships:
-      properties:
-        relationships:
-          items:
-            $ref: '#/components/schemas/EntityRelationship'
-          type: array
-          title: Relationships
-          description: List of entity relationships
-      type: object
-      required:
-      - relationships
-      title: EntitiesRelationships
-      description: Represents a collection of entity relationships.
-      example:
-        relationships:
-        - entity1: user
-          entity2: invoice
-          relationship_type: owns
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    ScanDetailsOwaspCoverage:
-      properties:
-        full_name:
-          type: string
-          title: Full Name
-        status:
-          type: string
-          title: Status
-        link:
-          type: string
-          title: Link
-      type: object
-      required:
-      - full_name
-      - status
-      - link
-      title: ScanDetailsOwaspCoverage
-    ScanExecutionProgressUpdateRequest:
-      properties:
-        status:
-          type: string
-          title: Status
-        start_time:
-          type: string
-          format: date-time
-          title: Start Time
-        scan_duration:
-          type: integer
-          title: Scan Duration
-        scan_progress:
-          type: integer
-          title: Scan Progress
-        test_name:
-          type: string
-          title: Test Name
-        integration:
-          type: string
-          title: Integration
-        application_id:
-          type: string
-          title: Application Id
-      type: object
-      required:
-      - status
-      - start_time
-      - scan_duration
-      - scan_progress
-      - test_name
-      - integration
-      - application_id
-      title: ScanExecutionProgressUpdateRequest
-    ScanSummary:
-      properties:
-        errors:
-          type: integer
-          title: Errors
-        functional_test_name:
-          type: string
-          title: Functional Test Name
-        endpoints:
-          items:
-            $ref: '#/components/schemas/Endpoint'
-          type: array
-          title: Endpoints
-        scan_timestamp:
-          type: string
-          format: date-time
-          title: Scan Timestamp
-        scan_status:
-          type: string
-          title: Scan Status
-        number_of_requests:
-          type: integer
-          title: Number Of Requests
-        unique_endpoints:
-          type: integer
-          title: Unique Endpoints
-        warnings:
-          type: integer
-          title: Warnings
-        source:
-          $ref: '#/components/schemas/Source'
-        scan_id:
-          type: string
-          title: Scan Id
-        number_of_tests:
-          type: integer
-          title: Number Of Tests
-        passed_tests:
-          type: integer
-          title: Passed Tests
-        scan_duration:
+        id:
           anyOf:
-          - type: integer
-          - $ref: '#/components/schemas/ScanDuration'
-          title: Scan Duration
-        severity_map_count:
-          anyOf:
-          - additionalProperties:
-              type: integer
-            type: object
+          - type: string
           - type: 'null'
-          title: Severity Map Count
+          title: Id
+        category:
+          type: string
+          title: Category
+        subcategory:
+          type: string
+          title: Subcategory
+        request_numbers:
+          anyOf:
+          - items:
+              type: integer
+            type: array
+          - type: 'null'
+          title: Request Numbers
+        endpoint:
+          $ref: '#/components/schemas/Endpoint'
+        host:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Host
+        parameter:
+          type: string
+          title: Parameter
+        original_value:
+          type: string
+          title: Original Value
+        parameter_type:
+          type: string
+          title: Parameter Type
+        replaced_value:
+          type: string
+          title: Replaced Value
+        finding_parameter_uid:
+          type: string
+          title: Finding Parameter Uid
+        finding_parameter_rid:
+          type: string
+          title: Finding Parameter Rid
+        finding_replaced_value_uid:
+          type: string
+          title: Finding Replaced Value Uid
+        finding_replaced_value_rid:
+          type: string
+          title: Finding Replaced Value Rid
+        payload:
+          type: string
+          title: Payload
+        verified_by:
+          type: string
+          title: Verified By
+        curl_cmd:
+          type: string
+          title: Curl Cmd
       additionalProperties: true
       type: object
       required:
-      - errors
-      - functional_test_name
-      - endpoints
-      - scan_timestamp
-      - scan_status
-      - number_of_requests
-      - unique_endpoints
-      - warnings
-      - source
-      - scan_id
-      - number_of_tests
-      - passed_tests
-      - scan_duration
-      title: ScanSummary
+      - category
+      - subcategory
+      - endpoint
+      - parameter
+      - original_value
+      - parameter_type
+      - replaced_value
+      - finding_parameter_uid
+      - finding_parameter_rid
+      - finding_replaced_value_uid
+      - finding_replaced_value_rid
+      - payload
+      - verified_by
+      - curl_cmd
+      title: ScanFinding
     OwaspCoverage:
       properties:
         Name:
@@ -1404,6 +1773,49 @@ components:
       - Status
       - Link
       title: OwaspCoverage
+    FalsePositiveLLMResult:
+      properties:
+        is_false_positive:
+          $ref: '#/components/schemas/Conclusion'
+          description: Is the finding a false positive? YES, NO, or INCONCLUSIVE.
+        reason:
+          type: string
+          title: Reason
+          description: Reason for the false positive determination.
+        confidence:
+          type: number
+          maximum: 1.0
+          minimum: 0.0
+          title: Confidence
+          description: Confidence of the false positive between 0 and 1.
+      type: object
+      required:
+      - is_false_positive
+      - reason
+      - confidence
+      title: FalsePositiveLLMResult
+      description: The direct, typed result from an LLM for a false positive query.
+    VulnerabilitiesDetails-Output:
+      properties:
+        findings_details:
+          items:
+            $ref: '#/components/schemas/FindingDetails'
+          type: array
+          title: Findings Details
+      additionalProperties: true
+      type: object
+      required:
+      - findings_details
+      title: VulnerabilitiesDetails
+    CountOut:
+      properties:
+        count:
+          type: integer
+          title: Count
+      type: object
+      required:
+      - count
+      title: CountOut
     ScanSummaryProgressOut:
       properties:
         errors:
@@ -1527,250 +1939,11 @@ components:
       - progress_type
       - scan_progress
       title: ScanSummaryProgressOut
-    PiiSeenItem:
-      properties:
-        key:
-          type: string
-          title: Key
-        category:
-          type: string
-          title: Category
-        subcategory:
-          type: string
-          title: Subcategory
-        endpoint:
-          $ref: '#/components/schemas/Endpoint'
-        value:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Value
-      additionalProperties: true
-      type: object
-      required:
-      - key
-      - category
-      - subcategory
-      - endpoint
-      title: PiiSeenItem
-    FalsePositiveLLMResult:
-      properties:
-        is_false_positive:
-          $ref: '#/components/schemas/Conclusion'
-          description: Is the finding a false positive? YES, NO, or INCONCLUSIVE.
-        reason:
-          type: string
-          title: Reason
-          description: Reason for the false positive determination.
-        confidence:
-          type: number
-          maximum: 1.0
-          minimum: 0.0
-          title: Confidence
-          description: Confidence of the false positive between 0 and 1.
-      type: object
-      required:
-      - is_false_positive
-      - reason
-      - confidence
-      title: FalsePositiveLLMResult
-      description: The direct, typed result from an LLM for a false positive query.
-    ScanReportBusinessImpactAnalysis:
-      properties:
-        scan_id:
-          type: string
-          format: uuid
-          title: Scan Id
-        impact_analysis:
-          items:
-            $ref: '#/components/schemas/BusinessImpactAnalysis-Output'
-          type: array
-          minItems: 1
-          title: Impact Analysis
-      type: object
-      required:
-      - scan_id
-      - impact_analysis
-      title: ScanReportBusinessImpactAnalysis
-      description: Represents a collection of business impact analysis for a specific scan.
-    ScanDuration:
-      properties:
-        numberLong:
-          anyOf:
-          - type: string
-          - type: integer
-          - type: 'null'
-          title: Numberlong
-      type: object
-      title: ScanDuration
-    EntityRelationship:
-      properties:
-        entity1:
-          type: string
-          title: Entity1
-          description: First entity in the relationship
-        entity2:
-          type: string
-          title: Entity2
-          description: Second entity in the relationship
-        relationship_type:
-          type: string
-          title: Relationship Type
-          description: Relationship type
-      type: object
-      required:
-      - entity1
-      - entity2
-      - relationship_type
-      title: EntityRelationship
-    VulnerabilitiesDetails-Output:
-      properties:
-        findings_details:
-          items:
-            $ref: '#/components/schemas/FindingDetails'
-          type: array
-          title: Findings Details
-      additionalProperties: true
-      type: object
-      required:
-      - findings_details
-      title: VulnerabilitiesDetails
-    ScanFinding:
-      properties:
-        id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Id
-        category:
-          type: string
-          title: Category
-        subcategory:
-          type: string
-          title: Subcategory
-        request_numbers:
-          anyOf:
-          - items:
-              type: integer
-            type: array
-          - type: 'null'
-          title: Request Numbers
-        endpoint:
-          $ref: '#/components/schemas/Endpoint'
-        host:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Host
-        parameter:
-          type: string
-          title: Parameter
-        original_value:
-          type: string
-          title: Original Value
-        parameter_type:
-          type: string
-          title: Parameter Type
-        replaced_value:
-          type: string
-          title: Replaced Value
-        finding_parameter_uid:
-          type: string
-          title: Finding Parameter Uid
-        finding_parameter_rid:
-          type: string
-          title: Finding Parameter Rid
-        finding_replaced_value_uid:
-          type: string
-          title: Finding Replaced Value Uid
-        finding_replaced_value_rid:
-          type: string
-          title: Finding Replaced Value Rid
-        payload:
-          type: string
-          title: Payload
-        verified_by:
-          type: string
-          title: Verified By
-        curl_cmd:
-          type: string
-          title: Curl Cmd
-      additionalProperties: true
-      type: object
-      required:
-      - category
-      - subcategory
-      - endpoint
-      - parameter
-      - original_value
-      - parameter_type
-      - replaced_value
-      - finding_parameter_uid
-      - finding_parameter_rid
-      - finding_replaced_value_uid
-      - finding_replaced_value_rid
-      - payload
-      - verified_by
-      - curl_cmd
-      title: ScanFinding
-    AnalysisEndpoint:
-      properties:
-        status_codes:
-          items:
-            type: integer
-          type: array
-          title: Status Codes
-        authenticated:
-          type: boolean
-          title: Authenticated
-        number_of_requests:
-          type: integer
-          title: Number Of Requests
-        max_time:
-          type: integer
-          title: Max Time
-        endpoint:
-          $ref: '#/components/schemas/Endpoint'
-        number_of_users:
-          type: integer
-          title: Number Of Users
-        is_timeout:
-          anyOf:
-          - type: boolean
-          - type: 'null'
-          title: Is Timeout
-      additionalProperties: true
-      type: object
-      required:
-      - status_codes
-      - authenticated
-      - number_of_requests
-      - max_time
-      - endpoint
-      - number_of_users
-      title: AnalysisEndpoint
-    OwaspStatus:
-      type: string
-      enum:
-      - Passed
-      - Failed
-      - Not Tested
-      title: OwaspStatus
-    Conclusion:
-      type: string
-      enum:
-      - 'Yes'
-      - 'No'
-      - Inconclusive
-      title: Conclusion
-      description: 'Enum for the conclusion of a false positive analysis:
-
-        YES, NO, or INCONCLUSIVE.'
-    PaginatedEndpointsResponse:
+    PaginatedTrafficResponse:
       properties:
         data:
           items:
-            $ref: '#/components/schemas/ScanDetailsEndpointItem'
+            $ref: '#/components/schemas/ScanDetailsEndpointTrafficItem'
           type: array
           title: Data
         total:
@@ -1780,41 +1953,23 @@ components:
       required:
       - data
       - total
-      title: PaginatedEndpointsResponse
-    BusinessImpactAnalysis-Output:
+      title: PaginatedTrafficResponse
+    ScanCreateOut:
       properties:
-        finding_id:
-          type: string
-          format: uuid
-          title: Finding Id
-        category:
-          type: string
-          title: Category
-        subcategory:
-          type: string
-          title: Subcategory
-        prompt:
-          type: string
-          title: Prompt
-        approved:
-          $ref: '#/components/schemas/Conclusion'
-          default: Inconclusive
-        business_impact_result:
-          $ref: '#/components/schemas/BusinessImpactLLMResult-Output'
+        vulnerabilities_details:
+          anyOf:
+          - $ref: '#/components/schemas/VulnerabilitiesDetails-Output'
+          - type: 'null'
+      additionalProperties: true
       type: object
       required:
-      - finding_id
-      - category
-      - subcategory
-      - prompt
-      - business_impact_result
-      title: BusinessImpactAnalysis
-      description: Represents a claim that a finding is a false positive.
-    PaginatedPiiResponse:
+      - vulnerabilities_details
+      title: ScanCreateOut
+    PaginatedFindingsResponse:
       properties:
         data:
           items:
-            $ref: '#/components/schemas/PiiDetailsItem'
+            $ref: '#/components/schemas/ScanDetailsFinding'
           type: array
           title: Data
         total:
@@ -1824,283 +1979,24 @@ components:
       required:
       - data
       - total
-      title: PaginatedPiiResponse
-    RunRemoteScanRequestBody:
+      title: PaginatedFindingsResponse
+    ScanDetailsOwaspCoverage:
       properties:
-        api_key:
+        full_name:
           type: string
-          title: Api Key
-        collection_to_test:
+          title: Full Name
+        status:
           type: string
-          title: Collection To Test
-        environment_name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Environment Name
-        application_id:
+          title: Status
+        link:
           type: string
-          pattern: ^([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})?$
-          title: Application Id
-      additionalProperties: true
+          title: Link
       type: object
       required:
-      - api_key
-      - collection_to_test
-      - application_id
-      title: RunRemoteScanRequestBody
-    PiiDetailsItem:
-      properties:
-        key:
-          type: string
-          title: Key
-        category:
-          type: string
-          title: Category
-        subcategory:
-          type: string
-          title: Subcategory
-        endpoint:
-          $ref: '#/components/schemas/ScanDetailsEndpoint'
-        value:
-          type: string
-          title: Value
-      type: object
-      required:
-      - key
-      - category
-      - subcategory
-      - endpoint
-      - value
-      title: PiiDetailsItem
-    ScanSummaryOut:
-      properties:
-        errors:
-          type: integer
-          title: Errors
-        functional_test_name:
-          type: string
-          title: Functional Test Name
-        endpoints:
-          items:
-            $ref: '#/components/schemas/Endpoint'
-          type: array
-          title: Endpoints
-        scan_timestamp:
-          type: string
-          format: date-time
-          title: Scan Timestamp
-        scan_status:
-          type: string
-          title: Scan Status
-        number_of_requests:
-          type: integer
-          title: Number Of Requests
-        unique_endpoints:
-          type: integer
-          title: Unique Endpoints
-        warnings:
-          type: integer
-          title: Warnings
-        source:
-          $ref: '#/components/schemas/Source'
-        scan_id:
-          type: string
-          title: Scan Id
-        number_of_tests:
-          type: integer
-          title: Number Of Tests
-        passed_tests:
-          type: integer
-          title: Passed Tests
-        scan_duration:
-          anyOf:
-          - type: integer
-          - $ref: '#/components/schemas/ScanDuration'
-          title: Scan Duration
-        severity_map_count:
-          anyOf:
-          - additionalProperties:
-              type: integer
-            type: object
-          - type: 'null'
-          title: Severity Map Count
-        first_name:
-          anyOf:
-          - type: string
-          - items:
-              anyOf:
-              - type: string
-              - type: 'null'
-            type: array
-          - type: 'null'
-          title: First Name
-        last_name:
-          anyOf:
-          - type: string
-          - items:
-              anyOf:
-              - type: string
-              - type: 'null'
-            type: array
-          - type: 'null'
-          title: Last Name
-        application_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Application Id
-        application:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Application
-        tags:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: Tags
-        pynt_collection_uploaded:
-          anyOf:
-          - type: boolean
-          - type: 'null'
-          title: Pynt Collection Uploaded
-          default: false
-      additionalProperties: true
-      type: object
-      required:
-      - errors
-      - functional_test_name
-      - endpoints
-      - scan_timestamp
-      - scan_status
-      - number_of_requests
-      - unique_endpoints
-      - warnings
-      - source
-      - scan_id
-      - number_of_tests
-      - passed_tests
-      - scan_duration
-      - first_name
-      - last_name
-      - application_id
-      - application
-      title: ScanSummaryOut
-    ScanDetailsEndpointTrafficItem:
-      properties:
-        path:
-          type: string
-          title: Path
-        method:
-          type: string
-          title: Method
-        host:
-          type: string
-          title: Host
-        original_status_codes:
-          items:
-            type: integer
-          type: array
-          title: Original Status Codes
-        authenticated:
-          type: boolean
-          title: Authenticated
-        number_of_users:
-          type: integer
-          title: Number Of Users
-        max_time_ms:
-          type: integer
-          title: Max Time Ms
-        number_of_requests:
-          type: integer
-          title: Number Of Requests
-        is_timeout:
-          anyOf:
-          - type: boolean
-          - type: 'null'
-          title: Is Timeout
-      type: object
-      required:
-      - path
-      - method
-      - host
-      - original_status_codes
-      - authenticated
-      - number_of_users
-      - max_time_ms
-      - number_of_requests
-      - is_timeout
-      title: ScanDetailsEndpointTrafficItem
-    ApprovalUpdateRequest:
-      properties:
-        value:
-          $ref: '#/components/schemas/Conclusion'
-      type: object
-      required:
-      - value
-      title: ApprovalUpdateRequest
-    VulnerabilityDefinition:
-      properties:
-        category:
-          type: string
-          title: Category
-        sub_category:
-          type: string
-          title: Sub Category
-      type: object
-      required:
-      - category
-      - sub_category
-      title: VulnerabilityDefinition
-    PaginatedScanCurrentOut:
-      properties:
-        data:
-          items:
-            $ref: '#/components/schemas/ScanCurrentOut'
-          type: array
-          title: Data
-        total:
-          type: integer
-          title: Total
-      type: object
-      required:
-      - data
-      - total
-      title: PaginatedScanCurrentOut
-    AttackCandidate:
-      properties:
-        Category:
-          type: string
-          title: Category
-        SubCategory:
-          type: string
-          title: Subcategory
-        Endpoint:
-          $ref: '#/components/schemas/Endpoint'
-      additionalProperties: true
-      type: object
-      required:
-      - Category
-      - SubCategory
-      - Endpoint
-      title: AttackCandidate
-    Endpoint:
-      properties:
-        path:
-          type: string
-          title: Path
-        method:
-          type: string
-          title: Method
-      additionalProperties: true
-      type: object
-      required:
-      - path
-      - method
-      title: Endpoint
+      - full_name
+      - status
+      - link
+      title: ScanDetailsOwaspCoverage
     ScanReportFalsePositiveAnalysis:
       properties:
         scan_id:
@@ -2119,26 +2015,88 @@ components:
       - claims
       title: ScanReportFalsePositiveAnalysis
       description: Represents a collection of false positive claims for a specific scan.
-    CreateScanRequestBody:
+    Feedback:
       properties:
-        scan_id:
+        message:
           type: string
-          pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
-          title: Scan Id
-        application_id:
+          title: Message
+        severity:
+          $ref: '#/components/schemas/FeedbackSeverity'
+        arguments:
           anyOf:
-          - type: string
-            pattern: ^([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})?$
+          - items:
+              type: string
+            type: array
           - type: 'null'
-          title: Application Id
-        report:
-          $ref: '#/components/schemas/ScanData'
+          title: Arguments
+      type: object
+      required:
+      - message
+      - severity
+      title: Feedback
+    FalsePositiveClaim-Output:
+      properties:
+        finding_id:
+          type: string
+          format: uuid
+          title: Finding Id
+        category:
+          type: string
+          title: Category
+        subcategory:
+          type: string
+          title: Subcategory
+        prompt:
+          type: string
+          title: Prompt
+        approved:
+          $ref: '#/components/schemas/Conclusion'
+          default: Inconclusive
+        false_positive_result:
+          $ref: '#/components/schemas/FalsePositiveLLMResult'
+      type: object
+      required:
+      - finding_id
+      - category
+      - subcategory
+      - prompt
+      - false_positive_result
+      title: FalsePositiveClaim
+      description: Represents a claim that a finding is a false positive.
+    AttackCandidate:
+      properties:
+        Category:
+          type: string
+          title: Category
+        SubCategory:
+          type: string
+          title: Subcategory
+        Endpoint:
+          $ref: '#/components/schemas/Endpoint'
       additionalProperties: true
       type: object
       required:
-      - scan_id
-      - report
-      title: CreateScanRequestBody
+      - Category
+      - SubCategory
+      - Endpoint
+      title: AttackCandidate
+    ScanDetailsEndpoint:
+      properties:
+        path:
+          type: string
+          title: Path
+        method:
+          type: string
+          title: Method
+        host:
+          type: string
+          title: Host
+      type: object
+      required:
+      - path
+      - method
+      - host
+      title: ScanDetailsEndpoint
     ScanDetailsMetadata:
       properties:
         scan_id:
@@ -2173,117 +2131,25 @@ components:
       - source
       - severity_map_count
       title: ScanDetailsMetadata
-    PaginatedTrafficResponse:
+    RunRemoteHarScanRequestBody:
       properties:
-        data:
-          items:
-            $ref: '#/components/schemas/ScanDetailsEndpointTrafficItem'
-          type: array
-          title: Data
-        total:
-          type: integer
-          title: Total
-      type: object
-      required:
-      - data
-      - total
-      title: PaginatedTrafficResponse
-    PaginatedFindingsResponse:
-      properties:
-        data:
-          items:
-            $ref: '#/components/schemas/ScanDetailsFinding'
-          type: array
-          title: Data
-        total:
-          type: integer
-          title: Total
-      type: object
-      required:
-      - data
-      - total
-      title: PaginatedFindingsResponse
-    FalsePositiveClaim-Output:
-      properties:
-        finding_id:
+        application_id:
           type: string
-          format: uuid
-          title: Finding Id
-        category:
+          pattern: ^([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})?$
+          title: Application Id
+        har_path:
           type: string
-          title: Category
-        subcategory:
+          title: Har Path
+        capture_domains:
           type: string
-          title: Subcategory
-        prompt:
-          type: string
-          title: Prompt
-        approved:
-          $ref: '#/components/schemas/Conclusion'
-          default: Inconclusive
-        false_positive_result:
-          $ref: '#/components/schemas/FalsePositiveLLMResult'
-      type: object
-      required:
-      - finding_id
-      - category
-      - subcategory
-      - prompt
-      - false_positive_result
-      title: FalsePositiveClaim
-      description: Represents a claim that a finding is a false positive.
-    Source:
-      properties:
-        integration:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Integration
-        user:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: User
-        integraion:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Integraion
+          title: Capture Domains
       additionalProperties: true
       type: object
       required:
-      - integration
-      - integraion
-      title: Source
-    FeedbackSeverity:
-      type: string
-      enum:
-      - info
-      - low
-      - medium
-      - high
-      title: FeedbackSeverity
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
+      - application_id
+      - har_path
+      - capture_domains
+      title: RunRemoteHarScanRequestBody
     ScanData:
       properties:
         scan_findings:
@@ -2411,17 +2277,53 @@ components:
       - pii_seen
       - goa_version
       title: ScanData
-    ScanCreateOut:
+    ScanWarning:
       properties:
-        vulnerabilities_details:
+        category:
+          type: string
+          title: Category
+        subcategory:
+          type: string
+          title: Subcategory
+        endpoint:
+          $ref: '#/components/schemas/Endpoint'
+        mode:
           anyOf:
-          - $ref: '#/components/schemas/VulnerabilitiesDetails-Output'
+          - type: string
           - type: 'null'
+          title: Mode
+          default: ''
+        header:
+          type: string
+          title: Header
+        id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Id
+        header_key:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Header Key
+        host:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Host
       additionalProperties: true
       type: object
       required:
-      - vulnerabilities_details
-      title: ScanCreateOut
+      - category
+      - subcategory
+      - endpoint
+      - header
+      title: ScanWarning
+    ScanSummaryProgressType:
+      type: string
+      enum:
+      - scan
+      title: ScanSummaryProgressType
     ScanConfigOut:
       properties:
         api_limit:
@@ -2459,14 +2361,127 @@ components:
       - application_id
       - local_only_mode
       title: ScanConfigOut
-    VulnerabilityInstanceRelevance:
-      type: string
+    Severity:
+      type: integer
       enum:
-      - relevant
-      - irrelevant_waived
-      - irrelevant_fixed
-      title: VulnerabilityInstanceRelevance
-    ScanDetailsEndpoint:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+      title: Severity
+    Endpoint:
+      properties:
+        path:
+          type: string
+          title: Path
+        method:
+          type: string
+          title: Method
+      additionalProperties: true
+      type: object
+      required:
+      - path
+      - method
+      title: Endpoint
+    GraphqlSeenItem:
+      properties:
+        path:
+          type: string
+          title: Path
+        method:
+          type: string
+          title: Method
+      additionalProperties: true
+      type: object
+      required:
+      - path
+      - method
+      title: GraphqlSeenItem
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    PaginatedScanCurrentOut:
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/ScanCurrentOut'
+          type: array
+          title: Data
+        total:
+          type: integer
+          title: Total
+      type: object
+      required:
+      - data
+      - total
+      title: PaginatedScanCurrentOut
+    PiiDetailsItem:
+      properties:
+        key:
+          type: string
+          title: Key
+        category:
+          type: string
+          title: Category
+        subcategory:
+          type: string
+          title: Subcategory
+        endpoint:
+          $ref: '#/components/schemas/ScanDetailsEndpoint'
+        value:
+          type: string
+          title: Value
+      type: object
+      required:
+      - key
+      - category
+      - subcategory
+      - endpoint
+      - value
+      title: PiiDetailsItem
+    PaginatedPiiResponse:
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/PiiDetailsItem'
+          type: array
+          title: Data
+        total:
+          type: integer
+          title: Total
+      type: object
+      required:
+      - data
+      - total
+      title: PaginatedPiiResponse
+    ApprovalUpdateRequest:
+      properties:
+        value:
+          $ref: '#/components/schemas/Conclusion'
+      type: object
+      required:
+      - value
+      title: ApprovalUpdateRequest
+    ScanDetailsEndpointItem:
       properties:
         path:
           type: string
@@ -2477,36 +2492,21 @@ components:
         host:
           type: string
           title: Host
+        findings_details:
+          items:
+            $ref: '#/components/schemas/VulnerabilityDefinition'
+          type: array
+          title: Findings Details
+        risk_score:
+          $ref: '#/components/schemas/Severity'
       type: object
       required:
       - path
       - method
       - host
-      title: ScanDetailsEndpoint
-    ScanDetailsFeedback:
-      properties:
-        message:
-          type: string
-          title: Message
-        severity:
-          $ref: '#/components/schemas/FeedbackSeverity'
-        arguments:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: Arguments
-      type: object
-      required:
-      - message
-      - severity
-      title: ScanDetailsFeedback
-    ScanSummaryProgressType:
-      type: string
-      enum:
-      - scan
-      title: ScanSummaryProgressType
+      - findings_details
+      - risk_score
+      title: ScanDetailsEndpointItem
   securitySchemes:
     API_Key:
       type: apiKey

@@ -967,28 +967,38 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    CreateDayOfWeekSpec:
+    UpdateScanScheduleRequest:
       properties:
-        time_local:
-          type: string
-          format: time
-          title: Time Local
-        schedule_type:
-          type: string
-          const: day_of_week
-          title: Schedule Type
-          default: day_of_week
-        days:
-          items:
-            $ref: '#/components/schemas/DayOfWeek'
-          type: array
-          minItems: 1
-          title: Days
+        spec:
+          anyOf:
+          - oneOf:
+            - $ref: '#/components/schemas/DayOfWeekSpec-Input'
+            - $ref: '#/components/schemas/DayIntervalSpec-Input'
+            - $ref: '#/components/schemas/OnlyOnceSpec'
+            discriminator:
+              propertyName: schedule_type
+              mapping:
+                day_interval: '#/components/schemas/DayIntervalSpec-Input'
+                day_of_week: '#/components/schemas/DayOfWeekSpec-Input'
+                only_once: '#/components/schemas/OnlyOnceSpec'
+          - type: 'null'
+          title: Spec
+        target:
+          anyOf:
+          - oneOf:
+            - $ref: '#/components/schemas/HarScanTargetOut'
+            - $ref: '#/components/schemas/NewmanScanTargetOut'
+            - $ref: '#/components/schemas/AppScanTargetOut'
+            discriminator:
+              propertyName: integration_type
+              mapping:
+                app: '#/components/schemas/AppScanTargetOut'
+                har: '#/components/schemas/HarScanTargetOut'
+                newman: '#/components/schemas/NewmanScanTargetOut'
+          - type: 'null'
+          title: Target
       type: object
-      required:
-      - time_local
-      - days
-      title: CreateDayOfWeekSpec
+      title: UpdateScanScheduleRequest
     DayOfWeekSpec-Output:
       properties:
         schedule_type:
@@ -1010,21 +1020,192 @@ components:
       - days
       - time_utc
       title: DayOfWeekSpec
-    AppScanTargetOut:
+    CreateApplicationRequest:
       properties:
-        integration_type:
+        name:
           type: string
-          const: app
-          title: Integration Type
-          default: app
+          minLength: 3
+          title: Name
+        assignee_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Assignee Id
+        tags:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Tags
+        last_tested_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Last Tested At
+        last_scan_status:
+          anyOf:
+          - $ref: '#/components/schemas/ScanExecutionStatus'
+          - type: 'null'
+        last_scan_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Last Scan Id
+        assignee:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Assignee
+        poid:
+          anyOf:
+          - type: string
+            pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
+          - type: 'null'
+          title: Poid
       type: object
-      title: AppScanTargetOut
-      description: 'Scan target for a Pynt application''s built collection.
-
-
-        The client supplies only the integration type; the collection''s S3 location
-
-        is derived server-side from the application''s assigned poid.'
+      required:
+      - name
+      title: CreateApplicationRequest
+    CreateDayIntervalSpec:
+      properties:
+        time_local:
+          type: string
+          format: time
+          title: Time Local
+        schedule_type:
+          type: string
+          const: day_interval
+          title: Schedule Type
+          default: day_interval
+        interval_days:
+          type: integer
+          minimum: 1.0
+          title: Interval Days
+      type: object
+      required:
+      - time_local
+      - interval_days
+      title: CreateDayIntervalSpec
+    DataSourceOut:
+      properties:
+        properties:
+          oneOf:
+          - $ref: '#/components/schemas/SwaggerDataSource'
+          - $ref: '#/components/schemas/SwaggerFileDataSource'
+          - $ref: '#/components/schemas/PostmanCollectionDataSource'
+          - $ref: '#/components/schemas/PostmanFileDataSource'
+          - $ref: '#/components/schemas/HarFileDataSource'
+          - $ref: '#/components/schemas/ScanDataSource'
+          title: Properties
+          discriminator:
+            propertyName: type
+            mapping:
+              har_file: '#/components/schemas/HarFileDataSource'
+              postman_collection: '#/components/schemas/PostmanCollectionDataSource'
+              postman_file: '#/components/schemas/PostmanFileDataSource'
+              scan: '#/components/schemas/ScanDataSource'
+              swagger: '#/components/schemas/SwaggerDataSource'
+              swagger_file: '#/components/schemas/SwaggerFileDataSource'
+        type:
+          anyOf:
+          - $ref: '#/components/schemas/DocsLinkType'
+          - $ref: '#/components/schemas/SourceFileType'
+          - $ref: '#/components/schemas/ScanType'
+          title: Type
+        status:
+          $ref: '#/components/schemas/DataSourceStatus'
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+        updated_at:
+          type: string
+          format: date-time
+          title: Updated At
+      type: object
+      required:
+      - properties
+      - type
+      - status
+      - created_at
+      - updated_at
+      title: DataSourceOut
+    ApplicationMetadataOut:
+      properties:
+        name:
+          type: string
+          minLength: 3
+          title: Name
+        assignee_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Assignee Id
+        tags:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Tags
+        last_tested_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Last Tested At
+        last_scan_status:
+          anyOf:
+          - $ref: '#/components/schemas/ScanExecutionStatus'
+          - type: 'null'
+        last_scan_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Last Scan Id
+        assignee:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Assignee
+        app_id:
+          type: string
+          pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
+          title: App Id
+        assignee_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Assignee Name
+        assigned_application:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Assigned Application
+        number_of_endpoint_groups:
+          type: integer
+          title: Number Of Endpoint Groups
+        vulnerability_instances:
+          type: integer
+          title: Vulnerability Instances
+        risk:
+          type: integer
+          title: Risk
+        data_sources:
+          additionalProperties:
+            $ref: '#/components/schemas/ApplicationDataSourceOut'
+          type: object
+          title: Data Sources
+      type: object
+      required:
+      - name
+      - number_of_endpoint_groups
+      - vulnerability_instances
+      - risk
+      - data_sources
+      title: ApplicationMetadataOut
     LastScansStatusSummary:
       properties:
         completed:
@@ -1057,50 +1238,436 @@ components:
           default: 0
       type: object
       title: LastScansStatusSummary
-    EndpointPropertiesInDB:
+    EndpointSource:
       properties:
-        authenticated:
-          anyOf:
-          - type: boolean
-          - type: 'null'
-          title: Authenticated
-        protocol:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Protocol
-        endpoint_status:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Endpoint Status
-        last_scan:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Last Scan
-        last_scan_time:
-          anyOf:
-          - type: string
-            format: date-time
-          - type: 'null'
-          title: Last Scan Time
-        request_bodies:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: Request Bodies
-        response_bodies:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: Response Bodies
+        name:
+          type: string
+          title: Name
+        value:
+          type: string
+          title: Value
       type: object
-      title: EndpointPropertiesInDB
+      required:
+      - name
+      - value
+      title: EndpointSource
+    PostmanCollectionDataSource:
+      properties:
+        url:
+          type: string
+          minLength: 1
+          format: uri
+          title: Url
+          description: URL to the file
+        type:
+          type: string
+          const: postman_collection
+          title: Type
+      type: object
+      required:
+      - url
+      - type
+      title: PostmanCollectionDataSource
+    PentestReportStatus:
+      type: string
+      enum:
+      - SUCCEEDED
+      - FAILED
+      - PENDING
+      title: PentestReportStatus
+    AggregatedRisks:
+      properties:
+        unscanned:
+          type: integer
+          title: Unscanned
+          default: 0
+        none:
+          type: integer
+          title: None
+          default: 0
+        low:
+          type: integer
+          title: Low
+          default: 0
+        medium:
+          type: integer
+          title: Medium
+          default: 0
+        high:
+          type: integer
+          title: High
+          default: 0
+        critical:
+          type: integer
+          title: Critical
+          default: 0
+      type: object
+      title: AggregatedRisks
+    CreateDayOfWeekSpec:
+      properties:
+        time_local:
+          type: string
+          format: time
+          title: Time Local
+        schedule_type:
+          type: string
+          const: day_of_week
+          title: Schedule Type
+          default: day_of_week
+        days:
+          items:
+            $ref: '#/components/schemas/DayOfWeek'
+          type: array
+          minItems: 1
+          title: Days
+      type: object
+      required:
+      - time_local
+      - days
+      title: CreateDayOfWeekSpec
+    ScanDuration:
+      properties:
+        numberLong:
+          anyOf:
+          - type: string
+          - type: integer
+          - type: 'null'
+          title: Numberlong
+      type: object
+      title: ScanDuration
+    Source:
+      properties:
+        integration:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Integration
+        user:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User
+        integraion:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Integraion
+      additionalProperties: true
+      type: object
+      required:
+      - integration
+      - integraion
+      title: Source
+    OnlyOnceSpec:
+      properties:
+        schedule_type:
+          type: string
+          const: only_once
+          title: Schedule Type
+          default: only_once
+        run_at:
+          type: string
+          format: date-time
+          title: Run At
+      type: object
+      required:
+      - run_at
+      title: OnlyOnceSpec
+    DayOfWeek:
+      type: string
+      enum:
+      - sunday
+      - monday
+      - tuesday
+      - wednesday
+      - thursday
+      - friday
+      - saturday
+      title: DayOfWeek
+    SwaggerFileDataSource:
+      properties:
+        path:
+          type: string
+          minLength: 1
+          title: Path
+          description: Path to the file in the bucket
+        type:
+          type: string
+          const: swagger_file
+          title: Type
+      type: object
+      required:
+      - path
+      - type
+      title: SwaggerFileDataSource
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    PostmanFileDataSource:
+      properties:
+        path:
+          type: string
+          minLength: 1
+          title: Path
+          description: Path to the file in the bucket
+        type:
+          type: string
+          const: postman_file
+          title: Type
+      type: object
+      required:
+      - path
+      - type
+      title: PostmanFileDataSource
+    AppScanTargetOut:
+      properties:
+        integration_type:
+          type: string
+          const: app
+          title: Integration Type
+          default: app
+      type: object
+      title: AppScanTargetOut
+      description: 'Scan target for a Pynt application''s built collection.
+
+
+        The client supplies only the integration type; the collection''s S3 location
+
+        is derived server-side from the application''s assigned poid.'
+    ApplicationDataSourceOut:
+      properties:
+        status:
+          type: string
+          title: Status
+      type: object
+      required:
+      - status
+      title: ApplicationDataSourceOut
+    LiveTrafficUpdateDataSourceRequest:
+      properties:
+        data_source:
+          oneOf:
+          - $ref: '#/components/schemas/SwaggerDataSource'
+          - $ref: '#/components/schemas/SwaggerFileDataSource'
+          - $ref: '#/components/schemas/PostmanCollectionDataSource'
+          - $ref: '#/components/schemas/PostmanFileDataSource'
+          - $ref: '#/components/schemas/HarFileDataSource'
+          - $ref: '#/components/schemas/ScanDataSource'
+          title: Data Source
+          discriminator:
+            propertyName: type
+            mapping:
+              har_file: '#/components/schemas/HarFileDataSource'
+              postman_collection: '#/components/schemas/PostmanCollectionDataSource'
+              postman_file: '#/components/schemas/PostmanFileDataSource'
+              scan: '#/components/schemas/ScanDataSource'
+              swagger: '#/components/schemas/SwaggerDataSource'
+              swagger_file: '#/components/schemas/SwaggerFileDataSource'
+      type: object
+      required:
+      - data_source
+      title: LiveTrafficUpdateDataSourceRequest
+    CreateScanScheduleRequest:
+      properties:
+        spec:
+          oneOf:
+          - $ref: '#/components/schemas/CreateDayOfWeekSpec'
+          - $ref: '#/components/schemas/CreateDayIntervalSpec'
+          - $ref: '#/components/schemas/CreateOnlyOnceSpec'
+          title: Spec
+          discriminator:
+            propertyName: schedule_type
+            mapping:
+              day_interval: '#/components/schemas/CreateDayIntervalSpec'
+              day_of_week: '#/components/schemas/CreateDayOfWeekSpec'
+              only_once: '#/components/schemas/CreateOnlyOnceSpec'
+        target:
+          oneOf:
+          - $ref: '#/components/schemas/HarScanTargetOut'
+          - $ref: '#/components/schemas/NewmanScanTargetOut'
+          - $ref: '#/components/schemas/AppScanTargetOut'
+          title: Target
+          discriminator:
+            propertyName: integration_type
+            mapping:
+              app: '#/components/schemas/AppScanTargetOut'
+              har: '#/components/schemas/HarScanTargetOut'
+              newman: '#/components/schemas/NewmanScanTargetOut'
+      type: object
+      required:
+      - spec
+      - target
+      title: CreateScanScheduleRequest
+    CreateEndpointRequest:
+      properties:
+        path:
+          type: string
+          title: Path
+        method:
+          type: string
+          title: Method
+        host:
+          type: string
+          title: Host
+        endpoint_type:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Endpoint Type
+        source:
+          $ref: '#/components/schemas/EndpointSource'
+        properties:
+          $ref: '#/components/schemas/EndpointPropertiesInDB'
+      type: object
+      required:
+      - path
+      - method
+      - host
+      - endpoint_type
+      - source
+      - properties
+      title: CreateEndpointRequest
+    UpdateScanScheduleStateRequest:
+      properties:
+        state:
+          type: string
+          enum:
+          - active
+          - paused
+          title: State
+      type: object
+      required:
+      - state
+      title: UpdateScanScheduleStateRequest
+    AuthenticationInfo:
+      properties:
+        method:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Method
+        name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Name
+      type: object
+      title: AuthenticationInfo
+    DayIntervalSpec-Input:
+      properties:
+        schedule_type:
+          type: string
+          const: day_interval
+          title: Schedule Type
+          default: day_interval
+        interval_days:
+          type: integer
+          minimum: 1.0
+          title: Interval Days
+        time_utc:
+          type: string
+          format: time
+          title: Time Utc
+      type: object
+      required:
+      - interval_days
+      - time_utc
+      title: DayIntervalSpec
+    DayOfWeekSpec-Input:
+      properties:
+        schedule_type:
+          type: string
+          const: day_of_week
+          title: Schedule Type
+          default: day_of_week
+        days:
+          items:
+            $ref: '#/components/schemas/DayOfWeek'
+          type: array
+          minItems: 1
+          title: Days
+        time_utc:
+          type: string
+          format: time
+          title: Time Utc
+      type: object
+      required:
+      - days
+      - time_utc
+      title: DayOfWeekSpec
+    YesNoQuestion:
+      properties:
+        verdict:
+          type: boolean
+          title: Verdict
+        reason:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Reason
+      type: object
+      required:
+      - verdict
+      title: YesNoQuestion
+    SingleApplicationMetrics:
+      properties:
+        last_scan_status:
+          anyOf:
+          - $ref: '#/components/schemas/ScanExecutionStatus'
+          - type: 'null'
+        last_scan_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Last Scan Id
+        risk:
+          type: integer
+          title: Risk
+        vulnerability_severity_summary:
+          $ref: '#/components/schemas/SeveritySummary'
+          default:
+            info: 0
+            low: 0
+            medium: 0
+            high: 0
+            critical: 0
+        api_risk_score_summary:
+          $ref: '#/components/schemas/AggregatedRisks'
+          default:
+            unscanned: 0
+            none: 0
+            low: 0
+            medium: 0
+            high: 0
+            critical: 0
+      type: object
+      required:
+      - risk
+      title: SingleApplicationMetrics
+    Body_create_endpoints_v1_application__application_id__endpoints_post:
+      properties:
+        create_endpoint_requests:
+          items:
+            $ref: '#/components/schemas/CreateEndpointRequest'
+          type: array
+          title: Create Endpoint Requests
+      type: object
+      required:
+      - create_endpoint_requests
+      title: Body_create_endpoints_v1_application__application_id__endpoints_post
+    SourceFileType:
+      type: string
+      enum:
+      - swagger_file
+      - postman_file
+      - har_file
+      title: SourceFileType
     DayIntervalSpec-Output:
       properties:
         schedule_type:
@@ -1120,23 +1687,218 @@ components:
       - interval_days
       - time_utc
       title: DayIntervalSpec
-    SwaggerDataSource:
+    ScanDataSource:
       properties:
-        url:
+        scan_id:
           type: string
-          minLength: 1
-          format: uri
-          title: Url
-          description: URL to the file
+          title: Scan Id
         type:
           type: string
-          const: swagger
+          const: scan
           title: Type
       type: object
       required:
-      - url
+      - scan_id
       - type
-      title: SwaggerDataSource
+      title: ScanDataSource
+    UpdateDataSourceRequest:
+      properties:
+        status:
+          $ref: '#/components/schemas/DataSourceStatus'
+          description: Status of the data source
+          default: PENDING
+        properties:
+          oneOf:
+          - $ref: '#/components/schemas/SwaggerDataSource'
+          - $ref: '#/components/schemas/SwaggerFileDataSource'
+          - $ref: '#/components/schemas/PostmanCollectionDataSource'
+          - $ref: '#/components/schemas/PostmanFileDataSource'
+          - $ref: '#/components/schemas/HarFileDataSource'
+          - $ref: '#/components/schemas/ScanDataSource'
+          title: Properties
+          discriminator:
+            propertyName: type
+            mapping:
+              har_file: '#/components/schemas/HarFileDataSource'
+              postman_collection: '#/components/schemas/PostmanCollectionDataSource'
+              postman_file: '#/components/schemas/PostmanFileDataSource'
+              scan: '#/components/schemas/ScanDataSource'
+              swagger: '#/components/schemas/SwaggerDataSource'
+              swagger_file: '#/components/schemas/SwaggerFileDataSource'
+      type: object
+      required:
+      - properties
+      title: UpdateDataSourceRequest
+    HarScanTargetOut:
+      properties:
+        integration_type:
+          type: string
+          const: har
+          title: Integration Type
+          default: har
+        har_path:
+          type: string
+          minLength: 1
+          title: Har Path
+        capture_domains:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Capture Domains
+      type: object
+      required:
+      - har_path
+      title: HarScanTargetOut
+    ApplicationOut:
+      properties:
+        name:
+          type: string
+          minLength: 3
+          title: Name
+        assignee_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Assignee Id
+        tags:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Tags
+        last_tested_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Last Tested At
+        last_scan_status:
+          anyOf:
+          - $ref: '#/components/schemas/ScanExecutionStatus'
+          - type: 'null'
+        last_scan_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Last Scan Id
+        assignee:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Assignee
+        app_id:
+          type: string
+          pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
+          title: App Id
+      type: object
+      required:
+      - name
+      title: ApplicationOut
+    CreateOnlyOnceSpec:
+      properties:
+        schedule_type:
+          type: string
+          const: only_once
+          title: Schedule Type
+          default: only_once
+        run_at:
+          type: string
+          format: date-time
+          title: Run At
+      type: object
+      required:
+      - run_at
+      title: CreateOnlyOnceSpec
+    ApplicationMetadataListOut:
+      properties:
+        count:
+          type: integer
+          title: Count
+        data:
+          items:
+            $ref: '#/components/schemas/ApplicationMetadataOut'
+          type: array
+          title: Data
+      type: object
+      required:
+      - count
+      - data
+      title: ApplicationMetadataListOut
+    ScanType:
+      type: string
+      enum:
+      - scan
+      title: ScanType
+    DocsLinkType:
+      type: string
+      enum:
+      - swagger
+      - postman_collection
+      title: DocsLinkType
+    UpdateApplicationRequest:
+      properties:
+        name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Name
+        assignee_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Assignee Id
+        tags:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Tags
+        poid:
+          anyOf:
+          - type: string
+            pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
+          - type: 'null'
+          title: Poid
+      type: object
+      title: UpdateApplicationRequest
+    ScanExecutionStatus:
+      type: string
+      enum:
+      - Pending
+      - running
+      - Completed
+      - Did not run
+      - Aborted
+      - Cancelled
+      - Scheduled
+      title: ScanExecutionStatus
+    NewmanScanTargetOut:
+      properties:
+        integration_type:
+          type: string
+          const: newman
+          title: Integration Type
+          default: newman
+        collection_to_test:
+          type: string
+          minLength: 1
+          title: Collection To Test
+        environment_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Environment Name
+        api_key:
+          type: string
+          minLength: 1
+          title: Api Key
+      type: object
+      required:
+      - collection_to_test
+      - api_key
+      title: NewmanScanTargetOut
     CountOut:
       properties:
         count:
@@ -1146,6 +1908,46 @@ components:
       required:
       - count
       title: CountOut
+    SeveritySummary:
+      properties:
+        info:
+          type: integer
+          title: Info
+          default: 0
+        low:
+          type: integer
+          title: Low
+          default: 0
+        medium:
+          type: integer
+          title: Medium
+          default: 0
+        high:
+          type: integer
+          title: High
+          default: 0
+        critical:
+          type: integer
+          title: Critical
+          default: 0
+      type: object
+      title: SeveritySummary
+    HarFileDataSource:
+      properties:
+        path:
+          type: string
+          minLength: 1
+          title: Path
+          description: Path to the file in the bucket
+        type:
+          type: string
+          const: har_file
+          title: Type
+      type: object
+      required:
+      - path
+      - type
+      title: HarFileDataSource
     EndpointLLMAnalysis:
       properties:
         endpoint:
@@ -1292,279 +2094,19 @@ components:
       - endpoint_id
       title: EndpointLLMAnalysis
       description: Business model — extends the LLM schema with application-level fields.
-    ApplicationMetadataOut:
+    PiiItem:
       properties:
-        name:
+        field_name:
           type: string
-          minLength: 3
-          title: Name
-        assignee_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Assignee Id
-        tags:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: Tags
-        last_tested_at:
-          anyOf:
-          - type: string
-            format: date-time
-          - type: 'null'
-          title: Last Tested At
-        last_scan_status:
-          anyOf:
-          - $ref: '#/components/schemas/ScanExecutionStatus'
-          - type: 'null'
-        last_scan_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Last Scan Id
-        assignee:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Assignee
-        app_id:
+          title: Field Name
+        value:
           type: string
-          pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
-          title: App Id
-        assignee_name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Assignee Name
-        assigned_application:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Assigned Application
-        number_of_endpoint_groups:
-          type: integer
-          title: Number Of Endpoint Groups
-        vulnerability_instances:
-          type: integer
-          title: Vulnerability Instances
-        risk:
-          type: integer
-          title: Risk
-        data_sources:
-          additionalProperties:
-            $ref: '#/components/schemas/ApplicationDataSourceOut'
-          type: object
-          title: Data Sources
+          title: Value
       type: object
       required:
-      - name
-      - number_of_endpoint_groups
-      - vulnerability_instances
-      - risk
-      - data_sources
-      title: ApplicationMetadataOut
-    SourceFileType:
-      type: string
-      enum:
-      - swagger_file
-      - postman_file
-      - har_file
-      title: SourceFileType
-    DocsLinkType:
-      type: string
-      enum:
-      - swagger
-      - postman_collection
-      title: DocsLinkType
-    PentestReportOut:
-      properties:
-        pentest_id:
-          type: string
-          title: Pentest Id
-        url:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Url
-        status:
-          $ref: '#/components/schemas/PentestReportStatus'
-      type: object
-      required:
-      - pentest_id
-      - url
-      - status
-      title: PentestReportOut
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    SingleApplicationMetrics:
-      properties:
-        last_scan_status:
-          anyOf:
-          - $ref: '#/components/schemas/ScanExecutionStatus'
-          - type: 'null'
-        last_scan_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Last Scan Id
-        risk:
-          type: integer
-          title: Risk
-        vulnerability_severity_summary:
-          $ref: '#/components/schemas/SeveritySummary'
-          default:
-            info: 0
-            low: 0
-            medium: 0
-            high: 0
-            critical: 0
-        api_risk_score_summary:
-          $ref: '#/components/schemas/AggregatedRisks'
-          default:
-            unscanned: 0
-            none: 0
-            low: 0
-            medium: 0
-            high: 0
-            critical: 0
-      type: object
-      required:
-      - risk
-      title: SingleApplicationMetrics
-    ApplicationListItemOut:
-      properties:
-        name:
-          type: string
-          minLength: 3
-          title: Name
-        assignee_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Assignee Id
-        tags:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: Tags
-        last_tested_at:
-          anyOf:
-          - type: string
-            format: date-time
-          - type: 'null'
-          title: Last Tested At
-        last_scan_status:
-          anyOf:
-          - $ref: '#/components/schemas/ScanExecutionStatus'
-          - type: 'null'
-        last_scan_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Last Scan Id
-        assignee:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Assignee
-        app_id:
-          type: string
-          pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
-          title: App Id
-        assigned_application:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Assigned Application
-      type: object
-      required:
-      - name
-      title: ApplicationListItemOut
-    AuthenticationInfo:
-      properties:
-        method:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Method
-        name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Name
-      type: object
-      title: AuthenticationInfo
-    DayIntervalSpec-Input:
-      properties:
-        schedule_type:
-          type: string
-          const: day_interval
-          title: Schedule Type
-          default: day_interval
-        interval_days:
-          type: integer
-          minimum: 1.0
-          title: Interval Days
-        time_utc:
-          type: string
-          format: time
-          title: Time Utc
-      type: object
-      required:
-      - interval_days
-      - time_utc
-      title: DayIntervalSpec
-    CreateOnlyOnceSpec:
-      properties:
-        schedule_type:
-          type: string
-          const: only_once
-          title: Schedule Type
-          default: only_once
-        run_at:
-          type: string
-          format: date-time
-          title: Run At
-      type: object
-      required:
-      - run_at
-      title: CreateOnlyOnceSpec
-    SeveritySummary:
-      properties:
-        info:
-          type: integer
-          title: Info
-          default: 0
-        low:
-          type: integer
-          title: Low
-          default: 0
-        medium:
-          type: integer
-          title: Medium
-          default: 0
-        high:
-          type: integer
-          title: High
-          default: 0
-        critical:
-          type: integer
-          title: Critical
-          default: 0
-      type: object
-      title: SeveritySummary
+      - field_name
+      - value
+      title: PiiItem
     ScanSummaryProgressOut:
       properties:
         errors:
@@ -1688,143 +2230,57 @@ components:
       - progress_type
       - scan_progress
       title: ScanSummaryProgressOut
-    NewmanScanTargetOut:
+    EndpointPropertiesInDB:
       properties:
-        integration_type:
-          type: string
-          const: newman
-          title: Integration Type
-          default: newman
-        collection_to_test:
-          type: string
-          minLength: 1
-          title: Collection To Test
-        environment_name:
+        authenticated:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Authenticated
+        protocol:
           anyOf:
           - type: string
           - type: 'null'
-          title: Environment Name
-        api_key:
-          type: string
-          minLength: 1
-          title: Api Key
-      type: object
-      required:
-      - collection_to_test
-      - api_key
-      title: NewmanScanTargetOut
-    ScanDuration:
-      properties:
-        numberLong:
+          title: Protocol
+        endpoint_status:
           anyOf:
           - type: string
-          - type: integer
           - type: 'null'
-          title: Numberlong
-      type: object
-      title: ScanDuration
-    AggregatedRisks:
-      properties:
-        unscanned:
-          type: integer
-          title: Unscanned
-          default: 0
-        none:
-          type: integer
-          title: None
-          default: 0
-        low:
-          type: integer
-          title: Low
-          default: 0
-        medium:
-          type: integer
-          title: Medium
-          default: 0
-        high:
-          type: integer
-          title: High
-          default: 0
-        critical:
-          type: integer
-          title: Critical
-          default: 0
-      type: object
-      title: AggregatedRisks
-    DataSourceStatus:
-      type: string
-      enum:
-      - SUCCEEDED
-      - FAILED
-      - PENDING
-      title: DataSourceStatus
-    DataSourceOut:
-      properties:
-        properties:
-          oneOf:
-          - $ref: '#/components/schemas/SwaggerDataSource'
-          - $ref: '#/components/schemas/SwaggerFileDataSource'
-          - $ref: '#/components/schemas/PostmanCollectionDataSource'
-          - $ref: '#/components/schemas/PostmanFileDataSource'
-          - $ref: '#/components/schemas/HarFileDataSource'
-          - $ref: '#/components/schemas/ScanDataSource'
-          title: Properties
-          discriminator:
-            propertyName: type
-            mapping:
-              har_file: '#/components/schemas/HarFileDataSource'
-              postman_collection: '#/components/schemas/PostmanCollectionDataSource'
-              postman_file: '#/components/schemas/PostmanFileDataSource'
-              scan: '#/components/schemas/ScanDataSource'
-              swagger: '#/components/schemas/SwaggerDataSource'
-              swagger_file: '#/components/schemas/SwaggerFileDataSource'
-        type:
+          title: Endpoint Status
+        last_scan:
           anyOf:
-          - $ref: '#/components/schemas/DocsLinkType'
-          - $ref: '#/components/schemas/SourceFileType'
-          - $ref: '#/components/schemas/ScanType'
-          title: Type
-        status:
-          $ref: '#/components/schemas/DataSourceStatus'
-        created_at:
-          type: string
-          format: date-time
-          title: Created At
-        updated_at:
-          type: string
-          format: date-time
-          title: Updated At
+          - type: string
+          - type: 'null'
+          title: Last Scan
+        last_scan_time:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Last Scan Time
+        request_bodies:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Request Bodies
+        response_bodies:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Response Bodies
       type: object
-      required:
-      - properties
-      - type
-      - status
-      - created_at
-      - updated_at
-      title: DataSourceOut
-    SwaggerFileDataSource:
-      properties:
-        path:
-          type: string
-          minLength: 1
-          title: Path
-          description: Path to the file in the bucket
-        type:
-          type: string
-          const: swagger_file
-          title: Type
-      type: object
-      required:
-      - path
-      - type
-      title: SwaggerFileDataSource
-    PentestReportStatus:
+      title: EndpointPropertiesInDB
+    ScheduleState:
       type: string
       enum:
-      - SUCCEEDED
-      - FAILED
-      - PENDING
-      title: PentestReportStatus
+      - active
+      - paused
+      - completed
+      title: ScheduleState
     PathParameter:
       properties:
         param_value:
@@ -1838,257 +2294,11 @@ components:
       - param_value
       - suggested_name
       title: PathParameter
-    DayOfWeek:
+    ScanSummaryProgressType:
       type: string
       enum:
-      - sunday
-      - monday
-      - tuesday
-      - wednesday
-      - thursday
-      - friday
-      - saturday
-      title: DayOfWeek
-    PiiItem:
-      properties:
-        field_name:
-          type: string
-          title: Field Name
-        value:
-          type: string
-          title: Value
-      type: object
-      required:
-      - field_name
-      - value
-      title: PiiItem
-    UpdateScanScheduleRequest:
-      properties:
-        spec:
-          anyOf:
-          - oneOf:
-            - $ref: '#/components/schemas/DayOfWeekSpec-Input'
-            - $ref: '#/components/schemas/DayIntervalSpec-Input'
-            - $ref: '#/components/schemas/OnlyOnceSpec'
-            discriminator:
-              propertyName: schedule_type
-              mapping:
-                day_interval: '#/components/schemas/DayIntervalSpec-Input'
-                day_of_week: '#/components/schemas/DayOfWeekSpec-Input'
-                only_once: '#/components/schemas/OnlyOnceSpec'
-          - type: 'null'
-          title: Spec
-        target:
-          anyOf:
-          - oneOf:
-            - $ref: '#/components/schemas/HarScanTargetOut'
-            - $ref: '#/components/schemas/NewmanScanTargetOut'
-            - $ref: '#/components/schemas/AppScanTargetOut'
-            discriminator:
-              propertyName: integration_type
-              mapping:
-                app: '#/components/schemas/AppScanTargetOut'
-                har: '#/components/schemas/HarScanTargetOut'
-                newman: '#/components/schemas/NewmanScanTargetOut'
-          - type: 'null'
-          title: Target
-      type: object
-      title: UpdateScanScheduleRequest
-    LiveTrafficUpdateDataSourceRequest:
-      properties:
-        data_source:
-          oneOf:
-          - $ref: '#/components/schemas/SwaggerDataSource'
-          - $ref: '#/components/schemas/SwaggerFileDataSource'
-          - $ref: '#/components/schemas/PostmanCollectionDataSource'
-          - $ref: '#/components/schemas/PostmanFileDataSource'
-          - $ref: '#/components/schemas/HarFileDataSource'
-          - $ref: '#/components/schemas/ScanDataSource'
-          title: Data Source
-          discriminator:
-            propertyName: type
-            mapping:
-              har_file: '#/components/schemas/HarFileDataSource'
-              postman_collection: '#/components/schemas/PostmanCollectionDataSource'
-              postman_file: '#/components/schemas/PostmanFileDataSource'
-              scan: '#/components/schemas/ScanDataSource'
-              swagger: '#/components/schemas/SwaggerDataSource'
-              swagger_file: '#/components/schemas/SwaggerFileDataSource'
-      type: object
-      required:
-      - data_source
-      title: LiveTrafficUpdateDataSourceRequest
-    PostmanCollectionDataSource:
-      properties:
-        url:
-          type: string
-          minLength: 1
-          format: uri
-          title: Url
-          description: URL to the file
-        type:
-          type: string
-          const: postman_collection
-          title: Type
-      type: object
-      required:
-      - url
-      - type
-      title: PostmanCollectionDataSource
-    HarFileDataSource:
-      properties:
-        path:
-          type: string
-          minLength: 1
-          title: Path
-          description: Path to the file in the bucket
-        type:
-          type: string
-          const: har_file
-          title: Type
-      type: object
-      required:
-      - path
-      - type
-      title: HarFileDataSource
-    YesNoQuestion:
-      properties:
-        verdict:
-          type: boolean
-          title: Verdict
-        reason:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Reason
-      type: object
-      required:
-      - verdict
-      title: YesNoQuestion
-    ApplicationMetadataListOut:
-      properties:
-        count:
-          type: integer
-          title: Count
-        data:
-          items:
-            $ref: '#/components/schemas/ApplicationMetadataOut'
-          type: array
-          title: Data
-      type: object
-      required:
-      - count
-      - data
-      title: ApplicationMetadataListOut
-    UpdateScanScheduleStateRequest:
-      properties:
-        state:
-          type: string
-          enum:
-          - active
-          - paused
-          title: State
-      type: object
-      required:
-      - state
-      title: UpdateScanScheduleStateRequest
-    DayOfWeekSpec-Input:
-      properties:
-        schedule_type:
-          type: string
-          const: day_of_week
-          title: Schedule Type
-          default: day_of_week
-        days:
-          items:
-            $ref: '#/components/schemas/DayOfWeek'
-          type: array
-          minItems: 1
-          title: Days
-        time_utc:
-          type: string
-          format: time
-          title: Time Utc
-      type: object
-      required:
-      - days
-      - time_utc
-      title: DayOfWeekSpec
-    CreateScanScheduleRequest:
-      properties:
-        spec:
-          oneOf:
-          - $ref: '#/components/schemas/CreateDayOfWeekSpec'
-          - $ref: '#/components/schemas/CreateDayIntervalSpec'
-          - $ref: '#/components/schemas/CreateOnlyOnceSpec'
-          title: Spec
-          discriminator:
-            propertyName: schedule_type
-            mapping:
-              day_interval: '#/components/schemas/CreateDayIntervalSpec'
-              day_of_week: '#/components/schemas/CreateDayOfWeekSpec'
-              only_once: '#/components/schemas/CreateOnlyOnceSpec'
-        target:
-          oneOf:
-          - $ref: '#/components/schemas/HarScanTargetOut'
-          - $ref: '#/components/schemas/NewmanScanTargetOut'
-          - $ref: '#/components/schemas/AppScanTargetOut'
-          title: Target
-          discriminator:
-            propertyName: integration_type
-            mapping:
-              app: '#/components/schemas/AppScanTargetOut'
-              har: '#/components/schemas/HarScanTargetOut'
-              newman: '#/components/schemas/NewmanScanTargetOut'
-      type: object
-      required:
-      - spec
-      - target
-      title: CreateScanScheduleRequest
-    PostmanFileDataSource:
-      properties:
-        path:
-          type: string
-          minLength: 1
-          title: Path
-          description: Path to the file in the bucket
-        type:
-          type: string
-          const: postman_file
-          title: Type
-      type: object
-      required:
-      - path
-      - type
-      title: PostmanFileDataSource
-    UpdateDataSourceRequest:
-      properties:
-        status:
-          $ref: '#/components/schemas/DataSourceStatus'
-          description: Status of the data source
-          default: PENDING
-        properties:
-          oneOf:
-          - $ref: '#/components/schemas/SwaggerDataSource'
-          - $ref: '#/components/schemas/SwaggerFileDataSource'
-          - $ref: '#/components/schemas/PostmanCollectionDataSource'
-          - $ref: '#/components/schemas/PostmanFileDataSource'
-          - $ref: '#/components/schemas/HarFileDataSource'
-          - $ref: '#/components/schemas/ScanDataSource'
-          title: Properties
-          discriminator:
-            propertyName: type
-            mapping:
-              har_file: '#/components/schemas/HarFileDataSource'
-              postman_collection: '#/components/schemas/PostmanCollectionDataSource'
-              postman_file: '#/components/schemas/PostmanFileDataSource'
-              scan: '#/components/schemas/ScanDataSource'
-              swagger: '#/components/schemas/SwaggerDataSource'
-              swagger_file: '#/components/schemas/SwaggerFileDataSource'
-      type: object
-      required:
-      - properties
-      title: UpdateDataSourceRequest
+      - scan
+      title: ScanSummaryProgressType
     Endpoint:
       properties:
         path:
@@ -2103,183 +2313,6 @@ components:
       - path
       - method
       title: Endpoint
-    CreateDayIntervalSpec:
-      properties:
-        time_local:
-          type: string
-          format: time
-          title: Time Local
-        schedule_type:
-          type: string
-          const: day_interval
-          title: Schedule Type
-          default: day_interval
-        interval_days:
-          type: integer
-          minimum: 1.0
-          title: Interval Days
-      type: object
-      required:
-      - time_local
-      - interval_days
-      title: CreateDayIntervalSpec
-    CreateEndpointRequest:
-      properties:
-        path:
-          type: string
-          title: Path
-        method:
-          type: string
-          title: Method
-        host:
-          type: string
-          title: Host
-        endpoint_type:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Endpoint Type
-        source:
-          $ref: '#/components/schemas/EndpointSource'
-        properties:
-          $ref: '#/components/schemas/EndpointPropertiesInDB'
-      type: object
-      required:
-      - path
-      - method
-      - host
-      - endpoint_type
-      - source
-      - properties
-      title: CreateEndpointRequest
-    CreateApplicationRequest:
-      properties:
-        name:
-          type: string
-          minLength: 3
-          title: Name
-        assignee_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Assignee Id
-        tags:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: Tags
-        last_tested_at:
-          anyOf:
-          - type: string
-            format: date-time
-          - type: 'null'
-          title: Last Tested At
-        last_scan_status:
-          anyOf:
-          - $ref: '#/components/schemas/ScanExecutionStatus'
-          - type: 'null'
-        last_scan_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Last Scan Id
-        assignee:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Assignee
-        poid:
-          anyOf:
-          - type: string
-            pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
-          - type: 'null'
-          title: Poid
-      type: object
-      required:
-      - name
-      title: CreateApplicationRequest
-    ScanDataSource:
-      properties:
-        scan_id:
-          type: string
-          title: Scan Id
-        type:
-          type: string
-          const: scan
-          title: Type
-      type: object
-      required:
-      - scan_id
-      - type
-      title: ScanDataSource
-    Source:
-      properties:
-        integration:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Integration
-        user:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: User
-        integraion:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Integraion
-      additionalProperties: true
-      type: object
-      required:
-      - integration
-      - integraion
-      title: Source
-    ScanType:
-      type: string
-      enum:
-      - scan
-      title: ScanType
-    OnlyOnceSpec:
-      properties:
-        schedule_type:
-          type: string
-          const: only_once
-          title: Schedule Type
-          default: only_once
-        run_at:
-          type: string
-          format: date-time
-          title: Run At
-      type: object
-      required:
-      - run_at
-      title: OnlyOnceSpec
-    ApplicationsMetrics:
-      properties:
-        risk_summary:
-          $ref: '#/components/schemas/AggregatedRisks'
-          default:
-            unscanned: 0
-            none: 0
-            low: 0
-            medium: 0
-            high: 0
-            critical: 0
-        last_scans_status_summary:
-          $ref: '#/components/schemas/LastScansStatusSummary'
-          default:
-            completed: 0
-            did_not_run: 0
-            not_scanned: 0
-            running: 0
-            pending: 0
-            scheduled: 0
-            aborted: 0
-      type: object
-      title: ApplicationsMetrics
     ValidationError:
       properties:
         loc:
@@ -2301,82 +2334,24 @@ components:
       - msg
       - type
       title: ValidationError
-    SyncStatus:
-      type: string
-      enum:
-      - pending
-      - synced
-      - failed
-      title: SyncStatus
-    EndpointSource:
+    PentestReportOut:
       properties:
-        name:
+        pentest_id:
           type: string
-          title: Name
-        value:
-          type: string
-          title: Value
-      type: object
-      required:
-      - name
-      - value
-      title: EndpointSource
-    HarScanTargetOut:
-      properties:
-        integration_type:
-          type: string
-          const: har
-          title: Integration Type
-          default: har
-        har_path:
-          type: string
-          minLength: 1
-          title: Har Path
-        capture_domains:
+          title: Pentest Id
+        url:
           anyOf:
           - type: string
           - type: 'null'
-          title: Capture Domains
-      type: object
-      required:
-      - har_path
-      title: HarScanTargetOut
-    UpdateApplicationRequest:
-      properties:
-        name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Name
-        assignee_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Assignee Id
-        tags:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: Tags
-        poid:
-          anyOf:
-          - type: string
-            pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
-          - type: 'null'
-          title: Poid
-      type: object
-      title: UpdateApplicationRequest
-    ApplicationDataSourceOut:
-      properties:
+          title: Url
         status:
-          type: string
-          title: Status
+          $ref: '#/components/schemas/PentestReportStatus'
       type: object
       required:
+      - pentest_id
+      - url
       - status
-      title: ApplicationDataSourceOut
+      title: PentestReportOut
     ScanScheduleOut:
       properties:
         scan_schedule_id:
@@ -2427,13 +2402,60 @@ components:
       - state
       - sync_status
       title: ScanScheduleOut
-    ScheduleState:
+    SyncStatus:
       type: string
       enum:
-      - active
-      - paused
-      - completed
-      title: ScheduleState
+      - pending
+      - synced
+      - failed
+      title: SyncStatus
+    SwaggerDataSource:
+      properties:
+        url:
+          type: string
+          minLength: 1
+          format: uri
+          title: Url
+          description: URL to the file
+        type:
+          type: string
+          const: swagger
+          title: Type
+      type: object
+      required:
+      - url
+      - type
+      title: SwaggerDataSource
+    ApplicationsMetrics:
+      properties:
+        risk_summary:
+          $ref: '#/components/schemas/AggregatedRisks'
+          default:
+            unscanned: 0
+            none: 0
+            low: 0
+            medium: 0
+            high: 0
+            critical: 0
+        last_scans_status_summary:
+          $ref: '#/components/schemas/LastScansStatusSummary'
+          default:
+            completed: 0
+            did_not_run: 0
+            not_scanned: 0
+            running: 0
+            pending: 0
+            scheduled: 0
+            aborted: 0
+      type: object
+      title: ApplicationsMetrics
+    DataSourceStatus:
+      type: string
+      enum:
+      - SUCCEEDED
+      - FAILED
+      - PENDING
+      title: DataSourceStatus
     PentestReportListItemOut:
       properties:
         pentest_id:
@@ -2451,12 +2473,7 @@ components:
       - status
       - created_at
       title: PentestReportListItemOut
-    ScanSummaryProgressType:
-      type: string
-      enum:
-      - scan
-      title: ScanSummaryProgressType
-    ApplicationOut:
+    ApplicationListItemOut:
       properties:
         name:
           type: string
@@ -2498,32 +2515,15 @@ components:
           type: string
           pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
           title: App Id
+        assigned_application:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Assigned Application
       type: object
       required:
       - name
-      title: ApplicationOut
-    ScanExecutionStatus:
-      type: string
-      enum:
-      - Pending
-      - running
-      - Completed
-      - Did not run
-      - Aborted
-      - Cancelled
-      - Scheduled
-      title: ScanExecutionStatus
-    Body_create_endpoints_v1_application__application_id__endpoints_post:
-      properties:
-        create_endpoint_requests:
-          items:
-            $ref: '#/components/schemas/CreateEndpointRequest'
-          type: array
-          title: Create Endpoint Requests
-      type: object
-      required:
-      - create_endpoint_requests
-      title: Body_create_endpoints_v1_application__application_id__endpoints_post
+      title: ApplicationListItemOut
   securitySchemes:
     API_Key:
       type: apiKey

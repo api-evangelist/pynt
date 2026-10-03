@@ -70,27 +70,20 @@ paths:
       - Operator Organization Context: []
 components:
   schemas:
-    ValidationError:
+    DownloadUrlRequest:
       properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
+        folder:
+          $ref: '#/components/schemas/ArtifactsAllowedFolders'
+          description: The folder to download the file from
+        file_name:
           type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
+          title: File Name
+          description: The prefix of the file to download
       type: object
       required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
+      - folder
+      - file_name
+      title: DownloadUrlRequest
     UploadUrlRequest:
       properties:
         folder:
@@ -120,6 +113,34 @@ components:
       - upload_url
       - path
       title: UploadUrlResponse
+    ArtifactsAllowedFolders:
+      type: string
+      enum:
+      - api-docs
+      - har-files
+      - collections
+      title: ArtifactsAllowedFolders
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
     HTTPValidationError:
       properties:
         detail:
@@ -129,27 +150,6 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
-    ArtifactsAllowedFolders:
-      type: string
-      enum:
-      - api-docs
-      - har-files
-      - collections
-      title: ArtifactsAllowedFolders
-    DownloadUrlRequest:
-      properties:
-        folder:
-          $ref: '#/components/schemas/ArtifactsAllowedFolders'
-          description: The folder to download the file from
-        file_name:
-          type: string
-          title: File Name
-          description: The prefix of the file to download
-      type: object
-      required:
-      - folder
-      - file_name
-      title: DownloadUrlRequest
   securitySchemes:
     API_Key:
       type: apiKey

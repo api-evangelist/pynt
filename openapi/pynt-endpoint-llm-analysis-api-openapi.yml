@@ -42,6 +42,33 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
+    AuthenticationInfo:
+      properties:
+        method:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Method
+        name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Name
+      type: object
+      title: AuthenticationInfo
+    PathParameter:
+      properties:
+        param_value:
+          type: string
+          title: Param Value
+        suggested_name:
+          type: string
+          title: Suggested Name
+      type: object
+      required:
+      - param_value
+      - suggested_name
+      title: PathParameter
     YesNoQuestion:
       properties:
         verdict:
@@ -223,28 +250,6 @@ components:
       - endpoint_id
       title: EndpointLLMAnalysis
       description: Business model — extends the LLM schema with application-level fields.
-    PathParameter:
-      properties:
-        param_value:
-          type: string
-          title: Param Value
-        suggested_name:
-          type: string
-          title: Suggested Name
-      type: object
-      required:
-      - param_value
-      - suggested_name
-      title: PathParameter
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
     PiiItem:
       properties:
         field_name:
@@ -258,20 +263,15 @@ components:
       - field_name
       - value
       title: PiiItem
-    AuthenticationInfo:
+    HTTPValidationError:
       properties:
-        method:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Method
-        name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Name
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
       type: object
-      title: AuthenticationInfo
+      title: HTTPValidationError
   securitySchemes:
     API_Key:
       type: apiKey

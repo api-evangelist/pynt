@@ -141,42 +141,6 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    PaginatedEndpointGroupsOut:
-      properties:
-        data:
-          items:
-            $ref: '#/components/schemas/EndpointGroupOut'
-          type: array
-          title: Data
-        total:
-          type: integer
-          title: Total
-      type: object
-      required:
-      - data
-      - total
-      title: PaginatedEndpointGroupsOut
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
     EndpointGroupsRisk:
       properties:
         unscanned:
@@ -205,11 +169,6 @@ components:
           default: 0
       type: object
       title: EndpointGroupsRisk
-    ExportFormat:
-      type: string
-      enum:
-      - csv
-      title: ExportFormat
     ExportResponse:
       properties:
         export_id:
@@ -228,15 +187,32 @@ components:
       - date
       - format
       title: ExportResponse
-    HTTPValidationError:
+    ValidationError:
       properties:
-        detail:
+        loc:
           items:
-            $ref: '#/components/schemas/ValidationError'
+            anyOf:
+            - type: string
+            - type: integer
           type: array
-          title: Detail
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
       type: object
-      title: HTTPValidationError
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    ExportFormat:
+      type: string
+      enum:
+      - csv
+      title: ExportFormat
     EndpointGroupOut:
       properties:
         endpoint_group_id:
@@ -312,6 +288,30 @@ components:
       - last_scan_time
       - last_seen
       title: EndpointGroupOut
+    PaginatedEndpointGroupsOut:
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/EndpointGroupOut'
+          type: array
+          title: Data
+        total:
+          type: integer
+          title: Total
+      type: object
+      required:
+      - data
+      - total
+      title: PaginatedEndpointGroupsOut
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
   securitySchemes:
     API_Key:
       type: apiKey

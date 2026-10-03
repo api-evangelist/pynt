@@ -39,24 +39,6 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    IntegrationInfo:
-      properties:
-        integration_id:
-          type: string
-          pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
-          title: Integration Id
-        integration_type:
-          type: string
-          title: Integration Type
-        status:
-          type: string
-          title: Status
-      type: object
-      required:
-      - integration_id
-      - integration_type
-      - status
-      title: IntegrationInfo
     ListIntegrationsResponse:
       properties:
         integrations:
@@ -68,6 +50,15 @@ components:
       required:
       - integrations
       title: ListIntegrationsResponse
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     ValidationError:
       properties:
         loc:
@@ -89,15 +80,24 @@ components:
       - msg
       - type
       title: ValidationError
-    HTTPValidationError:
+    IntegrationInfo:
       properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
+        integration_id:
+          type: string
+          pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
+          title: Integration Id
+        integration_type:
+          type: string
+          title: Integration Type
+        status:
+          type: string
+          title: Status
       type: object
-      title: HTTPValidationError
+      required:
+      - integration_id
+      - integration_type
+      - status
+      title: IntegrationInfo
   securitySchemes:
     API_Key:
       type: apiKey

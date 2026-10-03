@@ -152,40 +152,19 @@ paths:
       - Bearer Token: []
 components:
   schemas:
-    JiraPropertiesRequest:
+    JiraPropertiesSiteRequest:
       properties:
-        site:
-          anyOf:
-          - $ref: '#/components/schemas/JiraPropertiesSiteRequest'
-          - type: 'null'
-        default_project:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Default Project
-      type: object
-      title: JiraPropertiesRequest
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
+        id:
           type: string
-          title: Message
-        type:
+          title: Id
+        url:
           type: string
-          title: Error Type
+          title: Url
       type: object
       required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
+      - id
+      - url
+      title: JiraPropertiesSiteRequest
     JiraProject:
       properties:
         id:
@@ -213,19 +192,36 @@ components:
       - avatar_url
       - issue_types
       title: JiraProject
-    JiraPropertiesSiteRequest:
+    JiraSiteResponse:
       properties:
         id:
           type: string
           title: Id
+        name:
+          type: string
+          title: Name
         url:
           type: string
           title: Url
       type: object
       required:
       - id
+      - name
       - url
-      title: JiraPropertiesSiteRequest
+      title: JiraSiteResponse
+    JiraPropertiesRequest:
+      properties:
+        site:
+          anyOf:
+          - $ref: '#/components/schemas/JiraPropertiesSiteRequest'
+          - type: 'null'
+        default_project:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Default Project
+      type: object
+      title: JiraPropertiesRequest
     JiraAllowedValue:
       properties:
         id:
@@ -245,6 +241,36 @@ components:
           title: Name
       type: object
       title: JiraAllowedValue
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    Body_connect_jira_v1_ticketing_jira_put:
+      properties:
+        code:
+          type: string
+          title: Code
+      type: object
+      required:
+      - code
+      title: Body_connect_jira_v1_ticketing_jira_put
     HTTPValidationError:
       properties:
         detail:
@@ -306,32 +332,6 @@ components:
       - id
       - name
       title: IssueType
-    JiraSiteResponse:
-      properties:
-        id:
-          type: string
-          title: Id
-        name:
-          type: string
-          title: Name
-        url:
-          type: string
-          title: Url
-      type: object
-      required:
-      - id
-      - name
-      - url
-      title: JiraSiteResponse
-    Body_connect_jira_v1_ticketing_jira_put:
-      properties:
-        code:
-          type: string
-          title: Code
-      type: object
-      required:
-      - code
-      title: Body_connect_jira_v1_ticketing_jira_put
   securitySchemes:
     API_Key:
       type: apiKey

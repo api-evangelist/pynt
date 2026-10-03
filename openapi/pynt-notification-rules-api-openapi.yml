@@ -132,6 +132,16 @@ components:
       - msg
       - type
       title: ValidationError
+    NotificationRuleOut:
+      properties:
+        rule_id:
+          type: string
+          title: Rule Id
+      type: object
+      required:
+      - rule_id
+      title: NotificationRuleOut
+      description: Only the stable rule id — the portal owns and stores the rest, keyed by it.
     NotificationRuleCreate:
       properties:
         type:
@@ -169,6 +179,11 @@ components:
       required:
       - scan_status_triggers
       title: NotificationRuleCreate
+    NotificationServiceType:
+      type: string
+      enum:
+      - CAPI_SECURITY_TESTING
+      title: NotificationServiceType
     HTTPValidationError:
       properties:
         detail:
@@ -178,21 +193,6 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
-    NotificationRuleOut:
-      properties:
-        rule_id:
-          type: string
-          title: Rule Id
-      type: object
-      required:
-      - rule_id
-      title: NotificationRuleOut
-      description: Only the stable rule id — the portal owns and stores the rest, keyed by it.
-    NotificationServiceType:
-      type: string
-      enum:
-      - CAPI_SECURITY_TESTING
-      title: NotificationServiceType
   securitySchemes:
     API_Key:
       type: apiKey

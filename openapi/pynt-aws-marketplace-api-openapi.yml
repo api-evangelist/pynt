@@ -59,34 +59,6 @@ paths:
       - Bearer Token: []
 components:
   schemas:
-    UserRole:
-      type: string
-      enum:
-      - Admin
-      - User
-      - SystemAdmin
-      title: UserRole
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
     UserOut:
       properties:
         uid:
@@ -140,6 +112,34 @@ components:
       - name
       - lastname
       title: UserOut
+    UserRole:
+      type: string
+      enum:
+      - Admin
+      - User
+      - SystemAdmin
+      title: UserRole
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
     Body_aws_marketplace_signup_v1_marketplace_aws_signup_post:
       properties:
         aws_marketplace_id:

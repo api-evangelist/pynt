@@ -124,16 +124,84 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    ApplicationTrafficRoutingAny:
+    ApplicationTrafficRoutingCol:
       properties:
         op:
           type: string
-          const: any
+          enum:
+          - eq
+          - ne
           title: Op
-          default: any
+        col:
+          type: string
+          title: Col
+        value:
+          type: string
+          title: Value
       additionalProperties: false
       type: object
-      title: ApplicationTrafficRoutingAny
+      required:
+      - op
+      - col
+      - value
+      title: ApplicationTrafficRoutingCol
+    ApplicationTrafficRoutingCondition-Input:
+      properties:
+        op:
+          type: string
+          enum:
+          - and
+          - or
+          title: Op
+        filters:
+          items:
+            oneOf:
+            - $ref: '#/components/schemas/ApplicationTrafficRoutingAny'
+            - $ref: '#/components/schemas/ApplicationTrafficRoutingCol'
+            - $ref: '#/components/schemas/ApplicationTrafficRoutingCondition-Input'
+            discriminator:
+              propertyName: op
+              mapping:
+                and: '#/components/schemas/ApplicationTrafficRoutingCondition-Input'
+                any: '#/components/schemas/ApplicationTrafficRoutingAny'
+                eq: '#/components/schemas/ApplicationTrafficRoutingCol'
+                ne: '#/components/schemas/ApplicationTrafficRoutingCol'
+                or: '#/components/schemas/ApplicationTrafficRoutingCondition-Input'
+          type: array
+          title: Filters
+      additionalProperties: false
+      type: object
+      required:
+      - op
+      - filters
+      title: ApplicationTrafficRoutingCondition
+    TrafficCollectorOut-Output:
+      properties:
+        collector_id:
+          type: string
+          title: Collector Id
+        organization_id:
+          type: string
+          title: Organization Id
+        name:
+          type: string
+          title: Name
+        cluster_name:
+          type: string
+          title: Cluster Name
+        application_routing_entries:
+          items:
+            $ref: '#/components/schemas/ApplicationTrafficRoutingEntry-Output'
+          type: array
+          title: Application Routing Entries
+      type: object
+      required:
+      - collector_id
+      - organization_id
+      - name
+      - cluster_name
+      - application_routing_entries
+      title: TrafficCollectorOut
     ValidationError:
       properties:
         loc:
@@ -179,6 +247,39 @@ components:
       - application_id
       - routing_data
       title: ApplicationTrafficRoutingEntry
+    ApplicationTrafficRoutingAny:
+      properties:
+        op:
+          type: string
+          const: any
+          title: Op
+          default: any
+      additionalProperties: false
+      type: object
+      title: ApplicationTrafficRoutingAny
+    TrafficCollectorCreate:
+      properties:
+        name:
+          type: string
+          maxLength: 100
+          minLength: 1
+          title: Name
+        cluster_name:
+          type: string
+          maxLength: 100
+          minLength: 1
+          title: Cluster Name
+        application_routing_entries:
+          items:
+            $ref: '#/components/schemas/ApplicationTrafficRoutingEntry-Input'
+          type: array
+          title: Application Routing Entries
+      type: object
+      required:
+      - name
+      - cluster_name
+      - application_routing_entries
+      title: TrafficCollectorCreate
     ApplicationTrafficRoutingCondition-Output:
       properties:
         op:
@@ -233,77 +334,6 @@ components:
       - application_id
       - routing_data
       title: ApplicationTrafficRoutingEntry
-    ApplicationTrafficRoutingCol:
-      properties:
-        op:
-          type: string
-          enum:
-          - eq
-          - ne
-          title: Op
-        col:
-          type: string
-          title: Col
-        value:
-          type: string
-          title: Value
-      additionalProperties: false
-      type: object
-      required:
-      - op
-      - col
-      - value
-      title: ApplicationTrafficRoutingCol
-    TrafficCollectorCreate:
-      properties:
-        name:
-          type: string
-          maxLength: 100
-          minLength: 1
-          title: Name
-        cluster_name:
-          type: string
-          maxLength: 100
-          minLength: 1
-          title: Cluster Name
-        application_routing_entries:
-          items:
-            $ref: '#/components/schemas/ApplicationTrafficRoutingEntry-Input'
-          type: array
-          title: Application Routing Entries
-      type: object
-      required:
-      - name
-      - cluster_name
-      - application_routing_entries
-      title: TrafficCollectorCreate
-    TrafficCollectorOut-Output:
-      properties:
-        collector_id:
-          type: string
-          title: Collector Id
-        organization_id:
-          type: string
-          title: Organization Id
-        name:
-          type: string
-          title: Name
-        cluster_name:
-          type: string
-          title: Cluster Name
-        application_routing_entries:
-          items:
-            $ref: '#/components/schemas/ApplicationTrafficRoutingEntry-Output'
-          type: array
-          title: Application Routing Entries
-      type: object
-      required:
-      - collector_id
-      - organization_id
-      - name
-      - cluster_name
-      - application_routing_entries
-      title: TrafficCollectorOut
     HTTPValidationError:
       properties:
         detail:
@@ -313,36 +343,6 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
-    ApplicationTrafficRoutingCondition-Input:
-      properties:
-        op:
-          type: string
-          enum:
-          - and
-          - or
-          title: Op
-        filters:
-          items:
-            oneOf:
-            - $ref: '#/components/schemas/ApplicationTrafficRoutingAny'
-            - $ref: '#/components/schemas/ApplicationTrafficRoutingCol'
-            - $ref: '#/components/schemas/ApplicationTrafficRoutingCondition-Input'
-            discriminator:
-              propertyName: op
-              mapping:
-                and: '#/components/schemas/ApplicationTrafficRoutingCondition-Input'
-                any: '#/components/schemas/ApplicationTrafficRoutingAny'
-                eq: '#/components/schemas/ApplicationTrafficRoutingCol'
-                ne: '#/components/schemas/ApplicationTrafficRoutingCol'
-                or: '#/components/schemas/ApplicationTrafficRoutingCondition-Input'
-          type: array
-          title: Filters
-      additionalProperties: false
-      type: object
-      required:
-      - op
-      - filters
-      title: ApplicationTrafficRoutingCondition
   securitySchemes:
     API_Key:
       type: apiKey
