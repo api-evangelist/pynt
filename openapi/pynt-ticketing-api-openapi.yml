@@ -152,95 +152,6 @@ paths:
       - Bearer Token: []
 components:
   schemas:
-    JiraPropertiesSiteRequest:
-      properties:
-        id:
-          type: string
-          title: Id
-        url:
-          type: string
-          title: Url
-      type: object
-      required:
-      - id
-      - url
-      title: JiraPropertiesSiteRequest
-    JiraProject:
-      properties:
-        id:
-          type: string
-          title: Id
-        name:
-          type: string
-          title: Name
-        description:
-          type: string
-          title: Description
-        avatar_url:
-          type: string
-          title: Avatar Url
-        issue_types:
-          items:
-            $ref: '#/components/schemas/IssueType'
-          type: array
-          title: Issue Types
-      type: object
-      required:
-      - id
-      - name
-      - description
-      - avatar_url
-      - issue_types
-      title: JiraProject
-    JiraSiteResponse:
-      properties:
-        id:
-          type: string
-          title: Id
-        name:
-          type: string
-          title: Name
-        url:
-          type: string
-          title: Url
-      type: object
-      required:
-      - id
-      - name
-      - url
-      title: JiraSiteResponse
-    JiraPropertiesRequest:
-      properties:
-        site:
-          anyOf:
-          - $ref: '#/components/schemas/JiraPropertiesSiteRequest'
-          - type: 'null'
-        default_project:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Default Project
-      type: object
-      title: JiraPropertiesRequest
-    JiraAllowedValue:
-      properties:
-        id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Id
-        value:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Value
-        name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Name
-      type: object
-      title: JiraAllowedValue
     ValidationError:
       properties:
         loc:
@@ -262,24 +173,41 @@ components:
       - msg
       - type
       title: ValidationError
-    Body_connect_jira_v1_ticketing_jira_put:
+    IssueType:
       properties:
-        code:
+        id:
           type: string
-          title: Code
+          title: Id
+        name:
+          type: string
+          title: Name
+        icon_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Icon Url
       type: object
       required:
-      - code
-      title: Body_connect_jira_v1_ticketing_jira_put
-    HTTPValidationError:
+      - id
+      - name
+      title: IssueType
+    JiraSiteResponse:
       properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
+        id:
+          type: string
+          title: Id
+        name:
+          type: string
+          title: Name
+        url:
+          type: string
+          title: Url
       type: object
-      title: HTTPValidationError
+      required:
+      - id
+      - name
+      - url
+      title: JiraSiteResponse
     JiraField:
       properties:
         field_id:
@@ -314,7 +242,25 @@ components:
       - name
       - required
       title: JiraField
-    IssueType:
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    Body_connect_jira_v1_ticketing_jira_put:
+      properties:
+        code:
+          type: string
+          title: Code
+      type: object
+      required:
+      - code
+      title: Body_connect_jira_v1_ticketing_jira_put
+    JiraProject:
       properties:
         id:
           type: string
@@ -322,16 +268,70 @@ components:
         name:
           type: string
           title: Name
-        icon_url:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Icon Url
+        description:
+          type: string
+          title: Description
+        avatar_url:
+          type: string
+          title: Avatar Url
+        issue_types:
+          items:
+            $ref: '#/components/schemas/IssueType'
+          type: array
+          title: Issue Types
       type: object
       required:
       - id
       - name
-      title: IssueType
+      - description
+      - avatar_url
+      - issue_types
+      title: JiraProject
+    JiraAllowedValue:
+      properties:
+        id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Id
+        value:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Value
+        name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Name
+      type: object
+      title: JiraAllowedValue
+    JiraPropertiesSiteRequest:
+      properties:
+        id:
+          type: string
+          title: Id
+        url:
+          type: string
+          title: Url
+      type: object
+      required:
+      - id
+      - url
+      title: JiraPropertiesSiteRequest
+    JiraPropertiesRequest:
+      properties:
+        site:
+          anyOf:
+          - $ref: '#/components/schemas/JiraPropertiesSiteRequest'
+          - type: 'null'
+        default_project:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Default Project
+      type: object
+      title: JiraPropertiesRequest
   securitySchemes:
     API_Key:
       type: apiKey

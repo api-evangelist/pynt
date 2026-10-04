@@ -39,26 +39,6 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    ListIntegrationsResponse:
-      properties:
-        integrations:
-          items:
-            $ref: '#/components/schemas/IntegrationInfo'
-          type: array
-          title: Integrations
-      type: object
-      required:
-      - integrations
-      title: ListIntegrationsResponse
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
     ValidationError:
       properties:
         loc:
@@ -80,6 +60,17 @@ components:
       - msg
       - type
       title: ValidationError
+    ListIntegrationsResponse:
+      properties:
+        integrations:
+          items:
+            $ref: '#/components/schemas/IntegrationInfo'
+          type: array
+          title: Integrations
+      type: object
+      required:
+      - integrations
+      title: ListIntegrationsResponse
     IntegrationInfo:
       properties:
         integration_id:
@@ -98,6 +89,15 @@ components:
       - integration_type
       - status
       title: IntegrationInfo
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
   securitySchemes:
     API_Key:
       type: apiKey

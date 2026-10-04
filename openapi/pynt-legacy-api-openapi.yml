@@ -100,42 +100,6 @@ paths:
       - Operator Organization Context: []
 components:
   schemas:
-    UploadReportRequest:
-      properties:
-        scan_id:
-          anyOf:
-          - type: string
-            pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
-          - type: 'null'
-          title: Scan Id
-          deprecated: true
-        report:
-          type: string
-          title: Report
-      type: object
-      required:
-      - report
-      title: UploadReportRequest
-    ApplicationDataSourceOut:
-      properties:
-        status:
-          type: string
-          title: Status
-      type: object
-      required:
-      - status
-      title: ApplicationDataSourceOut
-    ScanExecutionStatus:
-      type: string
-      enum:
-      - Pending
-      - running
-      - Completed
-      - Did not run
-      - Aborted
-      - Cancelled
-      - Scheduled
-      title: ScanExecutionStatus
     ValidationError:
       properties:
         loc:
@@ -157,6 +121,60 @@ components:
       - msg
       - type
       title: ValidationError
+    CommunityUserResponse:
+      properties:
+        user-id:
+          type: string
+          title: User-Id
+      type: object
+      required:
+      - user-id
+      title: CommunityUserResponse
+    ScanExecutionStatus:
+      type: string
+      enum:
+      - Pending
+      - running
+      - Completed
+      - Did not run
+      - Aborted
+      - Cancelled
+      - Scheduled
+      title: ScanExecutionStatus
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ApplicationDataSourceOut:
+      properties:
+        status:
+          type: string
+          title: Status
+      type: object
+      required:
+      - status
+      title: ApplicationDataSourceOut
+    UploadReportRequest:
+      properties:
+        scan_id:
+          anyOf:
+          - type: string
+            pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
+          - type: 'null'
+          title: Scan Id
+          deprecated: true
+        report:
+          type: string
+          title: Report
+      type: object
+      required:
+      - report
+      title: UploadReportRequest
     ApplicationMetadataOut:
       properties:
         name:
@@ -231,24 +249,6 @@ components:
       - risk
       - data_sources
       title: ApplicationMetadataOut
-    CommunityUserResponse:
-      properties:
-        user-id:
-          type: string
-          title: User-Id
-      type: object
-      required:
-      - user-id
-      title: CommunityUserResponse
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
   securitySchemes:
     API_Key:
       type: apiKey

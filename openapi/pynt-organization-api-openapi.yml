@@ -159,15 +159,80 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    OrganizationCreateRequest:
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    OrganizationConfigResponse:
+      properties:
+        allow_collect_data:
+          type: boolean
+          title: Allow Collect Data
+        allow_collect_data_since:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Allow Collect Data Since
+        local_only_mode:
+          type: boolean
+          title: Local Only Mode
+      type: object
+      required:
+      - allow_collect_data
+      - allow_collect_data_since
+      - local_only_mode
+      title: OrganizationConfigResponse
+    OrganizationResponse:
+      properties:
+        organization_id:
+          type: string
+          title: Organization Id
+        name:
+          type: string
+          title: Name
+        license_expiration:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: License Expiration
+        config:
+          $ref: '#/components/schemas/OrganizationConfigResponse'
+      type: object
+      required:
+      - organization_id
+      - name
+      - config
+      title: OrganizationResponse
+    OrganizationUpdateModel:
       properties:
         name:
           type: string
+          maxLength: 30
+          pattern: ^[a-zA-Z0-9_\-\s]*$
           title: Name
       type: object
       required:
       - name
-      title: OrganizationCreateRequest
+      title: OrganizationUpdateModel
     OrganizationConfigUpdateModel:
       properties:
         allow_collect_data:
@@ -191,80 +256,6 @@ components:
       required:
       - organization_id
       title: OrganizationCreateResponse
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    OrganizationUpdateModel:
-      properties:
-        name:
-          type: string
-          maxLength: 30
-          pattern: ^[a-zA-Z0-9_\-\s]*$
-          title: Name
-      type: object
-      required:
-      - name
-      title: OrganizationUpdateModel
-    OrganizationResponse:
-      properties:
-        organization_id:
-          type: string
-          title: Organization Id
-        name:
-          type: string
-          title: Name
-        license_expiration:
-          anyOf:
-          - type: string
-            format: date-time
-          - type: 'null'
-          title: License Expiration
-        config:
-          $ref: '#/components/schemas/OrganizationConfigResponse'
-      type: object
-      required:
-      - organization_id
-      - name
-      - config
-      title: OrganizationResponse
-    OrganizationConfigResponse:
-      properties:
-        allow_collect_data:
-          type: boolean
-          title: Allow Collect Data
-        allow_collect_data_since:
-          anyOf:
-          - type: string
-            format: date-time
-          - type: 'null'
-          title: Allow Collect Data Since
-        local_only_mode:
-          type: boolean
-          title: Local Only Mode
-      type: object
-      required:
-      - allow_collect_data
-      - allow_collect_data_since
-      - local_only_mode
-      title: OrganizationConfigResponse
     HTTPValidationError:
       properties:
         detail:
@@ -283,6 +274,15 @@ components:
       required:
       - identity_provider
       title: SSOResponse
+    OrganizationCreateRequest:
+      properties:
+        name:
+          type: string
+          title: Name
+      type: object
+      required:
+      - name
+      title: OrganizationCreateRequest
   securitySchemes:
     API_Key:
       type: apiKey

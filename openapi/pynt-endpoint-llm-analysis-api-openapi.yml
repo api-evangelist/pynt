@@ -42,47 +42,19 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    AuthenticationInfo:
+    PiiItem:
       properties:
-        method:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Method
-        name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Name
-      type: object
-      title: AuthenticationInfo
-    PathParameter:
-      properties:
-        param_value:
+        field_name:
           type: string
-          title: Param Value
-        suggested_name:
+          title: Field Name
+        value:
           type: string
-          title: Suggested Name
+          title: Value
       type: object
       required:
-      - param_value
-      - suggested_name
-      title: PathParameter
-    YesNoQuestion:
-      properties:
-        verdict:
-          type: boolean
-          title: Verdict
-        reason:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Reason
-      type: object
-      required:
-      - verdict
-      title: YesNoQuestion
+      - field_name
+      - value
+      title: PiiItem
     ValidationError:
       properties:
         loc:
@@ -104,6 +76,42 @@ components:
       - msg
       - type
       title: ValidationError
+    PathParameter:
+      properties:
+        param_value:
+          type: string
+          title: Param Value
+        suggested_name:
+          type: string
+          title: Suggested Name
+      type: object
+      required:
+      - param_value
+      - suggested_name
+      title: PathParameter
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    AuthenticationInfo:
+      properties:
+        method:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Method
+        name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Name
+      type: object
+      title: AuthenticationInfo
     EndpointLLMAnalysis:
       properties:
         endpoint:
@@ -250,28 +258,20 @@ components:
       - endpoint_id
       title: EndpointLLMAnalysis
       description: Business model — extends the LLM schema with application-level fields.
-    PiiItem:
+    YesNoQuestion:
       properties:
-        field_name:
-          type: string
-          title: Field Name
-        value:
-          type: string
-          title: Value
+        verdict:
+          type: boolean
+          title: Verdict
+        reason:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Reason
       type: object
       required:
-      - field_name
-      - value
-      title: PiiItem
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
+      - verdict
+      title: YesNoQuestion
   securitySchemes:
     API_Key:
       type: apiKey

@@ -70,56 +70,6 @@ paths:
       - Operator Organization Context: []
 components:
   schemas:
-    DownloadUrlRequest:
-      properties:
-        folder:
-          $ref: '#/components/schemas/ArtifactsAllowedFolders'
-          description: The folder to download the file from
-        file_name:
-          type: string
-          title: File Name
-          description: The prefix of the file to download
-      type: object
-      required:
-      - folder
-      - file_name
-      title: DownloadUrlRequest
-    UploadUrlRequest:
-      properties:
-        folder:
-          $ref: '#/components/schemas/ArtifactsAllowedFolders'
-          description: The folder to upload the file to
-        file_name:
-          type: string
-          title: File Name
-          description: The prefix of the file to upload
-      type: object
-      required:
-      - folder
-      - file_name
-      title: UploadUrlRequest
-    UploadUrlResponse:
-      properties:
-        upload_url:
-          type: string
-          title: Upload Url
-          description: The presigned URL to upload the file
-        path:
-          type: string
-          title: Path
-          description: The path to the file in the bucket
-      type: object
-      required:
-      - upload_url
-      - path
-      title: UploadUrlResponse
-    ArtifactsAllowedFolders:
-      type: string
-      enum:
-      - api-docs
-      - har-files
-      - collections
-      title: ArtifactsAllowedFolders
     ValidationError:
       properties:
         loc:
@@ -150,6 +100,56 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
+    ArtifactsAllowedFolders:
+      type: string
+      enum:
+      - api-docs
+      - har-files
+      - collections
+      title: ArtifactsAllowedFolders
+    UploadUrlRequest:
+      properties:
+        folder:
+          $ref: '#/components/schemas/ArtifactsAllowedFolders'
+          description: The folder to upload the file to
+        file_name:
+          type: string
+          title: File Name
+          description: The prefix of the file to upload
+      type: object
+      required:
+      - folder
+      - file_name
+      title: UploadUrlRequest
+    UploadUrlResponse:
+      properties:
+        upload_url:
+          type: string
+          title: Upload Url
+          description: The presigned URL to upload the file
+        path:
+          type: string
+          title: Path
+          description: The path to the file in the bucket
+      type: object
+      required:
+      - upload_url
+      - path
+      title: UploadUrlResponse
+    DownloadUrlRequest:
+      properties:
+        folder:
+          $ref: '#/components/schemas/ArtifactsAllowedFolders'
+          description: The folder to download the file from
+        file_name:
+          type: string
+          title: File Name
+          description: The prefix of the file to download
+      type: object
+      required:
+      - folder
+      - file_name
+      title: DownloadUrlRequest
   securitySchemes:
     API_Key:
       type: apiKey

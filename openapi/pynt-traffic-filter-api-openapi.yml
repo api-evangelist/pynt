@@ -96,21 +96,6 @@ components:
           title: Filter Data
       type: object
       title: TrafficFilter
-    FilterAction:
-      type: string
-      enum:
-      - capture
-      - ignore
-      title: FilterAction
-    TrafficFilter-Output:
-      properties:
-        filter_data:
-          items:
-            $ref: '#/components/schemas/TrafficFilterEntry'
-          type: array
-          title: Filter Data
-      type: object
-      title: TrafficFilter
     ValidationError:
       properties:
         loc:
@@ -132,6 +117,30 @@ components:
       - msg
       - type
       title: ValidationError
+    FilterType:
+      type: string
+      enum:
+      - system
+      - user
+      title: FilterType
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    TrafficFilter-Output:
+      properties:
+        filter_data:
+          items:
+            $ref: '#/components/schemas/TrafficFilterEntry'
+          type: array
+          title: Filter Data
+      type: object
+      title: TrafficFilter
     TrafficFilterEntry:
       properties:
         name:
@@ -172,21 +181,12 @@ components:
       - name
       - action
       title: TrafficFilterEntry
-    FilterType:
+    FilterAction:
       type: string
       enum:
-      - system
-      - user
-      title: FilterType
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
+      - capture
+      - ignore
+      title: FilterAction
   securitySchemes:
     API_Key:
       type: apiKey

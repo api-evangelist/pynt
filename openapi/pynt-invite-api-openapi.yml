@@ -182,6 +182,60 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
+    CountOut:
+      properties:
+        count:
+          type: integer
+          title: Count
+      type: object
+      required:
+      - count
+      title: CountOut
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    InviteStatus:
+      type: string
+      enum:
+      - pending
+      - accepted
+      - rejected
+      - deleted
+      title: InviteStatus
+    UserRole:
+      type: string
+      enum:
+      - Admin
+      - User
+      - SystemAdmin
+      title: UserRole
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     Body_create_invite_v1_invite_post:
       properties:
         email:
@@ -250,34 +304,6 @@ components:
       - name
       - lastname
       title: UserOut
-    UserRole:
-      type: string
-      enum:
-      - Admin
-      - User
-      - SystemAdmin
-      title: UserRole
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
     InviteInDB:
       properties:
         invite_id:
@@ -321,32 +347,6 @@ components:
       - inviter
       - org_id
       title: InviteInDB
-    CountOut:
-      properties:
-        count:
-          type: integer
-          title: Count
-      type: object
-      required:
-      - count
-      title: CountOut
-    InviteStatus:
-      type: string
-      enum:
-      - pending
-      - accepted
-      - rejected
-      - deleted
-      title: InviteStatus
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
   securitySchemes:
     API_Key:
       type: apiKey

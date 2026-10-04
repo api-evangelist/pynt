@@ -130,37 +130,6 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    AuthorizationCodeExchangeRequest:
-      properties:
-        authorization_code:
-          type: string
-          title: Authorization Code
-        redirect_uri:
-          type: string
-          title: Redirect Uri
-      type: object
-      required:
-      - authorization_code
-      - redirect_uri
-      title: AuthorizationCodeExchangeRequest
-    DeviceTokenResponse:
-      properties:
-        access_token:
-          type: string
-          title: Access Token
-        refresh_token:
-          type: string
-          title: Refresh Token
-        token_type:
-          type: string
-          const: Bearer
-          title: Token Type
-      type: object
-      required:
-      - access_token
-      - refresh_token
-      - token_type
-      title: DeviceTokenResponse
     ValidationError:
       properties:
         loc:
@@ -182,15 +151,6 @@ components:
       - msg
       - type
       title: ValidationError
-    RefreshTokenResponse:
-      properties:
-        token:
-          type: string
-          title: Token
-      type: object
-      required:
-      - token
-      title: RefreshTokenResponse
     IdentityResponse:
       properties:
         organization_id:
@@ -204,16 +164,46 @@ components:
       - organization_id
       - user_id
       title: IdentityResponse
-    Body_issue_access_token_from_refresh_token_v1_auth_refresh_post:
+    DeviceTokenResponse:
       properties:
+        access_token:
+          type: string
+          title: Access Token
         refresh_token:
           type: string
-          minLength: 1
           title: Refresh Token
+        token_type:
+          type: string
+          const: Bearer
+          title: Token Type
       type: object
       required:
+      - access_token
       - refresh_token
-      title: Body_issue_access_token_from_refresh_token_v1_auth_refresh_post
+      - token_type
+      title: DeviceTokenResponse
+    AuthorizationCodeExchangeRequest:
+      properties:
+        authorization_code:
+          type: string
+          title: Authorization Code
+        redirect_uri:
+          type: string
+          title: Redirect Uri
+      type: object
+      required:
+      - authorization_code
+      - redirect_uri
+      title: AuthorizationCodeExchangeRequest
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     LoginResponse:
       properties:
         access_token:
@@ -240,15 +230,25 @@ components:
       - user_id
       - email
       title: LoginResponse
-    HTTPValidationError:
+    Body_issue_access_token_from_refresh_token_v1_auth_refresh_post:
       properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
+        refresh_token:
+          type: string
+          minLength: 1
+          title: Refresh Token
       type: object
-      title: HTTPValidationError
+      required:
+      - refresh_token
+      title: Body_issue_access_token_from_refresh_token_v1_auth_refresh_post
+    RefreshTokenResponse:
+      properties:
+        token:
+          type: string
+          title: Token
+      type: object
+      required:
+      - token
+      title: RefreshTokenResponse
   securitySchemes:
     API_Key:
       type: apiKey

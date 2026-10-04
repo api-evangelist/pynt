@@ -104,6 +104,27 @@ paths:
       - Operator Organization Context: []
 components:
   schemas:
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
     PostmanConnectResponse:
       properties:
         api_key:
@@ -129,49 +150,6 @@ components:
       required:
       - collectionId
       title: PostmanWebhookRunScanPayload
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    PostmanSetCredentialsRequest:
-      properties:
-        client_id:
-          type: string
-          title: Client Id
-        client_secret:
-          type: string
-          title: Client Secret
-      type: object
-      required:
-      - client_id
-      - client_secret
-      title: PostmanSetCredentialsRequest
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
     PostmanWebhookRunScanEvent:
       properties:
         eventId:
@@ -189,6 +167,28 @@ components:
       - eventKey
       - payload
       title: PostmanWebhookRunScanEvent
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    PostmanSetCredentialsRequest:
+      properties:
+        client_id:
+          type: string
+          title: Client Id
+        client_secret:
+          type: string
+          title: Client Secret
+      type: object
+      required:
+      - client_id
+      - client_secret
+      title: PostmanSetCredentialsRequest
   securitySchemes:
     API_Key:
       type: apiKey
