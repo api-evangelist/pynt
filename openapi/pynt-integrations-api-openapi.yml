@@ -60,17 +60,6 @@ components:
       - msg
       - type
       title: ValidationError
-    ListIntegrationsResponse:
-      properties:
-        integrations:
-          items:
-            $ref: '#/components/schemas/IntegrationInfo'
-          type: array
-          title: Integrations
-      type: object
-      required:
-      - integrations
-      title: ListIntegrationsResponse
     IntegrationInfo:
       properties:
         integration_id:
@@ -89,6 +78,17 @@ components:
       - integration_type
       - status
       title: IntegrationInfo
+    ListIntegrationsResponse:
+      properties:
+        integrations:
+          items:
+            $ref: '#/components/schemas/IntegrationInfo'
+          type: array
+          title: Integrations
+      type: object
+      required:
+      - integrations
+      title: ListIntegrationsResponse
     HTTPValidationError:
       properties:
         detail:

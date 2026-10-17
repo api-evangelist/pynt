@@ -100,27 +100,31 @@ paths:
       - Operator Organization Context: []
 components:
   schemas:
-    ValidationError:
+    HTTPValidationError:
       properties:
-        loc:
+        detail:
           items:
-            anyOf:
-            - type: string
-            - type: integer
+            $ref: '#/components/schemas/ValidationError'
           type: array
-          title: Location
-        msg:
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    UploadReportRequest:
+      properties:
+        scan_id:
+          anyOf:
+          - type: string
+            pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
+          - type: 'null'
+          title: Scan Id
+          deprecated: true
+        report:
           type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
+          title: Report
       type: object
       required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
+      - report
+      title: UploadReportRequest
     CommunityUserResponse:
       properties:
         user-id:
@@ -141,40 +145,6 @@ components:
       - Cancelled
       - Scheduled
       title: ScanExecutionStatus
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    ApplicationDataSourceOut:
-      properties:
-        status:
-          type: string
-          title: Status
-      type: object
-      required:
-      - status
-      title: ApplicationDataSourceOut
-    UploadReportRequest:
-      properties:
-        scan_id:
-          anyOf:
-          - type: string
-            pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
-          - type: 'null'
-          title: Scan Id
-          deprecated: true
-        report:
-          type: string
-          title: Report
-      type: object
-      required:
-      - report
-      title: UploadReportRequest
     ApplicationMetadataOut:
       properties:
         name:
@@ -249,6 +219,36 @@ components:
       - risk
       - data_sources
       title: ApplicationMetadataOut
+    ApplicationDataSourceOut:
+      properties:
+        status:
+          type: string
+          title: Status
+      type: object
+      required:
+      - status
+      title: ApplicationDataSourceOut
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
   securitySchemes:
     API_Key:
       type: apiKey

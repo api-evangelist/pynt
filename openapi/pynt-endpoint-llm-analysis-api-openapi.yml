@@ -42,76 +42,6 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    PiiItem:
-      properties:
-        field_name:
-          type: string
-          title: Field Name
-        value:
-          type: string
-          title: Value
-      type: object
-      required:
-      - field_name
-      - value
-      title: PiiItem
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    PathParameter:
-      properties:
-        param_value:
-          type: string
-          title: Param Value
-        suggested_name:
-          type: string
-          title: Suggested Name
-      type: object
-      required:
-      - param_value
-      - suggested_name
-      title: PathParameter
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    AuthenticationInfo:
-      properties:
-        method:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Method
-        name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Name
-      type: object
-      title: AuthenticationInfo
     EndpointLLMAnalysis:
       properties:
         endpoint:
@@ -258,6 +188,36 @@ components:
       - endpoint_id
       title: EndpointLLMAnalysis
       description: Business model — extends the LLM schema with application-level fields.
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
     YesNoQuestion:
       properties:
         verdict:
@@ -272,6 +232,46 @@ components:
       required:
       - verdict
       title: YesNoQuestion
+    AuthenticationInfo:
+      properties:
+        method:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Method
+        name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Name
+      type: object
+      title: AuthenticationInfo
+    PathParameter:
+      properties:
+        param_value:
+          type: string
+          title: Param Value
+        suggested_name:
+          type: string
+          title: Suggested Name
+      type: object
+      required:
+      - param_value
+      - suggested_name
+      title: PathParameter
+    PiiItem:
+      properties:
+        field_name:
+          type: string
+          title: Field Name
+        value:
+          type: string
+          title: Value
+      type: object
+      required:
+      - field_name
+      - value
+      title: PiiItem
   securitySchemes:
     API_Key:
       type: apiKey

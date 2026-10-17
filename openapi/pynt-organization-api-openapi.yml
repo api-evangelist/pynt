@@ -159,47 +159,24 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    ValidationError:
+    OrganizationCreateResponse:
       properties:
-        loc:
+        organization_id:
+          type: string
+          title: Organization Id
+      type: object
+      required:
+      - organization_id
+      title: OrganizationCreateResponse
+    HTTPValidationError:
+      properties:
+        detail:
           items:
-            anyOf:
-            - type: string
-            - type: integer
+            $ref: '#/components/schemas/ValidationError'
           type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
+          title: Detail
       type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    OrganizationConfigResponse:
-      properties:
-        allow_collect_data:
-          type: boolean
-          title: Allow Collect Data
-        allow_collect_data_since:
-          anyOf:
-          - type: string
-            format: date-time
-          - type: 'null'
-          title: Allow Collect Data Since
-        local_only_mode:
-          type: boolean
-          title: Local Only Mode
-      type: object
-      required:
-      - allow_collect_data
-      - allow_collect_data_since
-      - local_only_mode
-      title: OrganizationConfigResponse
+      title: HTTPValidationError
     OrganizationResponse:
       properties:
         organization_id:
@@ -222,6 +199,15 @@ components:
       - name
       - config
       title: OrganizationResponse
+    SSOResponse:
+      properties:
+        identity_provider:
+          type: string
+          title: Identity Provider
+      type: object
+      required:
+      - identity_provider
+      title: SSOResponse
     OrganizationUpdateModel:
       properties:
         name:
@@ -233,6 +219,35 @@ components:
       required:
       - name
       title: OrganizationUpdateModel
+    OrganizationConfigResponse:
+      properties:
+        allow_collect_data:
+          type: boolean
+          title: Allow Collect Data
+        allow_collect_data_since:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Allow Collect Data Since
+        local_only_mode:
+          type: boolean
+          title: Local Only Mode
+      type: object
+      required:
+      - allow_collect_data
+      - allow_collect_data_since
+      - local_only_mode
+      title: OrganizationConfigResponse
+    OrganizationCreateRequest:
+      properties:
+        name:
+          type: string
+          title: Name
+      type: object
+      required:
+      - name
+      title: OrganizationCreateRequest
     OrganizationConfigUpdateModel:
       properties:
         allow_collect_data:
@@ -247,42 +262,27 @@ components:
           title: Local Only Mode
       type: object
       title: OrganizationConfigUpdateModel
-    OrganizationCreateResponse:
+    ValidationError:
       properties:
-        organization_id:
-          type: string
-          title: Organization Id
-      type: object
-      required:
-      - organization_id
-      title: OrganizationCreateResponse
-    HTTPValidationError:
-      properties:
-        detail:
+        loc:
           items:
-            $ref: '#/components/schemas/ValidationError'
+            anyOf:
+            - type: string
+            - type: integer
           type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    SSOResponse:
-      properties:
-        identity_provider:
+          title: Location
+        msg:
           type: string
-          title: Identity Provider
+          title: Message
+        type:
+          type: string
+          title: Error Type
       type: object
       required:
-      - identity_provider
-      title: SSOResponse
-    OrganizationCreateRequest:
-      properties:
-        name:
-          type: string
-          title: Name
-      type: object
-      required:
-      - name
-      title: OrganizationCreateRequest
+      - loc
+      - msg
+      - type
+      title: ValidationError
   securitySchemes:
     API_Key:
       type: apiKey

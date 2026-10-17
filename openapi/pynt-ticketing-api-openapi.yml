@@ -152,62 +152,60 @@ paths:
       - Bearer Token: []
 components:
   schemas:
-    ValidationError:
+    JiraPropertiesRequest:
       properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    IssueType:
-      properties:
-        id:
-          type: string
-          title: Id
-        name:
-          type: string
-          title: Name
-        icon_url:
+        site:
+          anyOf:
+          - $ref: '#/components/schemas/JiraPropertiesSiteRequest'
+          - type: 'null'
+        default_project:
           anyOf:
           - type: string
           - type: 'null'
-          title: Icon Url
+          title: Default Project
       type: object
-      required:
-      - id
-      - name
-      title: IssueType
-    JiraSiteResponse:
+      title: JiraPropertiesRequest
+    JiraAllowedValue:
+      properties:
+        id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Id
+        value:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Value
+        name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Name
+      type: object
+      title: JiraAllowedValue
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    JiraPropertiesSiteRequest:
       properties:
         id:
           type: string
           title: Id
-        name:
-          type: string
-          title: Name
         url:
           type: string
           title: Url
       type: object
       required:
       - id
-      - name
       - url
-      title: JiraSiteResponse
+      title: JiraPropertiesSiteRequest
     JiraField:
       properties:
         field_id:
@@ -242,24 +240,6 @@ components:
       - name
       - required
       title: JiraField
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    Body_connect_jira_v1_ticketing_jira_put:
-      properties:
-        code:
-          type: string
-          title: Code
-      type: object
-      required:
-      - code
-      title: Body_connect_jira_v1_ticketing_jira_put
     JiraProject:
       properties:
         id:
@@ -287,51 +267,71 @@ components:
       - avatar_url
       - issue_types
       title: JiraProject
-    JiraAllowedValue:
+    ValidationError:
       properties:
-        id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Id
-        value:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Value
-        name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Name
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
       type: object
-      title: JiraAllowedValue
-    JiraPropertiesSiteRequest:
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    JiraSiteResponse:
       properties:
         id:
           type: string
           title: Id
+        name:
+          type: string
+          title: Name
         url:
           type: string
           title: Url
       type: object
       required:
       - id
+      - name
       - url
-      title: JiraPropertiesSiteRequest
-    JiraPropertiesRequest:
+      title: JiraSiteResponse
+    Body_connect_jira_v1_ticketing_jira_put:
       properties:
-        site:
-          anyOf:
-          - $ref: '#/components/schemas/JiraPropertiesSiteRequest'
-          - type: 'null'
-        default_project:
+        code:
+          type: string
+          title: Code
+      type: object
+      required:
+      - code
+      title: Body_connect_jira_v1_ticketing_jira_put
+    IssueType:
+      properties:
+        id:
+          type: string
+          title: Id
+        name:
+          type: string
+          title: Name
+        icon_url:
           anyOf:
           - type: string
           - type: 'null'
-          title: Default Project
+          title: Icon Url
       type: object
-      title: JiraPropertiesRequest
+      required:
+      - id
+      - name
+      title: IssueType
   securitySchemes:
     API_Key:
       type: apiKey

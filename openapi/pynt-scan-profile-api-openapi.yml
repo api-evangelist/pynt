@@ -68,15 +68,6 @@ components:
       required:
       - should_attack
       title: ScanAttackConfig
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
     ScanProfileBase:
       properties:
         scan_profile_id:
@@ -103,6 +94,15 @@ components:
       - application_id
       - tests
       title: ScanProfileBase
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
   securitySchemes:
     API_Key:
       type: apiKey

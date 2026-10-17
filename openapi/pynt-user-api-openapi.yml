@@ -143,43 +143,6 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    CreateUserResponse:
-      properties:
-        new_organization_created:
-          type: boolean
-          title: New Organization Created
-      type: object
-      required:
-      - new_organization_created
-      title: CreateUserResponse
-    UserRole:
-      type: string
-      enum:
-      - Admin
-      - User
-      - SystemAdmin
-      title: UserRole
     HTTPValidationError:
       properties:
         detail:
@@ -189,14 +152,22 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
-    UserUpdateModel:
+    UserRole:
+      type: string
+      enum:
+      - Admin
+      - User
+      - SystemAdmin
+      title: UserRole
+    CreateUserResponse:
       properties:
-        role:
-          $ref: '#/components/schemas/UserRole'
+        new_organization_created:
+          type: boolean
+          title: New Organization Created
       type: object
       required:
-      - role
-      title: UserUpdateModel
+      - new_organization_created
+      title: CreateUserResponse
     UserOut:
       properties:
         uid:
@@ -250,6 +221,35 @@ components:
       - name
       - lastname
       title: UserOut
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    UserUpdateModel:
+      properties:
+        role:
+          $ref: '#/components/schemas/UserRole'
+      type: object
+      required:
+      - role
+      title: UserUpdateModel
   securitySchemes:
     API_Key:
       type: apiKey

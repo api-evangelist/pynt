@@ -105,46 +105,6 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    NotificationRuleOut:
-      properties:
-        rule_id:
-          type: string
-          title: Rule Id
-      type: object
-      required:
-      - rule_id
-      title: NotificationRuleOut
-      description: Only the stable rule id — the portal owns and stores the rest, keyed by it.
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
     NotificationRuleCreate:
       properties:
         type:
@@ -182,6 +142,46 @@ components:
       required:
       - scan_status_triggers
       title: NotificationRuleCreate
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    NotificationRuleOut:
+      properties:
+        rule_id:
+          type: string
+          title: Rule Id
+      type: object
+      required:
+      - rule_id
+      title: NotificationRuleOut
+      description: Only the stable rule id — the portal owns and stores the rest, keyed by it.
     NotificationServiceType:
       type: string
       enum:

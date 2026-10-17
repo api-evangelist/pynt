@@ -38,27 +38,6 @@ paths:
       - Operator Organization Context: []
 components:
   schemas:
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
     HTTPValidationError:
       properties:
         detail:
@@ -82,6 +61,41 @@ components:
       - type
       - cluster_name
       title: K8sScanJobTarget
+    DequeueJobRequest:
+      properties:
+        target:
+          oneOf:
+          - $ref: '#/components/schemas/K8sScanJobTarget'
+          title: Target
+          discriminator:
+            propertyName: type
+            mapping:
+              K8S: '#/components/schemas/K8sScanJobTarget'
+      type: object
+      required:
+      - target
+      title: DequeueJobRequest
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
     DequeueJobResponse:
       properties:
         job_id:
@@ -99,20 +113,6 @@ components:
       - harl_url
       - application_id
       title: DequeueJobResponse
-    DequeueJobRequest:
-      properties:
-        target:
-          oneOf:
-          - $ref: '#/components/schemas/K8sScanJobTarget'
-          title: Target
-          discriminator:
-            propertyName: type
-            mapping:
-              K8S: '#/components/schemas/K8sScanJobTarget'
-      type: object
-      required:
-      - target
-      title: DequeueJobRequest
   securitySchemes:
     API_Key:
       type: apiKey

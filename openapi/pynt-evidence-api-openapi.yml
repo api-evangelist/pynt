@@ -68,16 +68,6 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    StoreEvidenceRequest:
-      properties:
-        scan_id:
-          type: string
-          format: uuid
-          title: Scan Id
-      type: object
-      required:
-      - scan_id
-      title: StoreEvidenceRequest
     ValidationError:
       properties:
         loc:
@@ -99,6 +89,16 @@ components:
       - msg
       - type
       title: ValidationError
+    StoreEvidenceRequest:
+      properties:
+        scan_id:
+          type: string
+          format: uuid
+          title: Scan Id
+      type: object
+      required:
+      - scan_id
+      title: StoreEvidenceRequest
     HTTPValidationError:
       properties:
         detail:

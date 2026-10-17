@@ -86,27 +86,6 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
     FalsePositiveClaim-Output:
       properties:
         finding_id:
@@ -136,24 +115,33 @@ components:
       - false_positive_result
       title: FalsePositiveClaim
       description: Represents a claim that a finding is a false positive.
-    ScanReportFalsePositiveAnalysis:
+    ApprovalUpdateRequest:
       properties:
-        scan_id:
-          type: string
-          format: uuid
-          title: Scan Id
-        claims:
-          items:
-            $ref: '#/components/schemas/FalsePositiveClaim-Output'
-          type: array
-          minItems: 1
-          title: Claims
+        value:
+          $ref: '#/components/schemas/Conclusion'
       type: object
       required:
-      - scan_id
-      - claims
-      title: ScanReportFalsePositiveAnalysis
-      description: Represents a collection of false positive claims for a specific scan.
+      - value
+      title: ApprovalUpdateRequest
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    Conclusion:
+      type: string
+      enum:
+      - 'Yes'
+      - 'No'
+      - Inconclusive
+      title: Conclusion
+      description: 'Enum for the conclusion of a false positive analysis:
+
+        YES, NO, or INCONCLUSIVE.'
     FalsePositiveLLMResult:
       properties:
         is_false_positive:
@@ -176,33 +164,45 @@ components:
       - confidence
       title: FalsePositiveLLMResult
       description: The direct, typed result from an LLM for a false positive query.
-    HTTPValidationError:
+    ScanReportFalsePositiveAnalysis:
       properties:
-        detail:
+        scan_id:
+          type: string
+          format: uuid
+          title: Scan Id
+        claims:
           items:
-            $ref: '#/components/schemas/ValidationError'
+            $ref: '#/components/schemas/FalsePositiveClaim-Output'
           type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    ApprovalUpdateRequest:
-      properties:
-        value:
-          $ref: '#/components/schemas/Conclusion'
+          minItems: 1
+          title: Claims
       type: object
       required:
-      - value
-      title: ApprovalUpdateRequest
-    Conclusion:
-      type: string
-      enum:
-      - 'Yes'
-      - 'No'
-      - Inconclusive
-      title: Conclusion
-      description: 'Enum for the conclusion of a false positive analysis:
-
-        YES, NO, or INCONCLUSIVE.'
+      - scan_id
+      - claims
+      title: ScanReportFalsePositiveAnalysis
+      description: Represents a collection of false positive claims for a specific scan.
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
   securitySchemes:
     API_Key:
       type: apiKey

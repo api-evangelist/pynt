@@ -141,42 +141,33 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    PaginatedEndpointGroupsOut:
+    HTTPValidationError:
       properties:
-        data:
+        detail:
           items:
-            $ref: '#/components/schemas/EndpointGroupOut'
+            $ref: '#/components/schemas/ValidationError'
           type: array
-          title: Data
-        total:
-          type: integer
-          title: Total
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ExportResponse:
+      properties:
+        export_id:
+          type: string
+          format: uuid
+          title: Export Id
+        date:
+          type: string
+          format: date-time
+          title: Date
+        format:
+          $ref: '#/components/schemas/ExportFormat'
       type: object
       required:
-      - data
-      - total
-      title: PaginatedEndpointGroupsOut
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
+      - export_id
+      - date
+      - format
+      title: ExportResponse
     EndpointGroupOut:
       properties:
         endpoint_group_id:
@@ -252,38 +243,47 @@ components:
       - last_scan_time
       - last_seen
       title: EndpointGroupOut
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
     ExportFormat:
       type: string
       enum:
       - csv
       title: ExportFormat
-    ExportResponse:
+    ValidationError:
       properties:
-        export_id:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
           type: string
-          format: uuid
-          title: Export Id
-        date:
+          title: Message
+        type:
           type: string
-          format: date-time
-          title: Date
-        format:
-          $ref: '#/components/schemas/ExportFormat'
+          title: Error Type
       type: object
       required:
-      - export_id
-      - date
-      - format
-      title: ExportResponse
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    PaginatedEndpointGroupsOut:
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/EndpointGroupOut'
+          type: array
+          title: Data
+        total:
+          type: integer
+          title: Total
+      type: object
+      required:
+      - data
+      - total
+      title: PaginatedEndpointGroupsOut
     EndpointGroupsRisk:
       properties:
         unscanned:

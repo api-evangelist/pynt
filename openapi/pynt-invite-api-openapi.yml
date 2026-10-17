@@ -182,51 +182,49 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    CountOut:
+    InviteInDB:
       properties:
-        count:
-          type: integer
-          title: Count
+        invite_id:
+          type: string
+          pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
+          title: Invite Id
+        status:
+          $ref: '#/components/schemas/InviteStatus'
+        email:
+          type: string
+          title: Email
+        organization_id:
+          type: string
+          pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
+          title: Organization Id
+        inviter:
+          type: string
+          pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
+          title: Inviter
+        role:
+          $ref: '#/components/schemas/UserRole'
+          default: User
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+        deleted_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Deleted At
+        org_id:
+          type: string
+          title: Org Id
       type: object
       required:
-      - count
-      title: CountOut
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    InviteStatus:
-      type: string
-      enum:
-      - pending
-      - accepted
-      - rejected
-      - deleted
-      title: InviteStatus
-    UserRole:
-      type: string
-      enum:
-      - Admin
-      - User
-      - SystemAdmin
-      title: UserRole
+      - status
+      - email
+      - organization_id
+      - inviter
+      - org_id
+      title: InviteInDB
     HTTPValidationError:
       properties:
         detail:
@@ -236,6 +234,13 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
+    UserRole:
+      type: string
+      enum:
+      - Admin
+      - User
+      - SystemAdmin
+      title: UserRole
     Body_create_invite_v1_invite_post:
       properties:
         email:
@@ -251,6 +256,14 @@ components:
       - email
       - role
       title: Body_create_invite_v1_invite_post
+    InviteStatus:
+      type: string
+      enum:
+      - pending
+      - accepted
+      - rejected
+      - deleted
+      title: InviteStatus
     UserOut:
       properties:
         uid:
@@ -304,49 +317,36 @@ components:
       - name
       - lastname
       title: UserOut
-    InviteInDB:
+    ValidationError:
       properties:
-        invite_id:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
           type: string
-          pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
-          title: Invite Id
-        status:
-          $ref: '#/components/schemas/InviteStatus'
-        email:
+          title: Message
+        type:
           type: string
-          title: Email
-        organization_id:
-          type: string
-          pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
-          title: Organization Id
-        inviter:
-          type: string
-          pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
-          title: Inviter
-        role:
-          $ref: '#/components/schemas/UserRole'
-          default: User
-        created_at:
-          type: string
-          format: date-time
-          title: Created At
-        deleted_at:
-          anyOf:
-          - type: string
-            format: date-time
-          - type: 'null'
-          title: Deleted At
-        org_id:
-          type: string
-          title: Org Id
+          title: Error Type
       type: object
       required:
-      - status
-      - email
-      - organization_id
-      - inviter
-      - org_id
-      title: InviteInDB
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    CountOut:
+      properties:
+        count:
+          type: integer
+          title: Count
+      type: object
+      required:
+      - count
+      title: CountOut
   securitySchemes:
     API_Key:
       type: apiKey

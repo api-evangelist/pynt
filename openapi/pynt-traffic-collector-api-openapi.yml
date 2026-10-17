@@ -124,78 +124,6 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    TrafficCollectorOut-Output:
-      properties:
-        collector_id:
-          type: string
-          title: Collector Id
-        organization_id:
-          type: string
-          title: Organization Id
-        name:
-          type: string
-          title: Name
-        cluster_name:
-          type: string
-          title: Cluster Name
-        application_routing_entries:
-          items:
-            $ref: '#/components/schemas/ApplicationTrafficRoutingEntry-Output'
-          type: array
-          title: Application Routing Entries
-      type: object
-      required:
-      - collector_id
-      - organization_id
-      - name
-      - cluster_name
-      - application_routing_entries
-      title: TrafficCollectorOut
-    ApplicationTrafficRoutingEntry-Output:
-      properties:
-        application_id:
-          type: string
-          title: Application Id
-        routing_data:
-          oneOf:
-          - $ref: '#/components/schemas/ApplicationTrafficRoutingAny'
-          - $ref: '#/components/schemas/ApplicationTrafficRoutingCol'
-          - $ref: '#/components/schemas/ApplicationTrafficRoutingCondition-Output'
-          title: Routing Data
-          discriminator:
-            propertyName: op
-            mapping:
-              and: '#/components/schemas/ApplicationTrafficRoutingCondition-Output'
-              any: '#/components/schemas/ApplicationTrafficRoutingAny'
-              eq: '#/components/schemas/ApplicationTrafficRoutingCol'
-              ne: '#/components/schemas/ApplicationTrafficRoutingCol'
-              or: '#/components/schemas/ApplicationTrafficRoutingCondition-Output'
-      type: object
-      required:
-      - application_id
-      - routing_data
-      title: ApplicationTrafficRoutingEntry
     ApplicationTrafficRoutingAny:
       properties:
         op:
@@ -206,6 +134,29 @@ components:
       additionalProperties: false
       type: object
       title: ApplicationTrafficRoutingAny
+    TrafficCollectorCreate:
+      properties:
+        name:
+          type: string
+          maxLength: 100
+          minLength: 1
+          title: Name
+        cluster_name:
+          type: string
+          maxLength: 100
+          minLength: 1
+          title: Cluster Name
+        application_routing_entries:
+          items:
+            $ref: '#/components/schemas/ApplicationTrafficRoutingEntry-Input'
+          type: array
+          title: Application Routing Entries
+      type: object
+      required:
+      - name
+      - cluster_name
+      - application_routing_entries
+      title: TrafficCollectorCreate
     HTTPValidationError:
       properties:
         detail:
@@ -215,36 +166,6 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
-    ApplicationTrafficRoutingCondition-Output:
-      properties:
-        op:
-          type: string
-          enum:
-          - and
-          - or
-          title: Op
-        filters:
-          items:
-            oneOf:
-            - $ref: '#/components/schemas/ApplicationTrafficRoutingAny'
-            - $ref: '#/components/schemas/ApplicationTrafficRoutingCol'
-            - $ref: '#/components/schemas/ApplicationTrafficRoutingCondition-Output'
-            discriminator:
-              propertyName: op
-              mapping:
-                and: '#/components/schemas/ApplicationTrafficRoutingCondition-Output'
-                any: '#/components/schemas/ApplicationTrafficRoutingAny'
-                eq: '#/components/schemas/ApplicationTrafficRoutingCol'
-                ne: '#/components/schemas/ApplicationTrafficRoutingCol'
-                or: '#/components/schemas/ApplicationTrafficRoutingCondition-Output'
-          type: array
-          title: Filters
-      additionalProperties: false
-      type: object
-      required:
-      - op
-      - filters
-      title: ApplicationTrafficRoutingCondition
     ApplicationTrafficRoutingCol:
       properties:
         op:
@@ -320,29 +241,108 @@ components:
       - op
       - filters
       title: ApplicationTrafficRoutingCondition
-    TrafficCollectorCreate:
+    TrafficCollectorOut-Output:
       properties:
+        collector_id:
+          type: string
+          title: Collector Id
+        organization_id:
+          type: string
+          title: Organization Id
         name:
           type: string
-          maxLength: 100
-          minLength: 1
           title: Name
         cluster_name:
           type: string
-          maxLength: 100
-          minLength: 1
           title: Cluster Name
         application_routing_entries:
           items:
-            $ref: '#/components/schemas/ApplicationTrafficRoutingEntry-Input'
+            $ref: '#/components/schemas/ApplicationTrafficRoutingEntry-Output'
           type: array
           title: Application Routing Entries
       type: object
       required:
+      - collector_id
+      - organization_id
       - name
       - cluster_name
       - application_routing_entries
-      title: TrafficCollectorCreate
+      title: TrafficCollectorOut
+    ApplicationTrafficRoutingEntry-Output:
+      properties:
+        application_id:
+          type: string
+          title: Application Id
+        routing_data:
+          oneOf:
+          - $ref: '#/components/schemas/ApplicationTrafficRoutingAny'
+          - $ref: '#/components/schemas/ApplicationTrafficRoutingCol'
+          - $ref: '#/components/schemas/ApplicationTrafficRoutingCondition-Output'
+          title: Routing Data
+          discriminator:
+            propertyName: op
+            mapping:
+              and: '#/components/schemas/ApplicationTrafficRoutingCondition-Output'
+              any: '#/components/schemas/ApplicationTrafficRoutingAny'
+              eq: '#/components/schemas/ApplicationTrafficRoutingCol'
+              ne: '#/components/schemas/ApplicationTrafficRoutingCol'
+              or: '#/components/schemas/ApplicationTrafficRoutingCondition-Output'
+      type: object
+      required:
+      - application_id
+      - routing_data
+      title: ApplicationTrafficRoutingEntry
+    ApplicationTrafficRoutingCondition-Output:
+      properties:
+        op:
+          type: string
+          enum:
+          - and
+          - or
+          title: Op
+        filters:
+          items:
+            oneOf:
+            - $ref: '#/components/schemas/ApplicationTrafficRoutingAny'
+            - $ref: '#/components/schemas/ApplicationTrafficRoutingCol'
+            - $ref: '#/components/schemas/ApplicationTrafficRoutingCondition-Output'
+            discriminator:
+              propertyName: op
+              mapping:
+                and: '#/components/schemas/ApplicationTrafficRoutingCondition-Output'
+                any: '#/components/schemas/ApplicationTrafficRoutingAny'
+                eq: '#/components/schemas/ApplicationTrafficRoutingCol'
+                ne: '#/components/schemas/ApplicationTrafficRoutingCol'
+                or: '#/components/schemas/ApplicationTrafficRoutingCondition-Output'
+          type: array
+          title: Filters
+      additionalProperties: false
+      type: object
+      required:
+      - op
+      - filters
+      title: ApplicationTrafficRoutingCondition
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
   securitySchemes:
     API_Key:
       type: apiKey
