@@ -41,7 +41,7 @@ accessModel:
   - authentication
   - rate-limits
   - security
-  generated: '2026-11-06'
+  generated: '2026-11-13'
   method: derived
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/pynt.png
 x-docs-platform: gitbook
@@ -138,6 +138,14 @@ common:
     url: plans/pynt-plans-pricing.yml
   - type: RateLimits
     url: rate-limits/pynt-rate-limits.yml
+  - type: UsageTerms
+    url: terms/pynt-terms-of-service.yml
+  - type: DataProcessing
+    url: privacy/pynt-privacy-policy.yml
+  - type: Attestations
+    url: compliance/pynt-compliance.yml
+  - type: Eligibility
+    url: eligibility/pynt-eligibility.yml
 apis:
 - aid: pynt:pynt-alive-api
   name: Pynt Alive API
@@ -649,7 +657,7 @@ apis:
   humanURL: https://docs.pynt.io/documentation
   baseURL: https://api.pynt.io
   tags:
-  - Traffic Filter
+  - traffic-filter
   tags_raw:
   - traffic-filter
   properties:
